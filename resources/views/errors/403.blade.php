@@ -8,7 +8,9 @@
 
                 <div class="mt-8 flex flex-wrap justify-center gap-3">
                     <a href="{{ route('home') }}" class="btn-primary">{{ __('site.errors.go_home') }}</a>
-                    <a href="{{ route('appointment.create') }}" class="btn-secondary">{{ __('site.actions.book_appointment') }}</a>
+                    @feature('appointment')
+                        <a href="{{ route('appointment.create') }}" class="btn-secondary">{{ __('site.actions.book_appointment') }}</a>
+                    @endfeature
                 </div>
             </div>
         </div>

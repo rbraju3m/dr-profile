@@ -32,47 +32,76 @@ Route::prefix('{locale}')
     ->middleware('locale')
     ->group(function () {
         Route::get('/', [HomeController::class, 'index'])->name('home');
-        Route::get('about', [ProfileController::class, 'show'])->name('about');
+        /*
+         * Anything a visitor can browse sits behind a `feature:` switch, so a
+         * section the admin has turned off stops answering rather than merely
+         * losing its menu entry. The switches live in App\Support\Features.
+         */
+        Route::middleware('feature:about')
+            ->get('about', [ProfileController::class, 'show'])->name('about');
 
-        Route::get('expertise', [ServiceController::class, 'index'])->name('services.index');
-        Route::get('expertise/{service}', [ServiceController::class, 'show'])->name('services.show');
+        Route::middleware('feature:services')->group(function () {
+            Route::get('expertise', [ServiceController::class, 'index'])->name('services.index');
+            Route::get('expertise/{service}', [ServiceController::class, 'show'])->name('services.show');
+        });
 
-        Route::get('chambers', [ChamberController::class, 'index'])->name('chambers.index');
-        Route::get('chambers/{chamber}', [ChamberController::class, 'show'])->name('chambers.show');
+        Route::middleware('feature:chambers')->group(function () {
+            Route::get('chambers', [ChamberController::class, 'index'])->name('chambers.index');
+            Route::get('chambers/{chamber}', [ChamberController::class, 'show'])->name('chambers.show');
+        });
 
         // Booking — the slots endpoint feeds the Alpine wizard.
-        Route::get('appointment', [AppointmentController::class, 'create'])->name('appointment.create');
-        Route::get('appointment/slots', [AppointmentController::class, 'slots'])->name('appointment.slots');
-        Route::post('appointment', [AppointmentController::class, 'store'])
-            ->middleware('throttle:10,1')
-            ->name('appointment.store');
-        Route::get('appointment/lookup', [AppointmentController::class, 'lookup'])->name('appointment.lookup');
-        Route::get('appointment/{appointment}', [AppointmentController::class, 'show'])->name('appointment.show');
-        Route::post('appointment/{appointment}/cancel', [AppointmentController::class, 'cancel'])
-            ->middleware('throttle:6,1')
-            ->name('appointment.cancel');
+        Route::middleware('feature:appointment')->group(function () {
+            Route::get('appointment', [AppointmentController::class, 'create'])->name('appointment.create');
+            Route::get('appointment/slots', [AppointmentController::class, 'slots'])->name('appointment.slots');
+            Route::post('appointment', [AppointmentController::class, 'store'])
+                ->middleware('throttle:10,1')
+                ->name('appointment.store');
+            Route::get('appointment/lookup', [AppointmentController::class, 'lookup'])->name('appointment.lookup');
+            Route::get('appointment/{appointment}', [AppointmentController::class, 'show'])->name('appointment.show');
+            Route::post('appointment/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+                ->middleware('throttle:6,1')
+                ->name('appointment.cancel');
+        });
 
-        Route::get('success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
-        Route::get('success-stories/{story}', [SuccessStoryController::class, 'show'])->name('stories.show');
+        Route::middleware('feature:stories')->group(function () {
+            Route::get('success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
+            Route::get('success-stories/{story}', [SuccessStoryController::class, 'show'])->name('stories.show');
+        });
 
-        Route::get('news', [PostController::class, 'news'])->name('news.index');
-        Route::get('news/{post}', [PostController::class, 'show'])->defaults('type', 'news')->name('news.show');
-        Route::get('events', [PostController::class, 'events'])->name('events.index');
-        Route::get('events/{post}', [PostController::class, 'show'])->defaults('type', 'event')->name('events.show');
-        Route::get('health-tips', [PostController::class, 'blog'])->name('blog.index');
-        Route::get('health-tips/{post}', [PostController::class, 'show'])->defaults('type', 'blog')->name('blog.show');
+        Route::middleware('feature:news')->group(function () {
+            Route::get('news', [PostController::class, 'news'])->name('news.index');
+            Route::get('news/{post}', [PostController::class, 'show'])->defaults('type', 'news')->name('news.show');
+        });
 
-        Route::get('gallery', [GalleryController::class, 'index'])->name('gallery.index');
-        Route::get('gallery/{album}', [GalleryController::class, 'show'])->name('gallery.show');
+        Route::middleware('feature:events')->group(function () {
+            Route::get('events', [PostController::class, 'events'])->name('events.index');
+            Route::get('events/{post}', [PostController::class, 'show'])->defaults('type', 'event')->name('events.show');
+        });
 
-        Route::get('publications', [PublicationController::class, 'index'])->name('publications.index');
-        Route::get('faq', [FaqController::class, 'index'])->name('faq.index');
-        Route::get('search', [SearchController::class, 'index'])->name('search');
+        Route::middleware('feature:blog')->group(function () {
+            Route::get('health-tips', [PostController::class, 'blog'])->name('blog.index');
+            Route::get('health-tips/{post}', [PostController::class, 'show'])->defaults('type', 'blog')->name('blog.show');
+        });
 
-        Route::get('contact', [ContactController::class, 'create'])->name('contact.create');
-        Route::post('contact', [ContactController::class, 'store'])
-            ->middleware('throttle:6,1')
-            ->name('contact.store');
+        Route::middleware('feature:gallery')->group(function () {
+            Route::get('gallery', [GalleryController::class, 'index'])->name('gallery.index');
+            Route::get('gallery/{album}', [GalleryController::class, 'show'])->name('gallery.show');
+        });
+
+        Route::middleware('feature:publications')
+            ->get('publications', [PublicationController::class, 'index'])->name('publications.index');
+        Route::middleware('feature:faq')
+            ->get('faq', [FaqController::class, 'index'])->name('faq.index');
+        Route::middleware('feature:search')
+            ->get('search', [SearchController::class, 'index'])->name('search');
+
+        Route::middleware('feature:contact')->group(function () {
+            Route::get('contact', [ContactController::class, 'create'])->name('contact.create');
+            Route::post('contact', [ContactController::class, 'store'])
+                ->middleware('throttle:6,1')
+                ->name('contact.store');
+        });
 
         Route::get('p/{page}', [PageController::class, 'show'])->name('pages.show');
     });
@@ -149,6 +178,9 @@ Route::prefix('admin')->name('admin.')->middleware('admin.locale')->group(functi
         Route::middleware('staff:admin')->group(function () use ($resource) {
             Route::get('settings', [Admin\SettingController::class, 'edit'])->name('settings.edit');
             Route::put('settings', [Admin\SettingController::class, 'update'])->name('settings.update');
+
+            Route::get('visibility', [Admin\FeatureController::class, 'edit'])->name('visibility.edit');
+            Route::put('visibility', [Admin\FeatureController::class, 'update'])->name('visibility.update');
             $resource('users', Admin\UserController::class);
         });
     });

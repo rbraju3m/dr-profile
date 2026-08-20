@@ -1,15 +1,17 @@
 @php
+    use App\Support\Features;
+
     $locale = app()->getLocale();
-    $links = [
-        ['route' => 'about', 'label' => __('site.nav.about')],
-        ['route' => 'services.index', 'label' => __('site.nav.services')],
-        ['route' => 'stories.index', 'label' => __('site.nav.success_stories')],
-        ['route' => 'news.index', 'label' => __('site.nav.news_events')],
-        ['route' => 'blog.index', 'label' => __('site.nav.blog')],
-        ['route' => 'gallery.index', 'label' => __('site.nav.gallery')],
-        ['route' => 'publications.index', 'label' => __('site.nav.publications')],
-        ['route' => 'faq.index', 'label' => __('site.nav.faq')],
-    ];
+    $links = Features::filter([
+        ['route' => 'about', 'label' => __('site.nav.about'), 'feature' => 'about'],
+        ['route' => 'services.index', 'label' => __('site.nav.services'), 'feature' => 'services'],
+        ['route' => 'stories.index', 'label' => __('site.nav.success_stories'), 'feature' => 'stories'],
+        ['route' => 'news.index', 'label' => __('site.nav.news_events'), 'feature' => 'news'],
+        ['route' => 'blog.index', 'label' => __('site.nav.blog'), 'feature' => 'blog'],
+        ['route' => 'gallery.index', 'label' => __('site.nav.gallery'), 'feature' => 'gallery'],
+        ['route' => 'publications.index', 'label' => __('site.nav.publications'), 'feature' => 'publications'],
+        ['route' => 'faq.index', 'label' => __('site.nav.faq'), 'feature' => 'faq'],
+    ]);
 @endphp
 
 <footer class="no-print mt-auto bg-primary-950 text-primary-100/80">
@@ -31,9 +33,12 @@
                     {{ setting('footer_note_'.$locale) ?: Str::limit(strip_tags((string) $doctor->tr('short_bio')), 150) }}
                 </p>
 
-                <x-social-links :doctor="$doctor" variant="boxed" class="mt-5"/>
+                @feature('social_links')
+                    <x-social-links :doctor="$doctor" variant="boxed" class="mt-5"/>
+                @endfeature
             </div>
 
+            @if (feature('footer_links') && filled($links))
             <div class="lg:col-span-3">
                 <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-white">{{ __('site.footer.quick_links') }}</h2>
                 <ul class="grid grid-cols-2 gap-x-4 gap-y-2.5 text-sm lg:grid-cols-1">
@@ -44,7 +49,9 @@
                     @endforeach
                 </ul>
             </div>
+            @endif
 
+            @feature('footer_chambers')
             <div class="lg:col-span-3">
                 <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-white">{{ __('site.footer.chambers') }}</h2>
                 <ul class="space-y-4 text-sm">
@@ -58,7 +65,9 @@
                     @endforeach
                 </ul>
             </div>
+            @endfeature
 
+            @feature('footer_contact')
             <div class="lg:col-span-2">
                 <h2 class="mb-4 text-sm font-semibold uppercase tracking-wider text-white">{{ __('site.footer.contact') }}</h2>
                 <ul class="space-y-3 text-sm">
@@ -82,16 +91,21 @@
                     @endif
                 </ul>
 
-                <a href="{{ route('contact.create') }}" class="btn-secondary mt-5 w-full !bg-white/10 !text-white !ring-white/20 hover:!bg-white/20">
-                    {{ __('site.nav.contact') }}
-                </a>
+                @feature('contact')
+                    <a href="{{ route('contact.create') }}" class="btn-secondary mt-5 w-full bg-white/10 text-white ring-white/20 hover:bg-white/20">
+                        {{ __('site.nav.contact') }}
+                    </a>
+                @endfeature
             </div>
+            @endfeature
         </div>
 
-        <p class="mt-10 rounded-xl bg-white/5 px-4 py-3 text-xs leading-relaxed">
-            <x-icon name="info" class="me-1 inline h-3.5 w-3.5 align-[-2px]"/>
-            {{ __('site.footer.disclaimer') }}
-        </p>
+        @feature('footer_disclaimer')
+            <p class="mt-10 rounded-xl bg-white/5 px-4 py-3 text-xs leading-relaxed">
+                <x-icon name="info" class="me-1 inline h-3.5 w-3.5 align-[-2px]"/>
+                {{ __('site.footer.disclaimer') }}
+            </p>
+        @endfeature
     </div>
 
     <div class="border-t border-white/10">

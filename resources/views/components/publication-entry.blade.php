@@ -7,7 +7,7 @@
 
     <div class="min-w-0 flex-1">
         <div class="flex flex-wrap items-center gap-2">
-            <span class="chip !bg-slate-100 !text-slate-600">{{ __('site.publications.types.'.$publication->type) }}</span>
+            <span class="chip bg-slate-100 text-slate-600">{{ __('site.publications.types.'.$publication->type) }}</span>
             @if ($publication->year)
                 <span class="text-xs tabular-nums text-slate-400">{{ bn_digits($publication->year) }}</span>
             @endif

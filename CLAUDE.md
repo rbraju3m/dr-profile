@@ -117,6 +117,69 @@ uploads, slugging and flash messages are inherited. The index table renders gene
   `content`, `description`, `philosophy`. An editor on a field printed with `{{ }}` would show its
   own markup to visitors.
 
+## Showing and hiding parts of the site
+
+Every public section, every homepage band and the header/footer furniture can be switched off from
+**Sections & Visibility** (`/admin/visibility`, admin role only). The registry is
+`App\Support\Features`; each switch is a `settings` row keyed `feature_<name>`, and a **missing row
+means on**, so nothing hides itself on an existing install.
+
+Switching a section off is not cosmetic. It must leave *every* way in:
+
+- the routes answer 404 — public routes are grouped behind `->middleware('feature:<name>')`;
+- the link leaves the header, the footer, the homepage and any page that cross-links to it;
+- the URLs leave `sitemap.xml` and the rows leave site search.
+
+Read a switch with `feature('key')` in PHP or `@feature('key') … @endfeature` in Blade (a
+`Blade::if` registered in `AppServiceProvider`). `Features::filter()` drops the entries of a nav
+array whose `feature` key is off.
+
+`requires` in the registry stops a switch from leaving a dead end: the homepage expertise band lists
+services and links to their detail pages, so it follows the `services` switch down whatever its own
+says. When a band or a button links into another section, gate the *link* on that section's switch —
+`home.blade.php` does this for both hero buttons.
+
+`FeatureRegistryTest` fails on a name used in a view but missing from the registry (an unknown name
+reads as "on", so the typo would otherwise be silent) and on a registered name nothing reads — the
+same recurring defect from both ends. `FeatureVisibilityTest` walks every section on and off. Two sweeps guard the "no dead ends" rule:
+one checks that no page a visitor can still reach links into a hidden section, in both languages;
+the other goes further for booking, which is offered from more places than anything else — the
+header, the phone bar, every chamber card, four sidebars and the error pages — and checks its
+wording is gone too.
+
+## Light and dark
+
+The site ships both themes. `App\Support\Theme` resolves which one a request renders in:
+
+- the admin picks the site default in **Sections & Visibility** — Light, Dark, or *Follow the device*;
+- a reader may overrule it for themselves while the `theme_toggle` switch is on. Their choice lives
+  in an unencrypted `theme` cookie, for the same reason the locale does: it has to be readable while
+  the first byte is being built, or the page paints in the wrong theme and flickers;
+- `Theme::forStaff()` (the admin layout and the sign-in page) always honours the cookie. The public
+  switch decides what *visitors* are offered, not what the back office looks like.
+
+`Follow the device` cannot be answered on the server, so no class is emitted and
+`partials/theme-script` settles it from `prefers-color-scheme` before the first paint.
+
+How the styling works — this is the part that is easy to get wrong:
+
+- The theme is a **class on `<html>`**, so `app.css` declares `@custom-variant dark` rather than
+  using Tailwind's default `prefers-color-scheme` behaviour.
+- Utilities compile to `var(--color-…)`, so **the neutral ramp is inverted once** under `.dark` and
+  every page follows. The brand ramps are *not* moved: `text-primary-100` is ink on the dark hero and
+  `bg-primary-950` is that hero's background, so a token that moved would take one with the other.
+  Their light tints are re-pointed one utility at a time in the block at the foot of `app.css`.
+- Component classes (`.card`, `.chip`, `.btn-secondary`, `.field-input`) take their surface from
+  `var(--surface-1)` and friends rather than a `.dark .card` rule, because a `.dark`-prefixed rule
+  outranks a utility and `<div class="card bg-primary-900">` must stay teal in both themes.
+- **Do not mark a colour utility `!important` to beat a component class.** It never needed to — the
+  utilities layer already outranks components — and an unlayered dark override cannot win against a
+  layered `!important`, so the marked element silently keeps its light colour.
+- Scrims (`bg-black/60`) and overlays on always-dark bands (`bg-white/10`, `text-white`) stay as they
+  are: those surfaces are dark in both themes.
+
+`ThemeTest` covers the default, the reader's override, the switch being off, and the admin panel.
+
 ## Media
 
 - Uploads go through `App\Services\MediaService` on the `public` disk with randomised filenames.

@@ -45,6 +45,7 @@
                 @endif
 
                 {{-- Next two weeks at a glance --}}
+                @feature('appointment')
                 <h2 class="mt-10 text-xl font-bold">{{ __('site.booking.select_date') }}</h2>
                 <div class="mt-4 grid grid-cols-3 gap-2.5 sm:grid-cols-5 lg:grid-cols-7">
                     @foreach ($calendar as $day)
@@ -66,6 +67,7 @@
                         </div>
                     @endforeach
                 </div>
+                @endfeature
 
                 @if ($chamber->map_embed)
                     <div class="mt-10 overflow-hidden rounded-2xl border border-slate-200">
@@ -120,7 +122,9 @@
                         @endif
 
                         <div class="mt-5 space-y-2">
-                            @if ($chamber->accepts_online_booking)
+                            @if (! feature('appointment'))
+                                {{-- Site-wide switch: not this chamber's doing, so no notice. --}}
+                            @elseif ($chamber->accepts_online_booking)
                                 <a href="{{ route('appointment.create', ['chamber' => $chamber->slug]) }}" class="btn-primary w-full">
                                     <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
                                 </a>

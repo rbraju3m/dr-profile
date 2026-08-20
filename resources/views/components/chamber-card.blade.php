@@ -30,8 +30,8 @@
             @endif
         </div>
 
-        @if ($chamber->accepts_online_booking)
-            <span class="chip shrink-0 !bg-accent-50 !text-accent-700">
+        @if ($chamber->accepts_online_booking && feature('appointment'))
+            <span class="chip shrink-0 bg-accent-50 text-accent-700">
                 <x-icon name="check" class="h-3 w-3"/>{{ __('site.actions.book_now') }}
             </span>
         @endif
@@ -77,7 +77,10 @@
     </div>
 
     <div class="border-t border-slate-100 p-4">
-        @if ($chamber->accepts_online_booking)
+        @if (! feature('appointment'))
+            {{-- Booking is off for the whole site: nothing to explain, just the way on. --}}
+            <a href="{{ route('chambers.show', $chamber) }}" class="btn-secondary w-full">{{ __('site.actions.view_details') }}</a>
+        @elseif ($chamber->accepts_online_booking)
             <div class="flex items-center gap-2">
                 <a href="{{ route('appointment.create', ['chamber' => $chamber->slug]) }}" class="btn-primary flex-1">
                     <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_now') }}

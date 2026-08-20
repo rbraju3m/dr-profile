@@ -24,9 +24,11 @@
                             <h2 class="text-lg font-semibold text-white">{{ __('site.contact.form_heading') }}</h2>
                             <p class="mt-1 text-sm text-primary-100">{{ __('site.contact.subheading') }}</p>
                         </div>
-                        <a href="{{ route('contact.create') }}" class="btn shrink-0 bg-white text-primary-800 hover:bg-primary-50">
-                            {{ __('site.nav.contact') }}
-                        </a>
+                        @feature('contact')
+                            <a href="{{ route('contact.create') }}" class="btn shrink-0 btn-invert">
+                                {{ __('site.nav.contact') }}
+                            </a>
+                        @endfeature
                     </div>
                 </div>
             @endif

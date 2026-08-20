@@ -37,9 +37,11 @@
                             </dl>
 
                             <div class="space-y-2 border-t border-slate-100 pt-4">
-                                <a href="{{ route('appointment.create') }}" class="btn-primary w-full">
-                                    <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
-                                </a>
+                                @feature('appointment')
+                                    <a href="{{ route('appointment.create') }}" class="btn-primary w-full">
+                                        <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
+                                    </a>
+                                @endfeature
                                 @if ($doctor->cv_file)
                                     <a href="{{ $doctor->mediaUrl('cv_file') }}" download class="btn-secondary w-full">
                                         <x-icon name="download" class="h-4 w-4"/>{{ __('site.actions.download_cv') }}
@@ -60,7 +62,7 @@
                 @if ($doctor->tr('philosophy'))
                     <div class="mt-10 rounded-2xl border-s-4 border-primary-500 bg-primary-50/60 p-6">
                         <h2 class="text-lg font-bold text-primary-900">{{ __('site.about.philosophy') }}</h2>
-                        <div class="prose-content mt-3 !text-primary-900/80">{!! $doctor->tr('philosophy') !!}</div>
+                        <div class="prose-content mt-3 text-primary-900/80">{!! $doctor->tr('philosophy') !!}</div>
                     </div>
                 @endif
 
@@ -124,7 +126,7 @@
                     </section>
                 @endforeach
 
-                @if ($publications->isNotEmpty())
+                @if ($publications->isNotEmpty() && feature('publications'))
                     <section class="mt-12">
                         <div class="flex flex-wrap items-center justify-between gap-3">
                             <h2 class="flex items-center gap-2.5 text-xl font-bold">
@@ -149,7 +151,7 @@
         </div>
     </section>
 
-    @if ($services->isNotEmpty())
+    @if ($services->isNotEmpty() && feature('services'))
         <section class="section bg-slate-50">
             <div class="container-page">
                 <x-section-heading :title="__('site.home.expertise_heading')" :subtitle="__('site.home.expertise_subheading')"/>

@@ -71,7 +71,7 @@
                 @if ($appointment->isCancellable())
                     <div class="no-print mt-6" x-data="{ open: false }">
                         <button type="button" @click="open = !open" x-show="!open"
-                                class="btn-ghost w-full !text-rose-600 hover:!bg-rose-50">
+                                class="btn-ghost w-full text-rose-600 hover:bg-rose-50">
                             <x-icon name="calendar-x" class="h-4 w-4"/>{{ __('site.booking.cancel') }}
                         </button>
 

@@ -37,7 +37,7 @@
                     {{-- Reels are shot vertically; framing one at 16:9 leaves a
                          sliver between two black bands. --}}
                     <div @class([
-                        'mt-8 overflow-hidden rounded-2xl bg-slate-900',
+                        'mt-8 overflow-hidden rounded-2xl bg-black',
                         'aspect-video' => ! $portrait,
                         'mx-auto aspect-[9/16] max-w-sm' => $portrait,
                     ])>
@@ -93,9 +93,11 @@
                             @endforeach
                         </dl>
 
-                        <a href="{{ route('appointment.create') }}" class="btn-primary mt-5 w-full">
-                            <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
-                        </a>
+                        @feature('appointment')
+                            <a href="{{ route('appointment.create') }}" class="btn-primary mt-5 w-full">
+                                <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
+                            </a>
+                        @endfeature
                     </div>
                 </div>
             </aside>

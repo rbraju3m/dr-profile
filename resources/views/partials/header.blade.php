@@ -1,21 +1,26 @@
 @php
+    use App\Support\Features;
+
     $locale = app()->getLocale();
-    $primaryNav = [
+
+    // Every entry names the switch that governs it, so a section turned off in
+    // the admin leaves the menu instead of linking to a page that 404s.
+    $primaryNav = Features::filter([
         ['route' => 'home', 'label' => __('site.nav.home')],
-        ['route' => 'about', 'label' => __('site.nav.about')],
-        ['route' => 'services.index', 'label' => __('site.nav.services')],
-        ['route' => 'chambers.index', 'label' => __('site.nav.chambers')],
-        ['route' => 'stories.index', 'label' => __('site.nav.success_stories')],
-    ];
-    $moreNav = [
-        ['route' => 'news.index', 'label' => __('site.nav.news'), 'icon' => 'file-text'],
-        ['route' => 'events.index', 'label' => __('site.nav.events'), 'icon' => 'calendar'],
-        ['route' => 'blog.index', 'label' => __('site.nav.blog'), 'icon' => 'book-open'],
-        ['route' => 'gallery.index', 'label' => __('site.nav.gallery'), 'icon' => 'image'],
-        ['route' => 'publications.index', 'label' => __('site.nav.publications'), 'icon' => 'graduation-cap'],
-        ['route' => 'faq.index', 'label' => __('site.nav.faq'), 'icon' => 'info'],
-        ['route' => 'search', 'label' => __('site.actions.search'), 'icon' => 'search'],
-    ];
+        ['route' => 'about', 'label' => __('site.nav.about'), 'feature' => 'about'],
+        ['route' => 'services.index', 'label' => __('site.nav.services'), 'feature' => 'services'],
+        ['route' => 'chambers.index', 'label' => __('site.nav.chambers'), 'feature' => 'chambers'],
+        ['route' => 'stories.index', 'label' => __('site.nav.success_stories'), 'feature' => 'stories'],
+    ]);
+    $moreNav = Features::filter([
+        ['route' => 'news.index', 'label' => __('site.nav.news'), 'icon' => 'file-text', 'feature' => 'news'],
+        ['route' => 'events.index', 'label' => __('site.nav.events'), 'icon' => 'calendar', 'feature' => 'events'],
+        ['route' => 'blog.index', 'label' => __('site.nav.blog'), 'icon' => 'book-open', 'feature' => 'blog'],
+        ['route' => 'gallery.index', 'label' => __('site.nav.gallery'), 'icon' => 'image', 'feature' => 'gallery'],
+        ['route' => 'publications.index', 'label' => __('site.nav.publications'), 'icon' => 'graduation-cap', 'feature' => 'publications'],
+        ['route' => 'faq.index', 'label' => __('site.nav.faq'), 'icon' => 'info', 'feature' => 'faq'],
+        ['route' => 'search', 'label' => __('site.actions.search'), 'icon' => 'search', 'feature' => 'search'],
+    ]);
 @endphp
 
 <header x-data="{ open: false, more: false, scrolled: false }"
@@ -23,6 +28,7 @@
         class="no-print sticky top-0 z-50">
 
     {{-- Utility strip: contact details and language, hidden on small screens --}}
+    @feature('header_topbar')
     <div class="hidden bg-primary-900 text-primary-100 lg:block">
         <div class="container-page flex h-10 items-center justify-between text-xs">
             <div class="flex items-center gap-6">
@@ -40,11 +46,17 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <x-social-links :doctor="$doctor"/>
-                <x-language-switcher class="text-primary-100"/>
+                @feature('social_links')
+                    <x-social-links :doctor="$doctor"/>
+                @endfeature
+                @feature('language_switcher')
+                    <x-language-switcher class="text-primary-100"/>
+                @endfeature
+                <x-theme-toggle class="text-primary-100"/>
             </div>
         </div>
     </div>
+    @endfeature
 
     {{-- Main bar --}}
     <div class="border-b border-slate-200 bg-white/95 backdrop-blur transition-shadow"
@@ -71,6 +83,7 @@
                        ])>{{ $item['label'] }}</a>
                 @endforeach
 
+                @if (filled($moreNav))
                 <div class="relative" @mouseenter="more = true" @mouseleave="more = false">
                     <button type="button" @click="more = !more" :aria-expanded="more"
                             class="flex items-center gap-1 rounded-full px-3.5 py-2 text-sm font-medium text-slate-600 transition hover:bg-slate-100 hover:text-slate-900">
@@ -95,19 +108,28 @@
                         </div>
                     </div>
                 </div>
+                @endif
             </nav>
 
             <div class="flex items-center gap-2">
-                <a href="{{ route('search') }}"
-                   class="hidden h-11 w-11 place-items-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 lg:grid"
-                   aria-label="{{ __('site.actions.search') }}">
-                    <x-icon name="search" class="h-5 w-5"/>
-                </a>
+                @feature('header_search')
+                    <a href="{{ route('search') }}"
+                       class="hidden h-11 w-11 place-items-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 lg:grid"
+                       aria-label="{{ __('site.actions.search') }}">
+                        <x-icon name="search" class="h-5 w-5"/>
+                    </a>
+                @endfeature
 
-                <a href="{{ route('appointment.create') }}" class="btn-primary hidden sm:inline-flex">
-                    <x-icon name="calendar-check" class="h-4 w-4"/>
-                    {{ __('site.nav.appointment') }}
-                </a>
+                @feature('appointment')
+                    <a href="{{ route('appointment.create') }}" class="btn-primary hidden sm:inline-flex">
+                        <x-icon name="calendar-check" class="h-4 w-4"/>
+                        {{ __('site.nav.appointment') }}
+                    </a>
+                @endfeature
+
+                {{-- The strip above carries this on wide screens; with the strip
+                     switched off it has to live here for everyone. --}}
+                <x-theme-toggle class="!h-11 !w-11 text-slate-500 {{ feature('header_topbar') ? 'lg:hidden' : '' }}"/>
 
                 <button type="button" @click="open = true"
                         class="grid h-11 w-11 place-items-center rounded-xl text-slate-600 hover:bg-slate-100 lg:hidden"
@@ -120,7 +142,7 @@
 
     {{-- Mobile drawer --}}
     <div x-show="open" x-cloak class="lg:hidden" role="dialog" aria-modal="true" id="mobile-menu">
-        <div x-show="open" x-transition.opacity class="fixed inset-0 z-40 bg-slate-900/50" @click="open = false"></div>
+        <div x-show="open" x-transition.opacity class="fixed inset-0 z-40 bg-black/60" @click="open = false"></div>
 
         <div x-show="open" x-cloak
              x-transition:enter="transition ease-out duration-250"
@@ -154,25 +176,31 @@
                             {{ $item['label'] }}
                         </a>
                     @endforeach
-                    <a href="{{ route('contact.create') }}"
-                       class="flex items-center gap-3 rounded-xl px-4 py-3 text-[15px] font-medium text-slate-700 hover:bg-slate-50">
-                        <x-icon name="mail" class="h-4 w-4 text-slate-400"/>
-                        {{ __('site.nav.contact') }}
-                    </a>
+                    @feature('contact')
+                        <a href="{{ route('contact.create') }}"
+                           class="flex items-center gap-3 rounded-xl px-4 py-3 text-[15px] font-medium text-slate-700 hover:bg-slate-50">
+                            <x-icon name="mail" class="h-4 w-4 text-slate-400"/>
+                            {{ __('site.nav.contact') }}
+                        </a>
+                    @endfeature
                 </div>
 
-                <div class="mt-6 border-t border-slate-200 pt-5">
-                    <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">{{ __('site.nav.language') }}</p>
-                    <x-language-switcher variant="buttons"/>
-                </div>
+                @feature('language_switcher')
+                    <div class="mt-6 border-t border-slate-200 pt-5">
+                        <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-slate-400">{{ __('site.nav.language') }}</p>
+                        <x-language-switcher variant="buttons"/>
+                    </div>
+                @endfeature
             </nav>
 
-            <div class="border-t border-slate-200 p-4">
-                <a href="{{ route('appointment.create') }}" class="btn-primary btn-lg w-full">
-                    <x-icon name="calendar-check" class="h-5 w-5"/>
-                    {{ __('site.nav.appointment') }}
-                </a>
-            </div>
+            @feature('appointment')
+                <div class="border-t border-slate-200 p-4">
+                    <a href="{{ route('appointment.create') }}" class="btn-primary btn-lg w-full">
+                        <x-icon name="calendar-check" class="h-5 w-5"/>
+                        {{ __('site.nav.appointment') }}
+                    </a>
+                </div>
+            @endfeature
         </div>
     </div>
 </header>

@@ -247,4 +247,20 @@ Alpine.data('readingProgress', () => ({
 }))
 
 window.Alpine = Alpine
+/**
+ * themeToggle — light/dark, applied to <html> at once and remembered.
+ *
+ * The cookie is what the server reads on the next request, so the page it
+ * sends back is already the right way round and nothing flashes.
+ */
+Alpine.data('themeToggle', () => ({
+    dark: document.documentElement.classList.contains('dark'),
+
+    flip() {
+        this.dark = !this.dark
+        document.documentElement.classList.toggle('dark', this.dark)
+        document.cookie = `theme=${this.dark ? 'dark' : 'light'};path=/;max-age=31536000;samesite=lax`
+    },
+}))
+
 Alpine.start()

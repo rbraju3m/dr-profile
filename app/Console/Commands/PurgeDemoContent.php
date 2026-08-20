@@ -21,6 +21,7 @@ use App\Models\Stat;
 use App\Models\SuccessStory;
 use App\Models\Testimonial;
 use App\Services\MediaService;
+use App\Support\Features;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 
@@ -144,9 +145,14 @@ class PurgeDemoContent extends Command
 
         DoctorProfile::forgetCache();
 
-        Setting::query()->delete();
+        /*
+         * The show/hide switches survive: they are decisions about how this
+         * site is laid out, not invented content, and resetting them would
+         * silently bring back sections the owner had turned off.
+         */
+        Setting::query()->where('group', '!=', Features::GROUP)->delete();
         Setting::forgetCache();
 
-        $this->line('  Doctor profile and site settings cleared');
+        $this->line('  Doctor profile and site settings cleared (visibility switches kept)');
     }
 }

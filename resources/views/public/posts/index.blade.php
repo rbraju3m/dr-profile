@@ -64,13 +64,15 @@
                         </div>
                     @endif
 
-                    <div class="card bg-primary-900 p-6 text-white">
-                        <h2 class="text-base font-semibold text-white">{{ __('site.home.cta_heading') }}</h2>
-                        <p class="mt-2 text-sm text-primary-100">{{ __('site.home.cta_text') }}</p>
-                        <a href="{{ route('appointment.create') }}" class="btn mt-4 w-full bg-white text-primary-800 hover:bg-primary-50">
-                            {{ __('site.actions.book_now') }}
-                        </a>
-                    </div>
+                    @feature('appointment')
+                        <div class="card bg-primary-900 p-6 text-white">
+                            <h2 class="text-base font-semibold text-white">{{ __('site.home.cta_heading') }}</h2>
+                            <p class="mt-2 text-sm text-primary-100">{{ __('site.home.cta_text') }}</p>
+                            <a href="{{ route('appointment.create') }}" class="btn mt-4 w-full btn-invert">
+                                {{ __('site.actions.book_now') }}
+                            </a>
+                        </div>
+                    @endfeature
                 </div>
             </aside>
         </div>

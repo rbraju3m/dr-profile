@@ -119,9 +119,11 @@
                                     <x-icon name="phone" class="h-3.5 w-3.5"/>{{ bn_digits($chamber->phone) }}
                                 </a>
                             @endif
-                            <a href="{{ route('chambers.show', $chamber) }}" class="btn-ghost !px-3 !py-1.5 !text-xs">
-                                {{ __('site.actions.view_details') }}
-                            </a>
+                            @feature('chambers')
+                                <a href="{{ route('chambers.show', $chamber) }}" class="btn-ghost !px-3 !py-1.5 !text-xs">
+                                    {{ __('site.actions.view_details') }}
+                                </a>
+                            @endfeature
                         </div>
                     </div>
                 @endforeach

@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\AdminLocale;
 use App\Http\Middleware\DetectLocale;
+use App\Http\Middleware\EnsureFeatureEnabled;
 use App\Http\Middleware\EnsureUserIsStaff;
 use App\Http\Middleware\SetLocale;
 use App\Support\Uploads;
@@ -22,9 +23,11 @@ return Application::configure(basePath: dirname(__DIR__))
          * The locale cookie stays unencrypted on purpose: DetectLocale reads it
          * before the session or cookie decryption is available, which is the
          * only way an error rendered by global middleware (a 413, say) can come
-         * out in the reader's language.
+         * out in the reader's language. The theme cookie is written by the
+         * browser itself and read while the first byte is being built, so it
+         * cannot be encrypted either.
          */
-        $middleware->encryptCookies(except: ['locale']);
+        $middleware->encryptCookies(except: ['locale', 'theme']);
 
         // Establishes a locale before routing, so 404s can render links too.
         $middleware->prepend(DetectLocale::class);
@@ -37,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
             'locale' => SetLocale::class,
             'admin.locale' => AdminLocale::class,
             'staff' => EnsureUserIsStaff::class,
+            'feature' => EnsureFeatureEnabled::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

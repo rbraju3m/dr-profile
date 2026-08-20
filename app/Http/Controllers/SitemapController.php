@@ -8,11 +8,15 @@ use App\Models\Page;
 use App\Models\Post;
 use App\Models\Service;
 use App\Models\SuccessStory;
+use App\Support\Features;
 use Illuminate\Http\Response;
 
 /**
  * Both locales of every public URL, so search engines index the Bangla and
  * English versions as alternates of one another.
+ *
+ * Sections switched off in the admin are left out: their URLs answer 404, and
+ * listing them here would ask a crawler to fetch pages that no longer exist.
  */
 class SitemapController extends Controller
 {
@@ -22,22 +26,32 @@ class SitemapController extends Controller
 
         foreach (array_keys(config('site.locales')) as $locale) {
             foreach ([
-                'home' => '1.0', 'about' => '0.9', 'services.index' => '0.9',
-                'chambers.index' => '0.9', 'appointment.create' => '1.0',
-                'stories.index' => '0.8', 'news.index' => '0.7', 'events.index' => '0.7',
-                'blog.index' => '0.7', 'gallery.index' => '0.6',
-                'publications.index' => '0.5', 'faq.index' => '0.6', 'contact.create' => '0.7',
-            ] as $name => $priority) {
+                'home' => ['1.0', null], 'about' => ['0.9', 'about'], 'services.index' => ['0.9', 'services'],
+                'chambers.index' => ['0.9', 'chambers'], 'appointment.create' => ['1.0', 'appointment'],
+                'stories.index' => ['0.8', 'stories'], 'news.index' => ['0.7', 'news'], 'events.index' => ['0.7', 'events'],
+                'blog.index' => ['0.7', 'blog'], 'gallery.index' => ['0.6', 'gallery'],
+                'publications.index' => ['0.5', 'publications'], 'faq.index' => ['0.6', 'faq'], 'contact.create' => ['0.7', 'contact'],
+            ] as $name => [$priority, $feature]) {
+                if ($feature && ! Features::enabled($feature)) {
+                    continue;
+                }
+
                 $urls[] = ['loc' => route($name, ['locale' => $locale]), 'priority' => $priority, 'lastmod' => null];
             }
 
             foreach ([
-                ['services.show', Service::active()->get()],
-                ['chambers.show', Chamber::active()->get()],
-                ['stories.show', SuccessStory::published()->get()],
-                ['gallery.show', GalleryAlbum::active()->get()],
-                ['pages.show', Page::published()->get()],
-            ] as [$route, $records]) {
+                ['services.show', 'services', fn () => Service::active()->get()],
+                ['chambers.show', 'chambers', fn () => Chamber::active()->get()],
+                ['stories.show', 'stories', fn () => SuccessStory::published()->get()],
+                ['gallery.show', 'gallery', fn () => GalleryAlbum::active()->get()],
+                ['pages.show', null, fn () => Page::published()->get()],
+            ] as [$route, $feature, $query]) {
+                if ($feature && ! Features::enabled($feature)) {
+                    continue;
+                }
+
+                $records = $query();
+
                 foreach ($records as $record) {
                     $urls[] = [
                         'loc' => route($route, ['locale' => $locale, $this->parameterFor($route) => $record]),
@@ -47,7 +61,15 @@ class SitemapController extends Controller
                 }
             }
 
-            foreach (['news' => 'news.show', 'event' => 'events.show', 'blog' => 'blog.show'] as $type => $route) {
+            foreach ([
+                'news' => ['news.show', 'news'],
+                'event' => ['events.show', 'events'],
+                'blog' => ['blog.show', 'blog'],
+            ] as $type => [$route, $feature]) {
+                if (! Features::enabled($feature)) {
+                    continue;
+                }
+
                 foreach (Post::published()->ofType($type)->get() as $post) {
                     $urls[] = [
                         'loc' => route($route, ['locale' => $locale, 'post' => $post]),

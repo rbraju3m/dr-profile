@@ -18,7 +18,7 @@
                                            ratio="aspect-square" :seed="$item->id"/>
 
                             @if ($item->type === 'video')
-                                <span class="absolute inset-0 grid place-items-center bg-slate-900/40">
+                                <span class="absolute inset-0 grid place-items-center bg-black/50">
                                     <span class="grid h-12 w-12 place-items-center rounded-full bg-white/95 text-primary-700">
                                         <x-icon name="play" class="h-5 w-5 fill-current"/>
                                     </span>
@@ -41,7 +41,7 @@
                      @keydown.arrow-right.window="index = (index + 1) % items.length"
                      @keydown.arrow-left.window="index = (index - 1 + items.length) % items.length"
                      x-transition.opacity
-                     class="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/90 p-4"
+                     class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
                      role="dialog" aria-modal="true">
 
                     <button type="button" @click="open = false"

@@ -1,8 +1,11 @@
+@php $theme = App\Support\Theme::forStaff(); @endphp
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" @class(['dark' => $theme === 'dark'])>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="{{ $theme === 'system' ? 'light dark' : $theme }}">
+    @include('partials.theme-script', ['theme' => $theme])
     <title>{{ __('admin.auth.sign_in') }} — {{ __('admin.panel') }}</title>
     <meta name="robots" content="noindex, nofollow">
     @fonts

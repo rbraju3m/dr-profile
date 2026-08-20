@@ -3,6 +3,10 @@
 @source '../**/*.blade.php';
 @source '../**/*.js';
 
+/* The theme is a class on <html>, not the OS preference: the admin sets a
+   default and the reader may override it, so `dark:` has to follow the class. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ==========================================================================
    Design tokens
    A clinical teal carries the brand; emerald signals positive outcomes and
@@ -39,6 +43,55 @@
 }
 
 /* ==========================================================================
+   Light and dark
+   Utilities compile to var(--color-…), so re-pointing a token under .dark
+   re-skins every page at once. Two rules govern which token may move:
+
+   - The neutral ramp (slate) is *inverted*, because it carries surfaces and
+     ink and both flip together.
+   - The brand ramps are *not* touched. primary-100 is ink on the dark hero and
+     primary-950 is that hero's background; a token that moved would take one
+     with the other. Their light tints are re-pointed one utility at a time,
+     lower down, where the intent is unambiguous.
+   ========================================================================== */
+:root {
+    --surface-1: #ffffff;               /* cards, bars, inputs */
+    --page-bg: #ffffff;
+    --ink-teal: var(--color-primary-700);
+    --chip-bg: var(--color-primary-50);
+    --ring-soft: var(--color-primary-200);
+    --sheen: rgb(255 255 255 / 0.55);
+}
+
+.dark {
+    color-scheme: dark;
+
+    --page-bg: #0b1220;
+    --surface-1: #121b28;
+    --ink-teal: #6cc3d9;
+    --chip-bg: #0f2733;
+    --ring-soft: #1c4a5c;
+    --sheen: rgb(255 255 255 / 0.06);
+
+    /* Neutrals, inverted end for end. */
+    --color-slate-50: #141d2b;
+    --color-slate-100: #1b2635;
+    --color-slate-200: #26313f;
+    --color-slate-300: #384558;
+    --color-slate-400: #7b8798;
+    --color-slate-500: #98a4b5;
+    --color-slate-600: #b9c3d0;
+    --color-slate-700: #d2dae4;
+    --color-slate-800: #e5ebf2;
+    --color-slate-900: #f2f6fa;
+    --color-slate-950: #f8fafc;
+
+    /* A shadow on a dark ground has to be darker, not lighter. */
+    --shadow-soft: 0 1px 2px rgb(0 0 0 / 0.5), 0 8px 24px -12px rgb(0 0 0 / 0.7);
+    --shadow-lift: 0 2px 4px rgb(0 0 0 / 0.5), 0 18px 40px -20px rgb(0 0 0 / 0.9);
+}
+
+/* ==========================================================================
    Base
    ========================================================================== */
 @layer base {
@@ -58,7 +111,8 @@
     }
 
     body {
-        @apply bg-white text-slate-700 antialiased;
+        @apply text-slate-700 antialiased;
+        background-color: var(--page-bg);
         font-feature-settings: 'cv02', 'cv03', 'cv04';
     }
 
@@ -104,7 +158,25 @@
     }
 
     .btn-secondary {
-        @apply bg-white text-primary-700 ring-1 ring-inset ring-primary-200 hover:bg-primary-50;
+        @apply ring-1 ring-inset;
+        background-color: var(--surface-1);
+        color: var(--ink-teal);
+        --tw-ring-color: var(--ring-soft);
+    }
+
+    .btn-secondary:hover {
+        background-color: var(--chip-bg);
+    }
+
+    /* A white button that sits on a teal band — white in either theme, because
+       the band behind it is dark in both. */
+    .btn-invert {
+        background-color: #ffffff;
+        color: #1c5062;
+    }
+
+    .btn-invert:hover {
+        background-color: #f0f9fb;
     }
 
     .btn-ghost {
@@ -121,7 +193,8 @@
 
     .card,
     .card-hover {
-        @apply rounded-2xl border border-slate-200/80 bg-white shadow-[var(--shadow-soft)];
+        @apply rounded-2xl border border-slate-200/80 shadow-[var(--shadow-soft)];
+        background-color: var(--surface-1);
     }
 
     .card-hover {
@@ -129,7 +202,9 @@
     }
 
     .chip {
-        @apply inline-flex items-center gap-1.5 rounded-full bg-primary-50 px-3 py-1 text-xs font-medium text-primary-700;
+        @apply inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-medium;
+        background-color: var(--chip-bg);
+        color: var(--ink-teal);
     }
 
     .eyebrow {
@@ -152,7 +227,10 @@
     .prose-content h3 { @apply text-lg; }
     .prose-content ul { @apply list-disc space-y-1 ps-5; }
     .prose-content ol { @apply list-decimal space-y-1 ps-5; }
-    .prose-content a { @apply text-primary-700 underline underline-offset-2 hover:text-primary-800; }
+    .prose-content a {
+        @apply underline underline-offset-2;
+        color: var(--ink-teal);
+    }
     .prose-content strong { @apply font-semibold text-slate-800; }
 
     .field-label {
@@ -160,7 +238,8 @@
     }
 
     .field-input {
-        @apply block w-full rounded-xl border-0 bg-white px-4 py-2.5 text-sm text-slate-900 shadow-sm
+        background-color: var(--surface-1);
+        @apply block w-full rounded-xl border-0 px-4 py-2.5 text-sm text-slate-900 shadow-sm
                ring-1 ring-inset ring-slate-300 placeholder:text-slate-400
                focus:ring-2 focus:ring-inset focus:ring-primary-600;
     }
@@ -182,7 +261,8 @@
     }
 
     .slot-free {
-        @apply bg-white text-slate-700 ring-1 ring-inset ring-slate-200 hover:ring-primary-500 hover:text-primary-700;
+        @apply text-slate-700 ring-1 ring-inset ring-slate-200 hover:ring-primary-500 hover:text-primary-700;
+        background-color: var(--surface-1);
     }
 
     .slot-selected {
@@ -250,7 +330,7 @@
     .card-hover::before {
         content: '';
         @apply pointer-events-none absolute inset-0 z-10 opacity-0;
-        background: linear-gradient(105deg, transparent 40%, rgb(255 255 255 / 0.55) 50%, transparent 60%);
+        background: linear-gradient(105deg, transparent 40%, var(--sheen) 50%, transparent 60%);
         transform: translateX(-100%);
         transition: opacity 200ms;
     }
@@ -368,4 +448,54 @@
 
 @media print {
     .no-print { display: none !important; }
+}
+
+/* ==========================================================================
+   Dark theme, utility by utility
+
+   These sit outside every layer on purpose, so they win over the generated
+   utility of the same name without an !important. Only utilities whose *role*
+   is unambiguous are listed: `bg-primary-50` is always a tint behind teal ink,
+   while `text-primary-100` is always ink on a teal band and is left alone.
+   ========================================================================== */
+:where(.dark) {
+    /* Surfaces. bg-white/25 and below are overlays on bands that are dark in
+       both themes, so they keep their white. */
+    .bg-white { background-color: var(--surface-1); }
+    .bg-white\/95 { background-color: color-mix(in oklab, var(--surface-1) 95%, transparent); }
+    .hover\:bg-white:hover { background-color: var(--surface-1); }
+
+    /* Tints behind coloured ink. */
+    .bg-primary-50, .hover\:bg-primary-50:hover { background-color: #0f2733; }
+    .bg-primary-100 { background-color: #14323f; }
+    .bg-accent-50 { background-color: #0c2a20; }
+    .bg-accent-100 { background-color: #10382c; }
+    .bg-amber-50 { background-color: #33260a; }
+    .bg-amber-100 { background-color: #40300d; }
+    .bg-rose-50 { background-color: #3a1420; }
+    .bg-rose-100 { background-color: #4a1a28; }
+
+    /* Coloured ink, lifted until it reads on a dark ground. */
+    .text-primary-500, .text-primary-600 { color: #47adc6; }
+    .text-primary-700, .hover\:text-primary-700:hover { color: #6cc3d9; }
+    .text-primary-800, .hover\:text-primary-800:hover { color: #81cbdd; }
+    .text-primary-900 { color: #a8dcea; }
+    .text-accent-600 { color: #34d399; }
+    .text-accent-700, .text-accent-800 { color: #6ee7b7; }
+    .text-amber-600, .text-amber-700, .text-amber-800 { color: #fbbf24; }
+    .text-rose-600, .text-rose-700, .text-rose-800 { color: #fb7185; }
+
+    /* Tinted rings around alerts and inputs, which would otherwise glow. */
+    .ring-primary-200 { --tw-ring-color: #1c4a5c; }
+    .ring-accent-200 { --tw-ring-color: #14503d; }
+    .ring-amber-200 { --tw-ring-color: #4d3a10; }
+    .ring-rose-200, .ring-rose-400 { --tw-ring-color: #56202f; }
+
+    /* Quill's own chrome, which ships its own borders. */
+    .ql-toolbar.ql-snow, .ql-container.ql-snow { background-color: var(--surface-1); }
+    .ql-snow .ql-stroke { stroke: var(--color-slate-500); }
+    .ql-snow .ql-fill { fill: var(--color-slate-500); }
+    .ql-snow .ql-picker-options { background-color: var(--surface-1); }
+
+    ::selection { background-color: #1c7792; color: #ffffff; }
 }

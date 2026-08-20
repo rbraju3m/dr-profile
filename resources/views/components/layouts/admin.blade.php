@@ -24,16 +24,20 @@
             ['route' => 'admin.pages.index', 'label' => __('admin.nav.pages'), 'icon' => 'file-text'],
             ['route' => 'admin.sliders.index', 'label' => __('admin.nav.sliders'), 'icon' => 'image'],
             ['route' => 'admin.stats.index', 'label' => __('admin.nav.stats'), 'icon' => 'activity'],
+            ['route' => 'admin.visibility.edit', 'label' => __('admin.nav.visibility'), 'icon' => 'eye', 'admin' => true],
             ['route' => 'admin.settings.edit', 'label' => __('admin.nav.settings'), 'icon' => 'settings', 'admin' => true],
             ['route' => 'admin.users.index', 'label' => __('admin.nav.users'), 'icon' => 'users', 'admin' => true],
         ],
     ];
 @endphp
+@php $theme = App\Support\Theme::forStaff(); @endphp
 <!DOCTYPE html>
-<html lang="{{ app()->getLocale() }}">
+<html lang="{{ app()->getLocale() }}" @class(['dark' => $theme === 'dark'])>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="{{ $theme === 'system' ? 'light dark' : $theme }}">
+    @include('partials.theme-script', ['theme' => $theme])
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? __('admin.panel')).' — '.__('admin.panel') }}</title>
     <meta name="robots" content="noindex, nofollow">
@@ -41,10 +45,10 @@
     @fonts
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-slate-100" x-data="{ sidebar: false }">
+<body class="bg-slate-100 dark:bg-[#0b1220]" x-data="{ sidebar: false }">
 
     {{-- Sidebar --}}
-    <div x-show="sidebar" x-cloak class="fixed inset-0 z-40 bg-slate-900/50 lg:hidden" @click="sidebar = false"></div>
+    <div x-show="sidebar" x-cloak class="fixed inset-0 z-40 bg-black/60 lg:hidden" @click="sidebar = false"></div>
 
     <aside :class="sidebar ? 'translate-x-0' : '-translate-x-full'"
            class="fixed inset-y-0 start-0 z-50 flex w-72 flex-col bg-primary-950 transition-transform lg:translate-x-0">
@@ -161,6 +165,15 @@
                     @endforeach
                 </div>
             </form>
+
+            <button type="button" x-data="themeToggle()" @click="flip()"
+                    :aria-pressed="dark"
+                    :aria-label="dark ? @js(__('site.theme.to_light')) : @js(__('site.theme.to_dark'))"
+                    :title="dark ? @js(__('site.theme.to_light')) : @js(__('site.theme.to_dark'))"
+                    class="grid h-10 w-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100">
+                <span x-show="!dark" x-cloak><x-icon name="moon" class="h-5 w-5"/></span>
+                <span x-show="dark" x-cloak><x-icon name="sun" class="h-5 w-5"/></span>
+            </button>
 
             <div class="relative" x-data="{ open: false }">
                 <button type="button" @click="open = !open" class="flex items-center gap-2 rounded-lg p-1 hover:bg-slate-100" :aria-expanded="open">

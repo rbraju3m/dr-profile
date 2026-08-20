@@ -7,7 +7,7 @@
 --}}
 @props(['cancel' => null, 'label' => null])
 
-<div class="sticky bottom-0 z-30 -mx-4 mt-6 border-t border-slate-200 bg-white/90 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
+<div class="sticky bottom-0 z-30 -mx-4 mt-6 border-t border-slate-200 bg-white/95 px-4 py-3 backdrop-blur sm:-mx-6 sm:px-6 lg:-mx-8 lg:px-8">
     <div class="flex flex-wrap items-center gap-3">
         <button type="submit" class="btn-primary btn-lg">
             <x-icon name="check" class="h-5 w-5"/>{{ $label ?? __('admin.actions.save_changes') }}

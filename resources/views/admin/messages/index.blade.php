@@ -2,7 +2,7 @@
     <x-admin.page-header :title="__('admin.nav.messages')">
         <x-slot:actions>
             <a href="{{ route('admin.messages.index', $onlyUnread ? [] : ['unread' => 1]) }}"
-               @class(['btn-secondary', '!bg-primary-600 !text-white !ring-primary-600' => $onlyUnread])>
+               @class(['btn-secondary', 'bg-primary-600 text-white ring-primary-600' => $onlyUnread])>
                 {{ __('admin.dashboard.unread_messages') }}
             </a>
         </x-slot:actions>

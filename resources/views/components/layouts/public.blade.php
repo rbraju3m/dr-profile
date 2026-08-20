@@ -24,11 +24,15 @@
         ])->values()->all(),
     ];
 @endphp
+@php $theme = App\Support\Theme::current(); @endphp
 <!DOCTYPE html>
-<html lang="{{ $locale }}" dir="{{ config('site.locales.'.$locale.'.dir', 'ltr') }}">
+<html lang="{{ $locale }}" dir="{{ config('site.locales.'.$locale.'.dir', 'ltr') }}"
+      @class(['dark' => $theme === 'dark'])>
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="color-scheme" content="{{ $theme === 'system' ? 'light dark' : $theme }}">
+    @include('partials.theme-script', ['theme' => $theme])
 
     <title>{{ $pageTitle ? $pageTitle.' — '.$siteName : ($doctor->tr('meta_title') ?: $siteName) }}</title>
     <meta name="description" content="{{ Str::limit(strip_tags((string) $metaDescription), 160) }}">
@@ -92,23 +96,28 @@
     </button>
 
     {{-- Mobile sticky booking bar: the single most important action on the site. --}}
-    <div class="no-print fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur lg:hidden">
-        <div class="flex items-center gap-2">
-            @if ($doctor->phone)
-                <a href="tel:{{ preg_replace('/\s/', '', $doctor->phone) }}"
-                   class="btn-secondary flex-1"
-                   aria-label="{{ __('site.actions.call_now') }}">
-                    <x-icon name="phone" class="h-4 w-4"/>
-                    {{ __('site.actions.call_now') }}
-                </a>
-            @endif
-            <a href="{{ route('appointment.create') }}" class="btn-primary flex-1">
-                <x-icon name="calendar-check" class="h-4 w-4"/>
-                {{ __('site.actions.book_now') }}
-            </a>
+    {{-- Nothing to act on means no bar, and no gap reserved for one either. --}}
+    @if (feature('mobile_action_bar') && ($doctor->phone || feature('appointment')))
+        <div class="no-print fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur lg:hidden">
+            <div class="flex items-center gap-2">
+                @if ($doctor->phone)
+                    <a href="tel:{{ preg_replace('/\s/', '', $doctor->phone) }}"
+                       class="btn-secondary flex-1"
+                       aria-label="{{ __('site.actions.call_now') }}">
+                        <x-icon name="phone" class="h-4 w-4"/>
+                        {{ __('site.actions.call_now') }}
+                    </a>
+                @endif
+                @feature('appointment')
+                    <a href="{{ route('appointment.create') }}" class="btn-primary flex-1">
+                        <x-icon name="calendar-check" class="h-4 w-4"/>
+                        {{ __('site.actions.book_now') }}
+                    </a>
+                @endfeature
+            </div>
         </div>
-    </div>
-    <div class="h-20 lg:hidden" aria-hidden="true"></div>
+        <div class="h-20 lg:hidden" aria-hidden="true"></div>
+    @endif
 
     @stack('scripts')
 </body>

@@ -19,6 +19,12 @@ return [
     'present' => 'Present',
     'skip_to_content' => 'Skip to main content',
 
+    'theme' => [
+        'to_dark' => 'Switch to dark',
+        'to_light' => 'Switch to light',
+        'label' => 'Appearance',
+    ],
+
     'nav' => [
         'home' => 'Home',
         'about' => 'About',

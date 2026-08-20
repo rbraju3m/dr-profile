@@ -43,7 +43,7 @@
                           onsubmit="return confirm('{{ __('admin.actions.confirm_delete') }}')">
                         @csrf
                         @method('DELETE')
-                        <button type="submit" class="btn-ghost w-full !text-rose-600 hover:!bg-rose-50">
+                        <button type="submit" class="btn-ghost w-full text-rose-600 hover:bg-rose-50">
                             <x-icon name="trash" class="h-4 w-4"/>{{ __('admin.actions.delete') }}
                         </button>
                     </form>

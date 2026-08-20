@@ -7,9 +7,11 @@ use App\Models\Chamber;
 use App\Models\ContactMessage;
 use App\Models\DoctorProfile;
 use App\Models\Page;
+use App\Support\Features;
 use App\Support\Uploads;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -24,6 +26,9 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerUploadMessages();
+
+        // @feature('home_stats') … @endfeature — the switches in App\Support\Features.
+        Blade::if('feature', fn (string $key) => Features::enabled($key));
 
         Paginator::defaultView('vendor.pagination.tailwind');
         Paginator::defaultSimpleView('vendor.pagination.simple-tailwind');

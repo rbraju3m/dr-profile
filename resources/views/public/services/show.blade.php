@@ -14,7 +14,7 @@
 
                 <div class="prose-content">{!! $service->tr('description') !!}</div>
 
-                @if ($stories->isNotEmpty())
+                @if ($stories->isNotEmpty() && feature('stories'))
                     <section class="mt-12">
                         <h2 class="text-xl font-bold">{{ __('site.stories.heading') }}</h2>
                         <div class="mt-5 grid gap-5 sm:grid-cols-2">
@@ -61,9 +61,11 @@
                             @endif
                         </dl>
 
-                        <a href="{{ route('appointment.create', ['service' => $service->id]) }}" class="btn-primary mt-5 w-full">
-                            <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
-                        </a>
+                        @feature('appointment')
+                            <a href="{{ route('appointment.create', ['service' => $service->id]) }}" class="btn-primary mt-5 w-full">
+                                <x-icon name="calendar-check" class="h-4 w-4"/>{{ __('site.actions.book_appointment') }}
+                            </a>
+                        @endfeature
                     </div>
 
                     @if ($related->isNotEmpty())

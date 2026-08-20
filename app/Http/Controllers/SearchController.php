@@ -7,6 +7,7 @@ use App\Models\Post;
 use App\Models\Publication;
 use App\Models\Service;
 use App\Models\SuccessStory;
+use App\Support\Features;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -33,24 +34,42 @@ class SearchController extends Controller
         ]);
     }
 
-    /** @return Collection<string, Collection> */
+    /**
+     * @return Collection<string, Collection>
+     *
+     * A section switched off in the admin answers 404, so its rows stay out of
+     * the results as well — a hit that leads to a "not found" page is worse
+     * than no hit at all.
+     */
     private function search(string $term): Collection
     {
-        $groups = collect([
-            __('site.nav.services') => Service::query()
+        $groups = collect();
+
+        if (Features::enabled('services')) {
+            $groups[__('site.nav.services')] = Service::query()
                 ->active()
                 ->where($this->matching($term, ['name_en', 'name_bn', 'short_description_en', 'short_description_bn']))
                 ->take(self::PER_TYPE)->get()
-                ->map(fn (Service $s) => $this->hit($s->tr('name'), $s->tr('short_description'), route('services.show', $s), 'stethoscope')),
+                ->map(fn (Service $s) => $this->hit($s->tr('name'), $s->tr('short_description'), route('services.show', $s), 'stethoscope'));
+        }
 
-            __('site.nav.success_stories') => SuccessStory::query()
+        if (Features::enabled('stories')) {
+            $groups[__('site.nav.success_stories')] = SuccessStory::query()
                 ->published()
                 ->where($this->matching($term, ['title_en', 'title_bn', 'summary_en', 'summary_bn']))
                 ->take(self::PER_TYPE)->get()
-                ->map(fn (SuccessStory $s) => $this->hit($s->tr('title'), $s->tr('summary'), route('stories.show', $s), 'heart')),
+                ->map(fn (SuccessStory $s) => $this->hit($s->tr('title'), $s->tr('summary'), route('stories.show', $s), 'heart'));
+        }
 
-            __('site.nav.news_events') => Post::query()
-                ->published()->whereIn('type', ['news', 'event'])
+        // News and events are two switches over one table.
+        $postTypes = array_values(array_filter([
+            Features::enabled('news') ? 'news' : null,
+            Features::enabled('events') ? 'event' : null,
+        ]));
+
+        if ($postTypes) {
+            $groups[__('site.nav.news_events')] = Post::query()
+                ->published()->whereIn('type', $postTypes)
                 ->where($this->matching($term, ['title_en', 'title_bn', 'excerpt_en', 'excerpt_bn']))
                 ->take(self::PER_TYPE)->get()
                 ->map(fn (Post $p) => $this->hit(
@@ -58,26 +77,32 @@ class SearchController extends Controller
                     $p->tr('excerpt'),
                     route($p->type === 'event' ? 'events.show' : 'news.show', $p),
                     $p->type === 'event' ? 'calendar' : 'file-text',
-                )),
+                ));
+        }
 
-            __('site.nav.blog') => Post::query()
+        if (Features::enabled('blog')) {
+            $groups[__('site.nav.blog')] = Post::query()
                 ->published()->blog()
                 ->where($this->matching($term, ['title_en', 'title_bn', 'excerpt_en', 'excerpt_bn']))
                 ->take(self::PER_TYPE)->get()
-                ->map(fn (Post $p) => $this->hit($p->tr('title'), $p->tr('excerpt'), route('blog.show', $p), 'book-open')),
+                ->map(fn (Post $p) => $this->hit($p->tr('title'), $p->tr('excerpt'), route('blog.show', $p), 'book-open'));
+        }
 
-            __('site.nav.faq') => Faq::query()
+        if (Features::enabled('faq')) {
+            $groups[__('site.nav.faq')] = Faq::query()
                 ->active()
                 ->where($this->matching($term, ['question_en', 'question_bn', 'answer_en', 'answer_bn']))
                 ->take(self::PER_TYPE)->get()
-                ->map(fn (Faq $f) => $this->hit($f->tr('question'), strip_tags((string) $f->tr('answer')), route('faq.index').'#faq', 'info')),
+                ->map(fn (Faq $f) => $this->hit($f->tr('question'), strip_tags((string) $f->tr('answer')), route('faq.index').'#faq', 'info'));
+        }
 
-            __('site.nav.publications') => Publication::query()
+        if (Features::enabled('publications')) {
+            $groups[__('site.nav.publications')] = Publication::query()
                 ->active()
                 ->where($this->matching($term, ['title_en', 'title_bn', 'authors', 'venue_en']))
                 ->take(self::PER_TYPE)->get()
-                ->map(fn (Publication $p) => $this->hit($p->tr('title'), $p->authors, route('publications.index'), 'graduation-cap')),
-        ]);
+                ->map(fn (Publication $p) => $this->hit($p->tr('title'), $p->authors, route('publications.index'), 'graduation-cap'));
+        }
 
         return $groups->reject(fn (Collection $hits) => $hits->isEmpty());
     }
