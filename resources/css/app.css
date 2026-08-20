@@ -393,6 +393,17 @@
         transform: scaleX(1);
     }
 
+    /* The same hairline, drawn on load rather than on scroll: for the band at
+       the top of a page, where there is nothing to wait for. */
+    .rule-in {
+        animation: rule-in 700ms var(--ease-soft) 200ms both;
+    }
+
+    @keyframes rule-in {
+        from { transform: scaleX(0); }
+        to { transform: scaleX(1); }
+    }
+
     /* The hero photograph drifts, once, over its first quarter minute. */
     .ken-burns {
         animation: ken-burns 20s var(--ease-soft) forwards;
@@ -523,7 +534,7 @@
         transform: none !important;
     }
 
-    .ken-burns { animation: none; }
+    .ken-burns, .rule-in { animation: none; }
     .rule-draw, .line-draw { transform: none !important; }
 }
 

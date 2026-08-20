@@ -12,7 +12,7 @@
                     </div>
                 @endif
 
-                <h2 class="text-xl font-bold">{{ __('site.chamber.weekly_schedule') }}</h2>
+                <h2 x-data x-reveal class="text-xl font-bold tracking-tight">{{ __('site.chamber.weekly_schedule') }}</h2>
 
                 @php $byDay = $chamber->activeSchedules->groupBy('day_of_week'); @endphp
 

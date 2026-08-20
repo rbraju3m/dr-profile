@@ -233,6 +233,10 @@ switch being off, and the admin panel.
   a seventh effect means asking whether it replaces one of these.
 - Headlines carry `.display`, which sets the tight tracking and line height in one place —
   and unsets both for Bangla, whose conjuncts collide at Latin metrics.
+- Every inner page opens with `<x-page-hero>`, which carries the homepage hero's language (hairline
+  grid, display type, accent rule) so the site reads as one thing. Its rule uses `.rule-in`, a CSS
+  animation rather than `x-reveal`: above the fold there is nothing to wait for, and a title that
+  stays invisible when JS fails is not a trade worth making.
 - Screenshots of anything below the fold catch reveals **mid-animation** and look half-drawn. Render
   with `--force-prefers-reduced-motion` to photograph the settled state.
 - Icons are inline SVG in `resources/views/components/icon.blade.php` — add glyphs there rather than

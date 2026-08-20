@@ -7,18 +7,18 @@
             @if ($publications->isEmpty())
                 <x-empty-state icon="book-open" :title="__('site.publications.empty')"/>
             @else
-                <div class="mx-auto max-w-4xl space-y-10">
+                <div class="mx-auto max-w-4xl space-y-12">
                     @foreach ($publications as $year => $items)
-                        <div>
-                            <h2 class="mb-4 flex items-center gap-3 text-lg font-bold">
-                                <span class="tabular-nums">{{ $year ? bn_digits($year) : '—' }}</span>
+                        <div x-data x-reveal>
+                            <h2 class="mb-5 flex items-center gap-4">
+                                <span class="text-2xl font-bold tabular-nums tracking-tight text-primary-700">{{ $year ? bn_digits($year) : '—' }}</span>
                                 <span class="h-px flex-1 bg-slate-200"></span>
-                                <span class="text-sm font-medium text-slate-400">{{ bn_digits($items->count()) }}</span>
+                                <span class="chip">{{ bn_digits($items->count()) }}</span>
                             </h2>
 
                             <ul class="space-y-3">
                                 @foreach ($items as $publication)
-                                    <li class="card p-5">
+                                    <li class="card card-hover p-5">
                                         <x-publication-entry :publication="$publication"/>
                                     </li>
                                 @endforeach

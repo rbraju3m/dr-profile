@@ -16,8 +16,8 @@
 
                 @if ($stories->isNotEmpty() && feature('stories'))
                     <section class="mt-12">
-                        <h2 class="text-xl font-bold">{{ __('site.stories.heading') }}</h2>
-                        <div class="mt-5 grid gap-5 sm:grid-cols-2">
+                        <h2 x-data x-reveal class="text-xl font-bold tracking-tight">{{ __('site.stories.heading') }}</h2>
+                        <div class="mt-6 grid gap-6 sm:grid-cols-2">
                             @foreach ($stories as $story)
                                 <x-story-card :story="$story"/>
                             @endforeach
@@ -27,8 +27,8 @@
 
                 @if ($testimonials->isNotEmpty())
                     <section class="mt-12">
-                        <h2 class="text-xl font-bold">{{ __('site.home.testimonials_heading') }}</h2>
-                        <div class="mt-5 grid gap-5 sm:grid-cols-2">
+                        <h2 x-data x-reveal class="text-xl font-bold tracking-tight">{{ __('site.home.testimonials_heading') }}</h2>
+                        <div class="mt-6 grid gap-6 sm:grid-cols-2">
                             @foreach ($testimonials as $testimonial)
                                 <x-testimonial-card :testimonial="$testimonial"/>
                             @endforeach

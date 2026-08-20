@@ -38,33 +38,45 @@
 
                     {{-- ---------------- Steps ---------------- --}}
                     <div class="lg:col-span-8">
-                        <ol class="mb-6 flex items-center gap-1 overflow-x-auto scrollbar-none">
+                        {{-- A rail rather than four pills: the line between two steps
+                             fills as the step behind it is completed, so the reader can
+                             see how far along they are without counting. --}}
+                        <ol class="mb-8 flex items-center gap-3 overflow-x-auto pb-1 scrollbar-none">
                             @foreach ([
                                 1 => __('site.booking.step_chamber'),
                                 2 => __('site.booking.step_date'),
                                 3 => __('site.booking.step_slot'),
                                 4 => __('site.booking.step_details'),
                             ] as $number => $label)
-                                <li class="flex shrink-0 items-center gap-1">
+                                <li @class(['flex shrink-0 items-center gap-3', 'flex-1' => $number < 4])>
                                     <button type="button" @click="goToStep({{ $number }})"
                                             :disabled="!canReach({{ $number }})"
-                                            :class="step === {{ $number }}
-                                                ? 'bg-primary-600 text-white'
-                                                : (canReach({{ $number }}) ? 'bg-white text-slate-600 ring-1 ring-inset ring-slate-200 hover:ring-primary-300' : 'bg-slate-100 text-slate-400 cursor-not-allowed')"
-                                            class="flex items-center gap-2 rounded-full px-3.5 py-2 text-sm font-medium transition">
-                                        <span class="grid h-5 w-5 place-items-center rounded-full text-[11px] font-bold tabular-nums"
-                                              :class="step === {{ $number }} ? 'bg-white/25' : 'bg-slate-100'">
+                                            :class="canReach({{ $number }}) ? 'cursor-pointer' : 'cursor-not-allowed'"
+                                            class="flex shrink-0 items-center gap-2.5 rounded-full text-start transition">
+                                        <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full text-sm font-bold tabular-nums ring-1 ring-inset transition duration-300"
+                                              :class="step === {{ $number }}
+                                                  ? 'bg-primary-600 text-white ring-primary-600 shadow-[var(--shadow-soft)]'
+                                                  : (step > {{ $number }}
+                                                      ? 'bg-accent-50 text-accent-700 ring-accent-200'
+                                                      : 'bg-white text-slate-400 ring-slate-200')">
                                             <template x-if="step > {{ $number }}">
-                                                <span>✓</span>
+                                                <span><x-icon name="check" class="h-4 w-4"/></span>
                                             </template>
                                             <template x-if="step <= {{ $number }}">
                                                 <span>{{ bn_digits($number) }}</span>
                                             </template>
                                         </span>
-                                        <span class="hidden sm:inline">{{ $label }}</span>
+                                        <span class="hidden text-sm font-medium transition sm:inline"
+                                              :class="step === {{ $number }} ? 'text-primary-700' : (canReach({{ $number }}) ? 'text-slate-600' : 'text-slate-400')">
+                                            {{ $label }}
+                                        </span>
                                     </button>
+
                                     @if ($number < 4)
-                                        <x-icon name="chevron-right" class="h-4 w-4 shrink-0 text-slate-300 rtl:rotate-180"/>
+                                        <span aria-hidden="true" class="relative h-0.5 w-full min-w-6 flex-1 overflow-hidden rounded-full bg-slate-200">
+                                            <span class="absolute inset-0 origin-left rounded-full bg-primary-500 transition-transform duration-500"
+                                                  :class="step > {{ $number }} ? 'scale-x-100' : 'scale-x-0'"></span>
+                                        </span>
                                     @endif
                                 </li>
                             @endforeach
@@ -88,12 +100,12 @@
 
                             {{-- Step 1: chamber --}}
                             <div x-show="step === 1" x-transition.opacity>
-                                <h2 class="text-lg font-semibold">{{ __('site.booking.select_chamber') }}</h2>
+                                <h2 class="text-xl font-bold tracking-tight">{{ __('site.booking.select_chamber') }}</h2>
 
                                 <div class="mt-5 space-y-3">
                                     @foreach ($chambers as $chamber)
-                                        <label class="flex cursor-pointer items-start gap-4 rounded-2xl border p-4 transition"
-                                               :class="chamberId === {{ $chamber->id }} ? 'border-primary-500 bg-primary-50/50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-primary-300'">
+                                        <label class="flex cursor-pointer items-start gap-4 rounded-2xl border p-4 transition duration-200 hover:-translate-y-0.5"
+                                               :class="chamberId === {{ $chamber->id }} ? 'border-primary-500 bg-primary-50 ring-1 ring-primary-500' : 'border-slate-200 hover:border-primary-300 hover:shadow-[var(--shadow-soft)]'">
                                             <input type="radio" name="chamber_choice" value="{{ $chamber->id }}"
                                                    x-model.number="chamberId" @change="onChamberChange()"
                                                    class="mt-1 h-4 w-4 shrink-0 text-primary-600 focus:ring-primary-500">
@@ -127,7 +139,7 @@
 
                             {{-- Step 2: date --}}
                             <div x-show="step === 2" x-transition.opacity>
-                                <h2 class="text-lg font-semibold">{{ __('site.booking.select_date') }}</h2>
+                                <h2 class="text-xl font-bold tracking-tight">{{ __('site.booking.select_date') }}</h2>
                                 <p class="mt-1 text-sm text-slate-500">{{ setting('appointment_notice_'.app()->getLocale()) }}</p>
 
                                 <div class="mt-5 grid grid-cols-3 gap-2.5 sm:grid-cols-4 lg:grid-cols-5">
@@ -148,7 +160,7 @@
 
                             {{-- Step 3: slot --}}
                             <div x-show="step === 3" x-transition.opacity>
-                                <h2 class="text-lg font-semibold">{{ __('site.booking.available_slots') }}</h2>
+                                <h2 class="text-xl font-bold tracking-tight">{{ __('site.booking.available_slots') }}</h2>
                                 <p class="mt-1 text-sm text-slate-500" x-text="humanDate()"></p>
 
                                 <div x-show="loading" class="mt-6 grid grid-cols-3 gap-2.5 sm:grid-cols-4">
@@ -175,7 +187,7 @@
 
                             {{-- Step 4: details --}}
                             <div x-show="step === 4" x-transition.opacity>
-                                <h2 class="text-lg font-semibold">{{ __('site.booking.step_details') }}</h2>
+                                <h2 class="text-xl font-bold tracking-tight">{{ __('site.booking.step_details') }}</h2>
 
                                 <div class="mt-5 grid gap-4 sm:grid-cols-2">
                                     <div class="sm:col-span-2">

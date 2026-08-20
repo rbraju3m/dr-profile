@@ -29,7 +29,7 @@
                         <div class="flex gap-2">
                             <input id="q" name="q" value="{{ $filters['q'] }}"
                                    placeholder="{{ __('site.posts.search_placeholder') }}" class="field-input">
-                            <button type="submit" class="btn-primary shrink-0 !px-4" aria-label="{{ __('site.actions.search') }}">
+                            <button type="submit" class="btn-primary shrink-0 px-4" aria-label="{{ __('site.actions.search') }}">
                                 <x-icon name="search" class="h-4 w-4"/>
                             </button>
                         </div>

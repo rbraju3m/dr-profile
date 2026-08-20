@@ -9,7 +9,8 @@
                 <div class="lg:sticky lg:top-28">
                     <div class="card overflow-hidden">
                         <x-media-frame :src="$doctor->photoUrl()" :alt="$doctor->fullName()" icon="stethoscope"
-                                       ratio="aspect-[4/5]" :label="$doctor->tr('name')" :seed="$doctor->tr('name')"/>
+                                       ratio="aspect-[4/5]" fit="contain"
+                                       :label="$doctor->tr('name')" :seed="$doctor->tr('name')"/>
 
                         <div class="space-y-4 p-6">
                             <div>
@@ -55,21 +56,27 @@
 
             <div class="lg:col-span-8">
                 @if ($doctor->tr('bio'))
-                    <h2 class="text-xl font-bold">{{ __('site.about.biography') }}</h2>
-                    <div class="prose-content mt-4">{!! $doctor->tr('bio') !!}</div>
+                    <div x-data x-reveal>
+                        <h2 class="display text-2xl">{{ __('site.about.biography') }}</h2>
+                        <span aria-hidden="true" class="rule-draw mt-4 block h-[3px] w-14 rounded-full bg-primary-500"></span>
+                    </div>
+                    <div class="prose-content mt-6 text-base">{!! $doctor->tr('bio') !!}</div>
                 @endif
 
                 @if ($doctor->tr('philosophy'))
-                    <div class="mt-10 rounded-2xl border-s-4 border-primary-500 bg-primary-50/60 p-6">
-                        <h2 class="text-lg font-bold text-primary-900">{{ __('site.about.philosophy') }}</h2>
-                        <div class="prose-content mt-3 text-primary-900/80">{!! $doctor->tr('philosophy') !!}</div>
-                    </div>
+                    <figure x-data x-reveal class="relative mt-12 overflow-hidden rounded-2xl border-s-4 border-primary-500 bg-primary-50 p-7">
+                        <x-icon name="quote" class="absolute -end-2 -top-2 h-16 w-16 text-primary-200/60"/>
+                        <h2 class="relative text-lg font-bold text-primary-900">{{ __('site.about.philosophy') }}</h2>
+                        {{-- Plain text-primary-900, not /80: an opacity variant is its own
+                             class and the dark override never reaches it. --}}
+                        <div class="prose-content relative mt-3 text-[17px] leading-relaxed text-primary-900">{!! $doctor->tr('philosophy') !!}</div>
+                    </figure>
                 @endif
 
                 @if ($stats->isNotEmpty())
-                    <div class="mt-10 grid grid-cols-2 gap-4 lg:grid-cols-4">
+                    <div x-data x-reveal.stagger class="mt-12 grid grid-cols-2 gap-4 lg:grid-cols-4">
                         @foreach ($stats as $stat)
-                            <div class="card p-5 text-center">
+                            <div class="card card-hover p-5 text-center">
                                 <x-icon :name="$stat->icon ?: 'activity'" class="mx-auto h-6 w-6 text-primary-500"/>
                                 <p class="mt-2 text-xl font-bold tabular-nums text-slate-900" x-data x-counter="{{ $stat->value }}">{{ $stat->displayValue() }}</p>
                                 <p class="mt-0.5 text-xs leading-tight text-slate-500">{{ $stat->tr('label') }}</p>
@@ -90,9 +97,9 @@
                     @php $items = $credentials[$type] ?? collect(); @endphp
                     @continue ($items->isEmpty())
 
-                    <section class="mt-12">
-                        <h2 class="flex items-center gap-2.5 text-xl font-bold">
-                            <span class="grid h-9 w-9 place-items-center rounded-lg bg-primary-50 text-primary-600">
+                    <section class="mt-14">
+                        <h2 x-data x-reveal class="flex items-center gap-3 text-xl font-bold tracking-tight">
+                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-primary-50 text-primary-600">
                                 <x-icon :name="$icon" class="h-5 w-5"/>
                             </span>
                             {{ $label }}
@@ -127,20 +134,22 @@
                 @endforeach
 
                 @if ($publications->isNotEmpty() && feature('publications'))
-                    <section class="mt-12">
+                    <section class="mt-14">
                         <div class="flex flex-wrap items-center justify-between gap-3">
-                            <h2 class="flex items-center gap-2.5 text-xl font-bold">
-                                <span class="grid h-9 w-9 place-items-center rounded-lg bg-primary-50 text-primary-600">
+                            <h2 class="flex items-center gap-3 text-xl font-bold tracking-tight">
+                                <span class="grid h-10 w-10 place-items-center rounded-xl bg-primary-50 text-primary-600">
                                     <x-icon name="book-open" class="h-5 w-5"/>
                                 </span>
                                 {{ __('site.publications.heading') }}
                             </h2>
-                            <a href="{{ route('publications.index') }}" class="btn-secondary">{{ __('site.actions.view_all') }}</a>
+                            <a href="{{ route('publications.index') }}" class="group btn-secondary">
+                                {{ __('site.actions.view_all') }}<x-icon name="arrow-right" class="lean h-4 w-4 rtl:rotate-180"/>
+                            </a>
                         </div>
 
-                        <ul class="mt-5 space-y-3">
+                        <ul x-data x-reveal.stagger class="mt-6 space-y-3">
                             @foreach ($publications as $publication)
-                                <li class="card p-5">
+                                <li class="card card-hover p-5">
                                     <x-publication-entry :publication="$publication"/>
                                 </li>
                             @endforeach
@@ -155,7 +164,7 @@
         <section class="section bg-slate-50">
             <div class="container-page">
                 <x-section-heading :title="__('site.home.expertise_heading')" :subtitle="__('site.home.expertise_subheading')"/>
-                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($services as $service)
                         <x-service-card :service="$service"/>
                     @endforeach

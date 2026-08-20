@@ -9,7 +9,7 @@
                 <div class="flex gap-2">
                     <input id="q" name="q" value="{{ $query }}" autofocus
                            placeholder="{{ __('site.search.placeholder') }}"
-                           class="field-input !py-3 !text-base">
+                           class="field-input py-3 text-base">
                     <button type="submit" class="btn-primary btn-lg shrink-0">
                         <x-icon name="search" class="h-5 w-5"/>
                         <span class="hidden sm:inline">{{ __('site.actions.search') }}</span>
@@ -29,10 +29,10 @@
 
                     @foreach ($groups as $label => $hits)
                         <div>
-                            <h2 class="mb-4 flex items-center gap-3 text-lg font-bold">
+                            <h2 class="mb-5 flex items-center gap-4 text-lg font-bold tracking-tight">
                                 {{ $label }}
                                 <span class="h-px flex-1 bg-slate-200"></span>
-                                <span class="text-sm font-medium tabular-nums text-slate-400">{{ bn_digits($hits->count()) }}</span>
+                                <span class="chip tabular-nums">{{ bn_digits($hits->count()) }}</span>
                             </h2>
 
                             <ul class="space-y-3">

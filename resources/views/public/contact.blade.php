@@ -6,7 +6,7 @@
         <div class="container-page grid gap-10 lg:grid-cols-12">
             <div class="lg:col-span-7">
                 <div class="card p-6 sm:p-8">
-                    <h2 class="text-lg font-semibold">{{ __('site.contact.form_heading') }}</h2>
+                    <h2 class="text-xl font-bold tracking-tight">{{ __('site.contact.form_heading') }}</h2>
 
                     @if (session('success'))
                         <x-alert type="success" class="mt-5">{{ session('success') }}</x-alert>
@@ -115,12 +115,12 @@
 
                         <div class="mt-3 flex flex-wrap gap-2">
                             @if ($chamber->phone)
-                                <a href="tel:{{ $chamber->phone }}" class="btn-secondary !px-3 !py-1.5 !text-xs">
+                                <a href="tel:{{ $chamber->phone }}" class="btn-secondary px-3 py-1.5 text-xs">
                                     <x-icon name="phone" class="h-3.5 w-3.5"/>{{ bn_digits($chamber->phone) }}
                                 </a>
                             @endif
                             @feature('chambers')
-                                <a href="{{ route('chambers.show', $chamber) }}" class="btn-ghost !px-3 !py-1.5 !text-xs">
+                                <a href="{{ route('chambers.show', $chamber) }}" class="btn-ghost px-3 py-1.5 text-xs">
                                     {{ __('site.actions.view_details') }}
                                 </a>
                             @endfeature

@@ -7,7 +7,7 @@
             @if ($services->isEmpty())
                 <x-empty-state icon="stethoscope" :title="__('site.posts.empty')"/>
             @else
-                <div x-data x-reveal.stagger class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($services as $service)
                         <x-service-card :service="$service"/>
                     @endforeach
