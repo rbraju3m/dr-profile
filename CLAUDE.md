@@ -35,6 +35,12 @@ Demo logins after seeding: `admin@drprofile.test` / `editor@drprofile.test`, pas
   test config back to `:memory:` sqlite, it will not boot.
 - Laravel 13 + Tailwind v4 + Alpine. Fonts (Inter, Noto Sans Bengali) are **self-hosted** through the
   `laravel-vite-plugin` `bunny()` helper and emitted by the `@fonts` Blade directive — no CDN.
+- **Upload limits differ per SAPI on this machine.** Apache (mod_php) allows 5G; the CLI ini allows
+  only 2M/8M, so `php artisan serve` rejects ordinary photographs while Apache accepts them. Use
+  `composer serve`, which raises them with `-d` flags. Before changing an upload limit, check the ini
+  of the SAPI that actually serves the request — `php -r` reports the CLI's, which is not the one
+  Apache uses. Note also that `.htaccess` `php_value` sets a ceiling: adding one under a vhost with
+  `AllowOverride All` would *lower* the effective limit here, not raise it.
 
 ## Bilingual architecture
 

@@ -72,6 +72,9 @@
         ],
         "pre-package-uninstall": [
             "Illuminate\\Foundation\\ComposerScripts::prePackageUninstall"
+        ],
+        "serve": [
+            "PHP_INI_SCAN_DIR=\":./dev/php\" php artisan serve"
         ]
     },
     "extra": {
