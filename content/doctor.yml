@@ -179,13 +179,12 @@ stats:
 
 # ----------------------------------------------------------------------------
 settings:
+  # Contact email, phone and hotline belong to the profile block above —
+  # that is what the header and footer display.
   site_name_en: "Dr. Imran Kabir"
   site_name_bn: "ডা. ইমরান কবির"
   footer_note_en: "Cardiology consultation in Dhaka. Sample content for demonstration."
   footer_note_bn: "ঢাকায় কার্ডিওলজি পরামর্শ সেবা। প্রদর্শনের জন্য নমুনা তথ্য।"
-  contact_email: "chamber@example.test"
-  contact_phone: "+880 1700 000000"
-  contact_hotline: "16000"
   contact_address_en: "Road 11, Banani, Dhaka 1213"
   contact_address_bn: "রোড ১১, বনানী, ঢাকা ১২১৩"
   appointment_notice_en: "Online serials close one hour before each sitting begins."

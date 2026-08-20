@@ -21,10 +21,13 @@ class SettingController extends Controller
             'footer_note_en' => 'textarea',
             'footer_note_bn' => 'textarea',
         ],
+        /*
+         * The doctor's email, phone and hotline live on the profile, which is
+         * what the header and footer read. They are deliberately not repeated
+         * here — a second copy nothing renders is a control that looks like it
+         * works and does not.
+         */
         'contact' => [
-            'contact_email' => 'text',
-            'contact_phone' => 'text',
-            'contact_hotline' => 'text',
             'contact_address_en' => 'textarea',
             'contact_address_bn' => 'textarea',
         ],
