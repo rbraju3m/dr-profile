@@ -31,6 +31,20 @@ php artisan doctor:import
 php artisan demo:purge --all          # remove every seeded record, keeping staff accounts
 ```
 
+Screenshots, when you need to see a change rather than assert it: Chrome is on this machine.
+
+```bash
+composer serve &
+google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+    --force-prefers-reduced-motion --window-size=1440,3000 \
+    --screenshot=out.png http://127.0.0.1:8000/en
+```
+
+`--force-prefers-reduced-motion` matters: without it, anything below the fold is photographed
+mid-reveal and looks half-drawn. Admin pages need a session, so fetch the HTML with `curl` through a
+cookie jar, rewrite `href="/` to absolute URLs, and open the saved file with `--disable-web-security`
+so the stylesheet still loads.
+
 ## Environment specifics
 
 - **No `pdo_sqlite` in this PHP build** — only `mysql` and `pgsql`. App and tests both run on MySQL;
@@ -47,13 +61,29 @@ php artisan demo:purge --all          # remove every seeded record, keeping staf
 
 ## The recurring defect in this codebase
 
-Four separate times, the admin has offered a control that saved something the site never rendered:
-contact settings nothing read, service and page images shown only on detail pages, X and Instagram
-links absent from the header, a signature upload displayed nowhere. Each looked like a working
-feature and did nothing.
+Something here is wired up on one side only, and looks finished from the side you are on. It has
+happened often enough to be worth naming.
 
-When adding a field, check it reaches a page. `tests/Feature/UploadedImagesAreShownTest.php` and
-`tests/Feature/SocialLinksTest.php` both assert exactly this and exist to stop it recurring.
+The admin offering a control the site never read: contact settings nothing rendered, service and page
+images shown only on detail pages, X and Instagram links absent from the header, a signature upload
+displayed nowhere. Then the same shape from other directions — a column header written as a plain
+English string, so the panel stayed half-English however it was switched; an "Icon name" free-text
+field that accepted `hero` and drew a bare circle; a component pushing scripts into a layout with no
+`@stack` to receive them; a dark-mode override that could not reach `text-primary-900/80`, because
+an opacity variant is its own class.
+
+**When you add a field, a label, a switch or a style, check it arrives.** Not that it saves — that a
+reader sees it. Every guard below exists because that check was skipped once:
+
+| Test | What it refuses to let happen |
+|---|---|
+| `UploadedImagesAreShownTest` | an upload the admin accepts and no page shows |
+| `SocialLinksTest` | a network editable in one place and rendered in another |
+| `FeatureVisibilityTest` | a hidden section still linked from a page a visitor can reach |
+| `FeatureRegistryTest` | a switch read but unregistered, or registered and read nowhere |
+| `ListingLabelsTest` / `FormLabelsTest` | an admin string that will not translate |
+| `TranslationParityTest` | a key in one language and not the other |
+| `IconPickerTest` | an icon offered that the site cannot draw, and a layout that drops what a component pushes |
 
 ## Bilingual architecture
 

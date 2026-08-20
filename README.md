@@ -19,6 +19,7 @@ trauma and spine specialist practising in Dhaka. Laravel 13, Tailwind CSS v4, Al
 - Search across everything, in either language
 - Contact form
 - Every page in both languages, with Bangla numerals, dates and currency
+- Light or dark, following the reader's device or the site's own setting
 
 **For the practice** — `/admin`
 
@@ -30,6 +31,12 @@ trauma and spine specialist practising in Dhaka. Laravel 13, Tailwind CSS v4, Al
 - Every content field editable in both languages side by side, with a rich text editor for the
   fields that render as HTML
 - Drag rows into the order patients see them; switch anything active or inactive from the listing
+- **Sections & Visibility**: switch off any part of the public site — a whole section, one band of
+  the homepage, or a piece of the header and footer. A section that is off loses its links, leaves
+  the sitemap and site search, and its pages answer "not found"
+- Choose the site's theme — light, dark, or whatever the reader's device asks for — and whether
+  readers may change it for themselves
+- Pick icons from the glyphs the site can actually draw, rather than typing a name and hoping
 - Two roles: `admin` (everything) and `editor` (content and appointments, no settings or users)
 
 ## Requirements
@@ -91,10 +98,15 @@ mysql -u root -p -e "CREATE DATABASE dr_profile_test CHARACTER SET utf8mb4 COLLA
 php artisan test
 ```
 
-198 tests covering slot generation, booking and double-booking, cancellation, the booking window and
+323 tests covering slot generation, booking and double-booking, cancellation, the booking window and
 lead time, locale routing and fallback, the language switcher, search, uploads and their failure
 messages, the file lifecycle, admin authorisation, CRUD, list reordering and switches, and every
 public page in both languages.
+
+Several exist to stop one particular defect returning — a control that looks like it works and
+changes nothing. They check that every visibility switch removes its section *and* every link into
+it, that both languages carry the same keys and that no admin label is left as an English string,
+and that an icon the admin offers is one the site can draw.
 
 ## Configuration
 
@@ -120,6 +132,11 @@ These need the doctor, not the code.
       translation and should be checked.
 - [ ] **Testimonials, publications, statistics and gallery are empty on purpose** — patient quotes
       and research papers cannot be written on his behalf. Add them when he supplies them.
+- [ ] **Two statistics carry icon names the site cannot draw** — "Surgery Patient" says `hero` and
+      "Follow Up Patient" says `admin`, so both render as bare circles. Open each in Statistics and
+      pick from the grid; the form flags them.
+- [ ] **The meta description still offers booking.** If online booking is ever switched off, the
+      description on every page ("book an appointment with…") needs rewording in Doctor Profile.
 - [ ] **Change the admin password and email.** The seeded accounts use `@drprofile.test` addresses,
       and there is no password reset flow, so a fake address means `php artisan tinker` is the only
       way back in.
