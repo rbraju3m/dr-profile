@@ -8,7 +8,8 @@
             <aside class="lg:col-span-4">
                 <div class="lg:sticky lg:top-28">
                     <div class="card overflow-hidden">
-                        <x-media-frame :src="$doctor->photoUrl()" :alt="$doctor->fullName()" icon="stethoscope" ratio="aspect-[4/5]"/>
+                        <x-media-frame :src="$doctor->photoUrl()" :alt="$doctor->fullName()" icon="stethoscope"
+                                       ratio="aspect-[4/5]" :label="$doctor->tr('name')" :seed="$doctor->tr('name')"/>
 
                         <div class="space-y-4 p-6">
                             <div>

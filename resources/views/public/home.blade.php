@@ -46,7 +46,8 @@
             <div class="lg:col-span-5">
                 <div class="relative mx-auto max-w-sm">
                     <div class="overflow-hidden rounded-3xl bg-white shadow-2xl">
-                        <x-media-frame :src="$doctor->photoUrl()" :alt="$doctor->fullName()" icon="stethoscope" ratio="aspect-[4/5]"/>
+                        <x-media-frame :src="$doctor->photoUrl()" :alt="$doctor->fullName()" icon="stethoscope"
+                                       ratio="aspect-[4/5]" :label="$doctor->tr('name')" :seed="$doctor->tr('name')"/>
 
                         <div class="p-5">
                             <p class="text-lg font-semibold text-slate-900">{{ $doctor->fullName() }}</p>
@@ -103,7 +104,8 @@
             <div class="relative">
                 <div class="overflow-hidden rounded-3xl">
                     <x-media-frame :src="$doctor->heroImageUrl() ?? $doctor->photoUrl()" :alt="$doctor->fullName()"
-                                   icon="stethoscope" ratio="aspect-[4/3]"/>
+                                   icon="stethoscope" ratio="aspect-[4/3]"
+                                   :label="$doctor->tr('name')" seed="doctor-hero"/>
                 </div>
                 <div class="mt-4 grid grid-cols-3 gap-3">
                     @foreach ($stats->skip(1)->take(3) as $stat)

@@ -36,7 +36,8 @@
 
                 @if ($post->imageUrl())
                     <div class="mb-8 overflow-hidden rounded-2xl">
-                        <x-media-frame :src="$post->imageUrl()" :alt="$post->tr('title')" ratio="aspect-[16/9]"/>
+                        <x-media-frame :src="$post->imageUrl()" :alt="$post->tr('title')" ratio="aspect-[16/9]"
+                                       :icon="$post->type === 'event' ? 'calendar' : 'file-text'" :seed="$post->slug"/>
                     </div>
                 @endif
 
@@ -97,7 +98,7 @@
                                         <a href="{{ route($listRoute[0] === 'events.index' ? 'events.show' : ($listRoute[0] === 'blog.index' ? 'blog.show' : 'news.show'), $item) }}"
                                            class="group flex gap-3">
                                             <span class="h-14 w-14 shrink-0 overflow-hidden rounded-lg">
-                                                <x-media-frame :src="$item->imageUrl()" :alt="$item->tr('title')" ratio="aspect-square"/>
+                                                <x-media-frame :src="$item->imageUrl()" :alt="$item->tr('title')" ratio="aspect-square" :seed="$item->slug"/>
                                             </span>
                                             <span class="min-w-0">
                                                 <span class="line-clamp-2 text-sm font-medium leading-snug text-slate-800 group-hover:text-primary-700">

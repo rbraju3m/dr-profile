@@ -7,7 +7,8 @@
             <div class="lg:col-span-8">
                 @if ($service->imageUrl())
                     <div class="mb-8 overflow-hidden rounded-2xl">
-                        <x-media-frame :src="$service->imageUrl()" :alt="$service->tr('name')" ratio="aspect-[16/9]"/>
+                        <x-media-frame :src="$service->imageUrl()" :alt="$service->tr('name')" ratio="aspect-[16/9]"
+                                       :icon="$service->icon ?: 'stethoscope'" :seed="$service->slug"/>
                     </div>
                 @endif
 

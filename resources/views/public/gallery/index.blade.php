@@ -9,7 +9,7 @@
                 <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($albums as $album)
                         <a href="{{ route('gallery.show', $album) }}" class="card-hover group flex flex-col overflow-hidden">
-                            <x-media-frame :src="$album->coverUrl()" :alt="$album->tr('title')" ratio="aspect-[4/3]">
+                            <x-media-frame :src="$album->coverUrl()" :alt="$album->tr('title')" ratio="aspect-[4/3]" :seed="$album->slug">
                                 <span class="absolute end-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm">
                                     {{ __('site.gallery.items', ['count' => bn_digits($album->items_count)]) }}
                                 </span>

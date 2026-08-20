@@ -7,7 +7,8 @@
             <div class="lg:col-span-7">
                 @if ($chamber->imageUrl())
                     <div class="mb-8 overflow-hidden rounded-2xl">
-                        <x-media-frame :src="$chamber->imageUrl()" :alt="$chamber->tr('name')" icon="building" ratio="aspect-[16/9]"/>
+                        <x-media-frame :src="$chamber->imageUrl()" :alt="$chamber->tr('name')" icon="building"
+                                       ratio="aspect-[16/9]" :seed="$chamber->slug"/>
                     </div>
                 @endif
 

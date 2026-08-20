@@ -7,7 +7,8 @@
             <article class="lg:col-span-8">
                 @if ($story->imageUrl())
                     <div class="mb-8 overflow-hidden rounded-2xl">
-                        <x-media-frame :src="$story->imageUrl()" :alt="$story->tr('title')" ratio="aspect-[16/9]"/>
+                        <x-media-frame :src="$story->imageUrl()" :alt="$story->tr('title')" ratio="aspect-[16/9]"
+                                       icon="heart" :seed="$story->slug"/>
                     </div>
                 @endif
 

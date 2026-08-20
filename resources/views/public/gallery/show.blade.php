@@ -14,7 +14,8 @@
                         <button type="button" @click="index = {{ $i }}; open = true"
                                 class="group relative overflow-hidden rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
                             <x-media-frame :src="$item->thumbnailUrl()" :alt="$item->tr('title')"
-                                           :icon="$item->type === 'video' ? 'play' : 'image'" ratio="aspect-square"/>
+                                           :icon="$item->type === 'video' ? 'play' : 'image'"
+                                           ratio="aspect-square" :seed="$item->id"/>
 
                             @if ($item->type === 'video')
                                 <span class="absolute inset-0 grid place-items-center bg-slate-900/40">
