@@ -64,6 +64,7 @@ class ProfileController extends Controller
             'youtube_url' => ['nullable', 'url', 'max:300'],
             'linkedin_url' => ['nullable', 'url', 'max:300'],
             'instagram_url' => ['nullable', 'url', 'max:300'],
+            'tiktok_url' => ['nullable', 'url', 'max:300'],
             'x_url' => ['nullable', 'url', 'max:300'],
             'meta_title_en' => ['nullable', 'string', 'max:180'],
             'meta_title_bn' => ['nullable', 'string', 'max:180'],

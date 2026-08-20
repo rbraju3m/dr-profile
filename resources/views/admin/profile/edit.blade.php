@@ -49,7 +49,7 @@
 
                 <x-admin.card :title="__('admin.profile.social')">
                     <div class="grid gap-4 sm:grid-cols-2">
-                        @foreach (['facebook_url' => 'Facebook', 'youtube_url' => 'YouTube', 'linkedin_url' => 'LinkedIn', 'instagram_url' => 'Instagram', 'x_url' => 'X'] as $field => $networkLabel)
+                        @foreach (['facebook_url' => 'Facebook', 'instagram_url' => 'Instagram', 'youtube_url' => 'YouTube', 'tiktok_url' => 'TikTok', 'linkedin_url' => 'LinkedIn', 'x_url' => 'X'] as $field => $networkLabel)
                             <x-admin.input :name="$field" :label="$networkLabel" :value="$profile->{$field}"/>
                         @endforeach
                     </div>

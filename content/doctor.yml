@@ -52,9 +52,12 @@ profile:
   whatsapp: "+8801886442286"
 
   facebook_url: "https://www.facebook.com/drshaikhsaadiulislam"
+  instagram_url: "https://www.instagram.com/drshaikhsaadiulislam"
+  tiktok_url: "https://www.tiktok.com/@drshaikhsaadiulislam"
+  # A LinkedIn *company* page rather than a personal profile — worth confirming
+  # this is the one he wants linked from his own site.
+  linkedin_url: "https://www.linkedin.com/company/saadiul/about/"
   youtube_url: ""
-  linkedin_url: ""
-  instagram_url: ""
 
   meta_title_en: "Dr. Shaikh Saadiul Islam — Orthopaedics, Trauma & Spine Specialist, Dhaka"
   meta_title_bn: "ডা. শেখ সাদিউল ইসলাম — অর্থোপেডিক্স, ট্রমা ও স্পাইন বিশেষজ্ঞ, ঢাকা"

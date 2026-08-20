@@ -40,16 +40,7 @@
             </div>
 
             <div class="flex items-center gap-4">
-                <div class="flex items-center gap-2">
-                    @foreach (['facebook' => $doctor->facebook_url, 'youtube' => $doctor->youtube_url, 'linkedin' => $doctor->linkedin_url] as $network => $url)
-                        @if ($url)
-                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
-                               class="rounded p-1 hover:bg-white/10 hover:text-white" aria-label="{{ ucfirst($network) }}">
-                                <x-icon :name="$network" class="h-3.5 w-3.5"/>
-                            </a>
-                        @endif
-                    @endforeach
-                </div>
+                <x-social-links :doctor="$doctor"/>
                 <x-language-switcher class="text-primary-100"/>
             </div>
         </div>

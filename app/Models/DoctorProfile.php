@@ -60,6 +60,39 @@ class DoctorProfile extends Model
         return trim(($this->tr('title') ?? '').' '.($this->tr('name') ?? ''));
     }
 
+    /**
+     * Every social account that has actually been filled in.
+     *
+     * Header and footer used to keep their own hardcoded lists, which is how
+     * Instagram ended up editable but missing from the header and X editable
+     * and shown nowhere at all. One list now feeds both.
+     *
+     * @return array<int, array{network: string, url: string, label: string}>
+     */
+    public function socialLinks(): array
+    {
+        $networks = [
+            'facebook' => 'Facebook',
+            'instagram' => 'Instagram',
+            'youtube' => 'YouTube',
+            'tiktok' => 'TikTok',
+            'linkedin' => 'LinkedIn',
+            'x' => 'X',
+        ];
+
+        $links = [];
+
+        foreach ($networks as $network => $label) {
+            $url = $this->getAttributeValue($network.'_url');
+
+            if (filled($url)) {
+                $links[] = ['network' => $network, 'url' => $url, 'label' => $label];
+            }
+        }
+
+        return $links;
+    }
+
     public function photoUrl(): ?string
     {
         return $this->mediaUrl('photo');

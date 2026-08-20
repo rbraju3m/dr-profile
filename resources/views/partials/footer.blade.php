@@ -31,22 +31,7 @@
                     {{ setting('footer_note_'.$locale) ?: Str::limit(strip_tags((string) $doctor->tr('short_bio')), 150) }}
                 </p>
 
-                <div class="mt-5 flex items-center gap-2">
-                    @foreach ([
-                        'facebook' => $doctor->facebook_url,
-                        'youtube' => $doctor->youtube_url,
-                        'linkedin' => $doctor->linkedin_url,
-                        'instagram' => $doctor->instagram_url,
-                    ] as $network => $url)
-                        @if ($url)
-                            <a href="{{ $url }}" target="_blank" rel="noopener noreferrer"
-                               class="grid h-9 w-9 place-items-center rounded-lg bg-white/10 transition hover:bg-primary-600 hover:text-white"
-                               aria-label="{{ ucfirst($network) }}">
-                                <x-icon :name="$network" class="h-4 w-4"/>
-                            </a>
-                        @endif
-                    @endforeach
-                </div>
+                <x-social-links :doctor="$doctor" variant="boxed" class="mt-5"/>
             </div>
 
             <div class="lg:col-span-3">
