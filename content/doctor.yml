@@ -1,111 +1,179 @@
 # ============================================================================
 #  Dr Shaikh Saadiul Islam
 # ----------------------------------------------------------------------------
-#  Only the name is filled in. It is the sole detail that was publicly visible;
-#  everything else on the Facebook page sits behind a login wall.
+#  Collected from his own site, https://www.saadiul.com — home, about, services
+#  and contact pages. Bangla is quoted from the site; the English is a
+#  translation and should be read over before the site goes live.
 #
-#  Every "REPLACE ME" below is refused by the importer rather than written, so
-#  this file is safe to import at any stage of completion. Fill in what you
-#  have, run `php artisan doctor:import`, repeat as more details arrive.
+#  Deliberately NOT filled in, because the source does not state them:
+#    · bmdc_reg_no      — not published anywhere on saadiul.com
+#    · consultation_fee — not published
+#    · stats            — the site says 980+ patients and 3500+ surgeries,
+#                         which cannot both be right; omitted pending his word
+#    · slot_minutes     — a guess of 15, see the note on the chamber below
 #
-#  The registration number must be checked against the BMDC register before the
-#  site goes live. It appears on the profile page and patients rely on it.
+#  Import with:  php artisan doctor:import
 # ============================================================================
 
 profile:
   title_en: "Dr."
   title_bn: "ডা."
   name_en: "Shaikh Saadiul Islam"
-  # Bangla spelling of a person's name is worth getting from him directly
-  # rather than transliterating. Blank means Bangla visitors see the English.
-  name_bn: ""
+  name_bn: "শেখ সাদিউল ইসলাম"
 
-  designation_en: "REPLACE ME"        # e.g. Consultant, <specialty>
-  designation_bn: ""
-  tagline_en: ""
-  tagline_bn: ""
+  designation_en: "Orthopaedics, Trauma & Spine Specialist"
+  designation_bn: "অর্থোপেডিক্স, ট্রমা ও স্পাইন বিশেষজ্ঞ"
 
-  degrees_en: "REPLACE ME"            # exactly as he lists them
-  degrees_bn: ""
+  tagline_en: "Treatment is not only physical healing — it is reassurance too."
+  tagline_bn: "চিকিৎসা কেবল শারীরিক আরোগ্যের নয়, মানসিক আশ্বাসেরও বিষয়"
 
-  bmdc_reg_no: "REPLACE ME"           # verify against the BMDC register
-  experience_years: 0
+  degrees_en: "MBBS (DMC), FCPS (Ortho), MS (Ortho), FACS (USA), BCS (Health)"
+  degrees_bn: "এমবিবিএস (ঢামেক), এফসিপিএস (অর্থো), এমএস (অর্থো), এফএসিএস (ইউএসএ), বিসিএস (স্বাস্থ্য)"
 
-  gender: ""
+  bmdc_reg_no: ""            # not published — get it from him and check the register
+  experience_years: 0        # not published
+
+  gender: "male"
   languages_en: "Bangla, English"
   languages_bn: "বাংলা, ইংরেজি"
 
-  short_bio_en: "REPLACE ME"
-  short_bio_bn: ""
-  bio_en: "REPLACE ME"
-  bio_bn: ""
-  philosophy_en: ""
-  philosophy_bn: ""
+  short_bio_en: "Dr. Shaikh Saadiul Islam is an orthopaedics, trauma and spine specialist serving as Resident Surgeon at the National Institute of Traumatology and Orthopaedic Rehabilitation (NITOR), Dhaka. He treats knee and lower back pain, disc problems, fractures, spinal disorders, arthritis and bone deformities."
+  short_bio_bn: "ডা. শেখ সাদিউল ইসলাম একজন অর্থোপেডিক্স, ট্রমা ও স্পাইন বিশেষজ্ঞ। তিনি জাতীয় অর্থোপেডিক হাসপাতাল ও পুনর্বাসন প্রতিষ্ঠানে (নিটোর) রেসিডেন্ট সার্জন হিসেবে দায়িত্ব পালন করছেন। হাঁটু ও কোমরের ব্যথা, ডিস্ক প্রবলেম, হাড় ভাঙা, স্পাইনের সমস্যা, বাত এবং হাড়ের বিকৃতির চিকিৎসা করেন।"
 
-  email: ""
-  phone: ""
+  bio_en: "<p>Dr. Shaikh Saadiul Islam completed his MBBS at Dhaka Medical College, followed by FCPS and MS in Orthopaedics. He is a Fellow of the American College of Surgeons and a member of the Bangladesh Civil Service (Health) cadre.</p><p>He completed the AO Trauma &amp; Spine advanced course in India and Sri Lanka, and currently serves as Resident Surgeon at the National Institute of Traumatology and Orthopaedic Rehabilitation (NITOR) in Dhaka.</p><p>His practice covers knee and lower back pain, disc problems, fractures following accidents, spinal disorders, arthritis, congenital and acquired bone deformities, and long-term pain management.</p>"
+  bio_bn: "<p>ডা. শেখ সাদিউল ইসলাম ঢাকা মেডিকেল কলেজ থেকে এমবিবিএস সম্পন্ন করেন, এরপর অর্থোপেডিক্সে এফসিপিএস ও এমএস ডিগ্রি অর্জন করেন। তিনি আমেরিকান কলেজ অব সার্জনসের ফেলো এবং বাংলাদেশ সিভিল সার্ভিস (স্বাস্থ্য) ক্যাডারের সদস্য।</p><p>ভারত ও শ্রীলঙ্কায় এও ট্রমা অ্যান্ড স্পাইন অ্যাডভান্সড কোর্স সম্পন্ন করেছেন এবং বর্তমানে ঢাকার জাতীয় অর্থোপেডিক হাসপাতাল ও পুনর্বাসন প্রতিষ্ঠানে (নিটোর) রেসিডেন্ট সার্জন হিসেবে কর্মরত।</p><p>হাঁটু ও কোমরের ব্যথা, ডিস্ক প্রবলেম, দুর্ঘটনাজনিত হাড় ভাঙা, স্পাইনের সমস্যা, বাত, জন্মগত ও অর্জিত হাড়ের বিকৃতি এবং দীর্ঘমেয়াদি ব্যথা ব্যবস্থাপনা তাঁর চিকিৎসার আওতাভুক্ত।</p>"
+
+  philosophy_en: "<p>Treatment is not only about physical healing — it is about reassurance as well.</p>"
+  philosophy_bn: "<p>চিকিৎসা কেবল শারীরিক আরোগ্যের নয়, মানসিক আশ্বাসেরও বিষয়।</p>"
+
+  email: "hello@saadiul.com"
+  phone: "+880 1886-442286"
   hotline: ""
-  whatsapp: ""
+  whatsapp: "+8801886442286"
 
   facebook_url: "https://www.facebook.com/drshaikhsaadiulislam"
   youtube_url: ""
   linkedin_url: ""
   instagram_url: ""
 
-  meta_title_en: ""
-  meta_title_bn: ""
-  meta_description_en: ""
-  meta_description_bn: ""
+  meta_title_en: "Dr. Shaikh Saadiul Islam — Orthopaedics, Trauma & Spine Specialist, Dhaka"
+  meta_title_bn: "ডা. শেখ সাদিউল ইসলাম — অর্থোপেডিক্স, ট্রমা ও স্পাইন বিশেষজ্ঞ, ঢাকা"
+  meta_description_en: "Chamber schedule and online appointment booking for Dr. Shaikh Saadiul Islam, orthopaedics, trauma and spine specialist, Dhaka."
+  meta_description_bn: "ডা. শেখ সাদিউল ইসলামের চেম্বারের সময়সূচি ও অনলাইন অ্যাপয়েন্টমেন্ট। অর্থোপেডিক্স, ট্রমা ও স্পাইন বিশেষজ্ঞ, ঢাকা।"
 
 # ----------------------------------------------------------------------------
-#  One block per chamber. day: 0=Sunday … 6=Saturday, 24-hour times.
+#  Chamber. The site gives "Saturday to Thursday, 7:00 PM to 10:00 PM", i.e.
+#  every day except Friday. slot_minutes is a GUESS: three hours at 15 minutes
+#  is 12 patients per sitting. It decides how many serials are issued each
+#  evening, so confirm it with him before this is live.
 # ----------------------------------------------------------------------------
 chambers:
-  - slug: "REPLACE-ME"
-    name_en: "REPLACE ME"
-    name_bn: ""
-    address_en: "REPLACE ME"
-    address_bn: ""
+  - slug: "insaf-barakah-hospital"
+    name_en: "Insaf Barakah Kidney and General Hospital"
+    name_bn: "ইনসাফ বারাকাহ কিডনি অ্যান্ড জেনারেল হাসপাতাল"
+    address_en: "11 Shahid Tajuddin Ahmad Sarani, Mogbazar, Dhaka 1217"
+    address_bn: "১১ শহীদ তাজউদ্দীন আহমদ সরণি, মগবাজার, ঢাকা ১২১৭"
     city_en: "Dhaka"
     city_bn: "ঢাকা"
     room_no: ""
-    phone: ""
-    appointment_phone: ""
-    consultation_fee: 0
+    phone: "+880 1886-442286"
+    appointment_phone: "+880 1886-442286"
+    consultation_fee: 0        # not published
     followup_fee: 0
-    note_en: ""
-    note_bn: ""
+    note_en: "Please bring any previous X-rays, MRI films and reports with you."
+    note_bn: "পূর্ববর্তী এক্স-রে, এমআরআই ফিল্ম ও রিপোর্ট সঙ্গে আনুন।"
     accepts_online_booking: true
     schedules:
-      - { day: 0, start: "18:00", end: "21:00", slot_minutes: 20, max_patients: null }
+      - { day: 6, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Saturday
+      - { day: 0, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Sunday
+      - { day: 1, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Monday
+      - { day: 2, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Tuesday
+      - { day: 3, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Wednesday
+      - { day: 4, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Thursday
+      # Friday (day 5) is his day off
 
 # ----------------------------------------------------------------------------
+#  The six services listed on saadiul.com/services, Bangla quoted from the site.
+# ----------------------------------------------------------------------------
 services:
-  - slug: "REPLACE-ME"
-    name_en: "REPLACE ME"
-    name_bn: ""
-    short_description_en: ""
-    short_description_bn: ""
-    icon: "stethoscope"
+  - slug: "orthopaedic-surgery"
+    name_en: "Orthopaedic Surgery"
+    name_bn: "অর্থোপেডিক সার্জারি"
+    short_description_en: "Effective surgical solutions for complex problems of the bones, joints and muscles."
+    short_description_bn: "হাড়, জয়েন্ট ও পেশীর বিভিন্ন জটিল সমস্যায় আধুনিক সার্জারির মাধ্যমে কার্যকর সমাধান প্রদান"
+    icon: "bone"
+    fee: null
+    is_featured: true
+
+  - slug: "spine-surgery"
+    name_en: "Spine Surgery"
+    name_bn: "স্পাইন সার্জারি"
+    short_description_en: "For disc problems, nerve pressure, and pain in the lower back or neck."
+    short_description_bn: "ডিস্ক প্রবলেম, নার্ভ প্রেসার, কোমর বা ঘাড়ের ব্যথা"
+    icon: "spine"
+    fee: null
+    is_featured: true
+
+  - slug: "joint-and-knee-pain"
+    name_en: "Joint and Knee Pain Treatment"
+    name_bn: "জয়েন্ট ও হাঁটু ব্যথার চিকিৎসা"
+    short_description_en: "Care from medical therapy through to joint replacement."
+    short_description_bn: "মেডিক্যাল থেরাপি থেকে শুরু করে জয়েন্ট রিপ্লেসমেন্ট পর্যন্ত সমন্বিত চিকিৎসা"
+    icon: "accessibility"
+    fee: null
+    is_featured: true
+
+  - slug: "bone-deformities"
+    name_en: "Bone Deformities and Congenital Problems"
+    name_bn: "হাড়ের বিকৃতি ও জন্মগত সমস্যা"
+    short_description_en: "Safe surgical correction of congenital and accident-related bone deformities."
+    short_description_bn: "জন্মগত বা দুর্ঘটনাজনিত হাড়ের বিকৃতি আধুনিক সার্জারির মাধ্যমে নিরাপদভাবে সংশোধন"
+    icon: "activity"
+    fee: null
+    is_featured: true
+
+  - slug: "sports-injury-management"
+    name_en: "Sports Injury Management"
+    name_bn: "স্পোর্টস ইনজুরি ম্যানেজমেন্ট"
+    short_description_en: "Specialised treatment for ligament tears and meniscus injuries."
+    short_description_bn: "লিগামেন্ট টিয়ার, মেনিস্কাস ইনজুরিতে বিশেষায়িত চিকিৎসা"
+    icon: "shield-check"
+    fee: null
+    is_featured: true
+
+  - slug: "chronic-pain-management"
+    name_en: "Chronic Pain Management"
+    name_bn: "ক্রনিক পেইন ম্যানেজমেন্ট"
+    short_description_en: "An individually planned combination of medication, physiotherapy and surgery."
+    short_description_bn: "ওষুধ, ফিজিওথেরাপি ও সার্জারির সমন্বয়ে ব্যক্তিগতভাবে পরিকল্পিত চিকিৎসা"
+    icon: "clipboard-check"
     fee: null
     is_featured: true
 
 # ----------------------------------------------------------------------------
 credentials:
-  - { type: "education", title_en: "REPLACE ME", title_bn: "", organization_en: "", start_year: null, end_year: null, is_current: false }
+  - { type: "education",  title_en: "MBBS",  title_bn: "এমবিবিএস", organization_en: "Dhaka Medical College", organization_bn: "ঢাকা মেডিকেল কলেজ", start_year: null, end_year: null, is_current: false }
+  - { type: "education",  title_en: "FCPS (Orthopaedics)", title_bn: "এফসিপিএস (অর্থোপেডিক্স)", organization_en: "Bangladesh College of Physicians and Surgeons", organization_bn: "বাংলাদেশ কলেজ অব ফিজিশিয়ানস অ্যান্ড সার্জনস", start_year: null, end_year: null, is_current: false }
+  - { type: "education",  title_en: "MS (Orthopaedics)", title_bn: "এমএস (অর্থোপেডিক্স)", organization_en: "", organization_bn: "", start_year: null, end_year: null, is_current: false }
+  - { type: "training",   title_en: "AO Trauma & Spine Advanced Course", title_bn: "এও ট্রমা অ্যান্ড স্পাইন অ্যাডভান্সড কোর্স", organization_en: "India and Sri Lanka", organization_bn: "ভারত ও শ্রীলঙ্কা", start_year: null, end_year: null, is_current: false }
+  - { type: "experience", title_en: "Resident Surgeon (R.S.)", title_bn: "রেসিডেন্ট সার্জন (আর.এস.)", organization_en: "National Institute of Traumatology and Orthopaedic Rehabilitation (NITOR)", organization_bn: "জাতীয় অর্থোপেডিক হাসপাতাল ও পুনর্বাসন প্রতিষ্ঠান (নিটোর)", start_year: null, end_year: null, is_current: true }
+  - { type: "experience", title_en: "Bangladesh Civil Service (Health)", title_bn: "বাংলাদেশ সিভিল সার্ভিস (স্বাস্থ্য)", organization_en: "", organization_bn: "", start_year: null, end_year: null, is_current: true }
+  - { type: "membership", title_en: "Fellow, American College of Surgeons (FACS)", title_bn: "ফেলো, আমেরিকান কলেজ অব সার্জনস (এফএসিএস)", organization_en: "United States", organization_bn: "যুক্তরাষ্ট্র", start_year: null, end_year: null, is_current: true }
 
 # ----------------------------------------------------------------------------
-#  Only claim numbers he can stand behind.
+#  Omitted on purpose: saadiul.com shows "980+ patients treated" alongside
+#  "3500+ successful surgeries". Those cannot both be true. Ask him for the
+#  real figures rather than publishing a number that invites doubt.
 # ----------------------------------------------------------------------------
 stats: []
 
 # ----------------------------------------------------------------------------
 settings:
   site_name_en: "Dr. Shaikh Saadiul Islam"
-  site_name_bn: ""
-  footer_note_en: ""
-  footer_note_bn: ""
-  contact_address_en: ""
-  contact_address_bn: ""
+  site_name_bn: "ডা. শেখ সাদিউল ইসলাম"
+  footer_note_en: "Orthopaedics, trauma and spine care in Dhaka."
+  footer_note_bn: "ঢাকায় অর্থোপেডিক্স, ট্রমা ও স্পাইন চিকিৎসা।"
+  contact_address_en: "Insaf Barakah Kidney and General Hospital, 11 Shahid Tajuddin Ahmad Sarani, Mogbazar, Dhaka 1217"
+  contact_address_bn: "ইনসাফ বারাকাহ কিডনি অ্যান্ড জেনারেল হাসপাতাল, ১১ শহীদ তাজউদ্দীন আহমদ সরণি, মগবাজার, ঢাকা ১২১৭"
   appointment_notice_en: "Online serials close one hour before each sitting begins."
   appointment_notice_bn: "প্রতিটি বসার এক ঘণ্টা আগে অনলাইন সিরিয়াল বন্ধ হয়ে যায়।"
