@@ -29,3 +29,6 @@ Thumbs.db
 # IDE
 .idea/
 .vscode/
+
+# Local image drop folder
+/incoming
