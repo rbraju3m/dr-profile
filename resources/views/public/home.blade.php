@@ -202,14 +202,14 @@
     {{-- ============================ Stats ============================ --}}
     @if ($stats->isNotEmpty())
         <section class="border-b border-slate-200 bg-white">
-            <div class="container-page grid grid-cols-2 gap-6 py-10 lg:grid-cols-4">
+            <div x-data x-reveal.stagger class="container-page grid grid-cols-2 gap-6 py-10 lg:grid-cols-4">
                 @foreach ($stats as $stat)
                     <div class="flex items-center gap-4">
                         <span class="grid h-12 w-12 shrink-0 place-items-center rounded-xl bg-primary-50 text-primary-600">
                             <x-icon :name="$stat->icon ?: 'activity'" class="h-6 w-6"/>
                         </span>
                         <div class="min-w-0">
-                            <p class="text-2xl font-bold tabular-nums text-slate-900">{{ $stat->displayValue() }}</p>
+                            <p class="text-2xl font-bold tabular-nums text-slate-900" x-data x-counter="{{ $stat->value }}">{{ $stat->displayValue() }}</p>
                             <p class="truncate text-sm text-slate-500">{{ $stat->tr('label') }}</p>
                         </div>
                     </div>
@@ -231,7 +231,7 @@
                 <div class="mt-4 grid grid-cols-3 gap-3">
                     @foreach ($stats->skip(1)->take(3) as $stat)
                         <div class="card p-4 text-center">
-                            <p class="text-lg font-bold tabular-nums text-primary-700">{{ $stat->displayValue() }}</p>
+                            <p class="text-lg font-bold tabular-nums text-primary-700" x-data x-counter="{{ $stat->value }}">{{ $stat->displayValue() }}</p>
                             <p class="mt-0.5 text-[11px] leading-tight text-slate-500">{{ $stat->tr('label') }}</p>
                         </div>
                     @endforeach
@@ -279,7 +279,7 @@
                 <x-section-heading :eyebrow="__('site.nav.services')" :title="__('site.home.expertise_heading')"
                                    :subtitle="__('site.home.expertise_subheading')"/>
 
-                <div class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($services as $service)
                         <x-service-card :service="$service"/>
                     @endforeach
@@ -301,7 +301,7 @@
                 <x-section-heading :eyebrow="__('site.nav.chambers')" :title="__('site.home.chambers_heading')"
                                    :subtitle="__('site.home.chambers_subheading')"/>
 
-                <div class="grid gap-6 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-6 lg:grid-cols-3">
                     @foreach ($chambers as $chamber)
                         <x-chamber-card :chamber="$chamber" :next-date="$nextDates[$chamber->id] ?? null"/>
                     @endforeach
@@ -315,7 +315,7 @@
         <div class="container-page">
             <x-section-heading :title="__('site.home.steps_heading')"/>
 
-            <div class="grid gap-6 md:grid-cols-3">
+            <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-3">
                 @foreach ([1, 2, 3] as $step)
                     <div class="relative card p-6">
                         <span class="grid h-11 w-11 place-items-center rounded-xl bg-primary-600 text-lg font-bold text-white tabular-nums">
@@ -346,7 +346,7 @@
                     </x-slot:action>
                 </x-section-heading>
 
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($stories as $story)
                         <x-story-card :story="$story"/>
                     @endforeach
@@ -361,7 +361,7 @@
             <div class="container-page">
                 <x-section-heading :title="__('site.home.testimonials_heading')"/>
 
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                     @foreach ($testimonials->take(3) as $testimonial)
                         <x-testimonial-card :testimonial="$testimonial"/>
                     @endforeach
@@ -385,7 +385,7 @@
                             </x-slot:action>
                         </x-section-heading>
 
-                        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             @foreach ($news as $post)
                                 <x-post-card :post="$post"/>
                             @endforeach
@@ -404,7 +404,7 @@
                             </x-slot:action>
                         </x-section-heading>
 
-                        <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                             @foreach ($articles as $post)
                                 <x-post-card :post="$post"/>
                             @endforeach

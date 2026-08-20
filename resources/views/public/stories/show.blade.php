@@ -2,6 +2,13 @@
     <x-page-hero :title="$story->tr('title')" :subtitle="$story->tr('summary')"
                  :breadcrumbs="[__('site.nav.success_stories') => route('stories.index'), Str::limit($story->tr('title'), 40) => null]"/>
 
+    {{-- Reading progress: a thin line under the header on long reads. --}}
+    <div x-data="readingProgress()" @scroll.window.passive="track()"
+         class="no-print sticky top-0 z-40 h-0.5 bg-transparent" aria-hidden="true">
+        <div class="h-full bg-primary-500 transition-[width] duration-150 ease-out"
+             :style="`width: ${progress}%`"></div>
+    </div>
+
     <section class="section bg-white">
         <div class="container-page grid gap-12 lg:grid-cols-12">
             <article class="lg:col-span-8">
@@ -19,7 +26,7 @@
                     </div>
                 @endif
 
-                <div class="prose-content">{!! $story->tr('content') !!}</div>
+                <div id="article-body" class="prose-content">{!! $story->tr('content') !!}</div>
 
                 @if ($story->video_url)
                     <div class="mt-8 aspect-video overflow-hidden rounded-2xl bg-slate-900">

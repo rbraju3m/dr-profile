@@ -9,7 +9,7 @@
                 @if ($upcoming->isEmpty())
                     <x-empty-state icon="calendar" :title="__('site.posts.empty')"/>
                 @else
-                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                         @foreach ($upcoming as $post)
                             <x-post-card :post="$post"/>
                         @endforeach

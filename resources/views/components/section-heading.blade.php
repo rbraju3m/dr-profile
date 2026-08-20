@@ -1,6 +1,6 @@
 @props(['eyebrow' => null, 'title', 'subtitle' => null, 'align' => 'center', 'action' => null])
 
-<div @class([
+<div x-data x-reveal @class([
     'mb-10 max-w-2xl',
     'mx-auto text-center' => $align === 'center',
     'flex flex-wrap items-end justify-between gap-4 max-w-none' => $align === 'between',

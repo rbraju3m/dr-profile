@@ -74,7 +74,7 @@
                 @foreach ($primaryNav as $item)
                     <a href="{{ route($item['route']) }}"
                        @class([
-                           'rounded-full px-3.5 py-2 text-sm font-medium transition',
+                           'nav-link rounded-full px-3.5 py-2 text-sm font-medium transition',
                            'bg-primary-50 text-primary-700' => request()->routeIs($item['route']),
                            'text-slate-600 hover:bg-slate-100 hover:text-slate-900' => ! request()->routeIs($item['route']),
                        ])>{{ $item['label'] }}</a>

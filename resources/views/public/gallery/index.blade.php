@@ -6,7 +6,7 @@
             @if ($albums->isEmpty())
                 <x-empty-state icon="image" :title="__('site.gallery.empty')"/>
             @else
-                <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     @foreach ($albums as $album)
                         <a href="{{ route('gallery.show', $album) }}" class="card-hover group flex flex-col overflow-hidden">
                             <x-media-frame :src="$album->coverUrl()" :alt="$album->tr('title')" ratio="aspect-[4/3]" :seed="$album->slug">

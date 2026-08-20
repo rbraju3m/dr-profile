@@ -74,6 +74,23 @@
 
     @include('partials.footer')
 
+    {{-- Back to top: appears once the visitor is well down a long page. --}}
+    <button type="button"
+            x-data="{ shown: false }"
+            x-init="$watch('shown', () => {})"
+            @scroll.window.passive="shown = window.scrollY > 700"
+            x-show="shown"
+            x-cloak
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 translate-y-3"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-end="opacity-0 translate-y-3"
+            @click="window.scrollTo({ top: 0, behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })"
+            class="to-top no-print hover:bg-primary-800"
+            aria-label="{{ __('site.errors.go_home') }}">
+        <x-icon name="chevron-up" class="h-5 w-5"/>
+    </button>
+
     {{-- Mobile sticky booking bar: the single most important action on the site. --}}
     <div class="no-print fixed inset-x-0 bottom-0 z-40 border-t border-slate-200 bg-white/95 p-3 backdrop-blur lg:hidden">
         <div class="flex items-center gap-2">

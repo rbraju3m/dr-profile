@@ -69,7 +69,7 @@
                         @foreach ($stats as $stat)
                             <div class="card p-5 text-center">
                                 <x-icon :name="$stat->icon ?: 'activity'" class="mx-auto h-6 w-6 text-primary-500"/>
-                                <p class="mt-2 text-xl font-bold tabular-nums text-slate-900">{{ $stat->displayValue() }}</p>
+                                <p class="mt-2 text-xl font-bold tabular-nums text-slate-900" x-data x-counter="{{ $stat->value }}">{{ $stat->displayValue() }}</p>
                                 <p class="mt-0.5 text-xs leading-tight text-slate-500">{{ $stat->tr('label') }}</p>
                             </div>
                         @endforeach
@@ -96,7 +96,7 @@
                             {{ $label }}
                         </h2>
 
-                        <ol class="mt-5 space-y-0 border-s-2 border-slate-100 ps-6">
+                        <ol x-data x-reveal.stagger class="mt-5 space-y-0 border-s-2 border-slate-100 ps-6">
                             @foreach ($items as $item)
                                 <li class="relative pb-7 last:pb-0">
                                     <span class="absolute -start-[1.9rem] top-1.5 grid h-3.5 w-3.5 place-items-center rounded-full bg-white ring-2 {{ $item->is_current ? 'ring-accent-500' : 'ring-slate-300' }}">

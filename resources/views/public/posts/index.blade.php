@@ -12,7 +12,7 @@
                 @if ($posts->isEmpty())
                     <x-empty-state icon="file-text" :title="__('site.posts.empty')"/>
                 @else
-                    <div class="grid gap-6 sm:grid-cols-2">
+                    <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2">
                         @foreach ($posts as $post)
                             <x-post-card :post="$post"/>
                         @endforeach

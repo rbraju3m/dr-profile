@@ -11,6 +11,13 @@
     <x-page-hero :title="$post->tr('title')"
                  :breadcrumbs="[$listRoute[1] => route($listRoute[0]), Str::limit($post->tr('title'), 40) => null]"/>
 
+    {{-- Reading progress: a thin line under the header on long reads. --}}
+    <div x-data="readingProgress()" @scroll.window.passive="track()"
+         class="no-print sticky top-0 z-40 h-0.5 bg-transparent" aria-hidden="true">
+        <div class="h-full bg-primary-500 transition-[width] duration-150 ease-out"
+             :style="`width: ${progress}%`"></div>
+    </div>
+
     <section class="section bg-white">
         <div class="container-page grid gap-12 lg:grid-cols-12">
             <article class="lg:col-span-8">
@@ -75,7 +82,7 @@
                     </div>
                 @endif
 
-                <div class="prose-content">{!! $post->tr('content') !!}</div>
+                <div id="article-body" class="prose-content">{!! $post->tr('content') !!}</div>
 
                 @if ($post->tags)
                     <div class="mt-8 flex flex-wrap items-center gap-2 border-t border-slate-100 pt-6">
