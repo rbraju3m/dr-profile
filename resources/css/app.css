@@ -60,6 +60,7 @@
     --ink-teal: var(--color-primary-700);
     --chip-bg: var(--color-primary-50);
     --ring-soft: var(--color-primary-200);
+    --selected-bg: #f4fbfc;
     --sheen: rgb(255 255 255 / 0.55);
 }
 
@@ -71,6 +72,7 @@
     --ink-teal: #6cc3d9;
     --chip-bg: #0f2733;
     --ring-soft: #1c4a5c;
+    --selected-bg: #0d2029;
     --sheen: rgb(255 255 255 / 0.06);
 
     /* Neutrals, inverted end for end. */
@@ -124,6 +126,13 @@
         @apply outline-2 outline-offset-2 outline-primary-600;
     }
 
+    /* Checkboxes and radios are native controls; without this they tick in the
+       browser's own blue, which belongs to no part of this palette. */
+    input[type='checkbox'],
+    input[type='radio'] {
+        accent-color: var(--color-primary-600);
+    }
+
     /* Anchor targets clear the sticky header. */
     [id] {
         scroll-margin-top: 6rem;
@@ -166,6 +175,25 @@
 
     .btn-secondary:hover {
         background-color: var(--chip-bg);
+    }
+
+    /* A checkbox or radio dressed as a row, ticked or not. The selected tint
+       is a token rather than `bg-primary-50/40`: an opacity variant compiles
+       to its own class name, which the dark overrides never reach, so those
+       rows stayed washed-out and light. */
+    .switch-row {
+        @apply flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3.5 transition;
+    }
+
+    .switch-row:has(:checked) {
+        border-color: var(--color-primary-400);
+        background-color: var(--selected-bg);
+    }
+
+    /* The knob of a toggle switch, which rides on a coloured track and so is
+       white in either theme. */
+    .switch-knob {
+        background-color: #ffffff;
     }
 
     /* A white button that sits on a teal band — white in either theme, because

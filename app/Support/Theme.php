@@ -51,6 +51,16 @@ final class Theme
     }
 
     /**
+     * The reader's own standing choice, which is what the switch itself has to
+     * show. It differs from current() in one case that matters: `system` is a
+     * choice, but it renders as light or dark.
+     */
+    public static function preference(bool $staff = false): string
+    {
+        return self::resolve($staff || self::switchable());
+    }
+
+    /**
      * The admin panel always honours the reader's own choice. The public
      * switch is a decision about what visitors are offered; staff spend hours
      * in here, and hiding it from them would be answering a different question.

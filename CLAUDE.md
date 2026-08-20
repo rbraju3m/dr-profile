@@ -175,10 +175,18 @@ How the styling works — this is the part that is easy to get wrong:
 - **Do not mark a colour utility `!important` to beat a component class.** It never needed to — the
   utilities layer already outranks components — and an unlayered dark override cannot win against a
   layered `!important`, so the marked element silently keeps its light colour.
+- An **opacity variant is its own class**: `bg-primary-50/40` is never touched by the override on
+  `bg-primary-50`. Where a tint has to flip, give it a token and a component class — `.switch-row`
+  is the ticked checkbox row, `.switch-knob` the toggle's white knob, which rides on a coloured
+  track and so stays white in both themes.
 - Scrims (`bg-black/60`) and overlays on always-dark bands (`bg-white/10`, `text-white`) stay as they
   are: those surfaces are dark in both themes.
 
-`ThemeTest` covers the default, the reader's override, the switch being off, and the admin panel.
+The reader's switch has **three** positions — light, dark, follow the device — because a plain flip
+is a one-way door: the moment a reader touches it their cookie outranks their phone for a year.
+
+`ThemeTest` covers the default, the reader's override, handing the choice back to the device, the
+switch being off, and the admin panel.
 
 ## Media
 

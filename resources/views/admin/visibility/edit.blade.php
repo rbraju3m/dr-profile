@@ -9,7 +9,7 @@
                       :subtitle="__('admin.visibility.appearance.intro')">
             <div class="grid gap-3 sm:grid-cols-3">
                 @foreach (App\Support\Theme::CHOICES as $choice)
-                    <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3.5 transition has-[:checked]:border-primary-400 has-[:checked]:bg-primary-50/40">
+                    <label class="switch-row">
                         <input type="radio" name="theme_default" value="{{ $choice }}"
                                @checked(old('theme_default', $theme) === $choice)
                                class="mt-0.5 h-4 w-4 border-slate-300 text-primary-600 focus:ring-primary-500">
@@ -40,7 +40,7 @@
 
                     <div class="space-y-2">
                         @foreach ($features as $key => $feature)
-                            <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3 transition has-[:checked]:border-primary-400 has-[:checked]:bg-primary-50/40">
+                            <label class="switch-row p-3">
                                 <input type="hidden" name="features[{{ $key }}]" value="0">
                                 <input type="checkbox" name="features[{{ $key }}]" value="1"
                                        @checked(old('features.'.$key, $feature['enabled']))

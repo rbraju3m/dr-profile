@@ -1,16 +1,24 @@
 {{--
-    Runs before the first paint, and only has work to do when the theme is
-    "follow the device" — the server cannot know what the device says. Kept
-    inline and dependency-free so it lands ahead of the stylesheet.
+    Settles the theme before the first paint. The server can name `light` and
+    `dark` itself; `system` it cannot, so that one is resolved here — and kept
+    in step afterwards, because following the device means following it while
+    the page is open too.
 --}}
 <script>
     (function () {
-        var theme = @json($theme);
+        var media = window.matchMedia('(prefers-color-scheme: dark)')
 
-        if (theme === 'system') {
-            theme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        window.applyTheme = function (theme) {
+            var resolved = theme === 'system' ? (media.matches ? 'dark' : 'light') : theme
+
+            window.themePreference = theme
+            document.documentElement.classList.toggle('dark', resolved === 'dark')
         }
 
-        document.documentElement.classList.toggle('dark', theme === 'dark')
+        media.addEventListener('change', function () {
+            if (window.themePreference === 'system') window.applyTheme('system')
+        })
+
+        window.applyTheme(@json($theme));
     })();
 </script>

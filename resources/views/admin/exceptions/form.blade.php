@@ -13,7 +13,7 @@
                     <x-admin.input name="date" type="date" :label="__('site.booking.step_date')" required
                                    :value="$record?->date?->toDateString()"/>
 
-                    <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3.5 transition has-[:checked]:border-primary-400 has-[:checked]:bg-primary-50/50">
+                    <label class="switch-row">
                         <input type="hidden" name="is_available" value="0">
                         <input type="checkbox" name="is_available" value="1" x-model="available"
                                class="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500">

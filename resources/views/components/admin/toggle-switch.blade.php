@@ -17,5 +17,5 @@
         class="relative inline-flex h-6 w-11 shrink-0 items-center rounded-full transition disabled:opacity-60
                focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
     <span :class="on ? 'translate-x-6' : 'translate-x-1'"
-          class="inline-block h-4 w-4 transform rounded-full bg-white shadow transition"></span>
+          class="switch-knob inline-block h-4 w-4 transform rounded-full shadow transition"></span>
 </button>

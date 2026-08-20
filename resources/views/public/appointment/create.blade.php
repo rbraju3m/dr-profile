@@ -223,7 +223,7 @@
                                         <span class="field-label">{{ __('site.booking.visit_type') }}</span>
                                         <div class="grid grid-cols-2 gap-3">
                                             @foreach (['new' => __('site.booking.visit_new'), 'followup' => __('site.booking.visit_followup')] as $value => $label)
-                                                <label class="flex cursor-pointer items-center gap-2.5 rounded-xl border border-slate-200 px-4 py-2.5 text-sm transition has-[:checked]:border-primary-500 has-[:checked]:bg-primary-50">
+                                                <label class="switch-row items-center gap-2.5 px-4 py-2.5 text-sm">
                                                     <input type="radio" name="visit_type" value="{{ $value }}"
                                                            @checked(old('visit_type', 'new') === $value)
                                                            class="h-4 w-4 text-primary-600 focus:ring-primary-500">

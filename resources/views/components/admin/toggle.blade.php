@@ -1,6 +1,6 @@
 @props(['name', 'label', 'value' => false, 'hint' => null])
 
-<label class="flex cursor-pointer items-start gap-3 rounded-xl border border-slate-200 p-3.5 transition has-[:checked]:border-primary-400 has-[:checked]:bg-primary-50/50">
+<label class="switch-row">
     <input type="hidden" name="{{ $name }}" value="0">
     <input type="checkbox" name="{{ $name }}" value="1" @checked(old($name, $value))
            class="mt-0.5 h-4 w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500">

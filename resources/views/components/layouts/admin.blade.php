@@ -166,14 +166,7 @@
                 </div>
             </form>
 
-            <button type="button" x-data="themeToggle()" @click="flip()"
-                    :aria-pressed="dark"
-                    :aria-label="dark ? @js(__('site.theme.to_light')) : @js(__('site.theme.to_dark'))"
-                    :title="dark ? @js(__('site.theme.to_light')) : @js(__('site.theme.to_dark'))"
-                    class="grid h-10 w-10 place-items-center rounded-lg text-slate-500 transition hover:bg-slate-100">
-                <span x-show="!dark" x-cloak><x-icon name="moon" class="h-5 w-5"/></span>
-                <span x-show="dark" x-cloak><x-icon name="sun" class="h-5 w-5"/></span>
-            </button>
+            <x-theme-toggle staff class="!h-10 !w-10 text-slate-500"/>
 
             <div class="relative" x-data="{ open: false }">
                 <button type="button" @click="open = !open" class="flex items-center gap-2 rounded-lg p-1 hover:bg-slate-100" :aria-expanded="open">

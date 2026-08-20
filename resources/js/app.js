@@ -248,18 +248,27 @@ Alpine.data('readingProgress', () => ({
 
 window.Alpine = Alpine
 /**
- * themeToggle — light/dark, applied to <html> at once and remembered.
+ * themeToggle — light, dark, or whatever the device asks for.
  *
  * The cookie is what the server reads on the next request, so the page it
- * sends back is already the right way round and nothing flashes.
+ * sends back is already the right way round and nothing flashes. `system`
+ * hands the decision back to the device, including when the device changes its
+ * mind while the page is open.
  */
-Alpine.data('themeToggle', () => ({
-    dark: document.documentElement.classList.contains('dark'),
+Alpine.data('themeToggle', (initial, labels) => ({
+    theme: ['light', 'dark', 'system'].includes(initial) ? initial : 'light',
+    labels: labels ?? {},
 
-    flip() {
-        this.dark = !this.dark
-        document.documentElement.classList.toggle('dark', this.dark)
-        document.cookie = `theme=${this.dark ? 'dark' : 'light'};path=/;max-age=31536000;samesite=lax`
+    get label() {
+        return this.labels[this.theme] ?? ''
+    },
+
+    cycle() {
+        const order = ['light', 'dark', 'system']
+        this.theme = order[(order.indexOf(this.theme) + 1) % order.length]
+
+        document.cookie = `theme=${this.theme};path=/;max-age=31536000;samesite=lax`
+        window.applyTheme(this.theme)
     },
 }))
 

@@ -22,6 +22,7 @@ return [
     'theme' => [
         'to_dark' => 'Switch to dark',
         'to_light' => 'Switch to light',
+        'to_system' => 'Match my device',
         'label' => 'Appearance',
     ],
 

@@ -66,6 +66,30 @@ class ThemeTest extends TestCase
             ->get('/en')->assertOk()->assertSee('class="dark"', escape: false);
     }
 
+    /**
+     * The switch has three positions, not two: a plain flip would be a one-way
+     * door, since the reader's cookie outranks their device for a year the
+     * moment they touch it.
+     */
+    public function test_a_reader_can_hand_the_choice_back_to_their_device(): void
+    {
+        $this->setDefault('dark');
+
+        $this->withUnencryptedCookie('theme', 'system')
+            ->get('/en')->assertOk()
+            ->assertDontSee('class="dark"', escape: false)
+            ->assertSee('content="light dark"', escape: false);
+    }
+
+    /** The button opens where the reader left it, not where the page rendered. */
+    public function test_the_switch_shows_where_the_reader_left_it(): void
+    {
+        $this->withUnencryptedCookie('theme', 'system')
+            ->get('/en')->assertOk()
+            ->assertSee("themeToggle('system'", escape: false)
+            ->assertSee(__('site.theme.to_light'), escape: false);
+    }
+
     /** With the switch off the choice belongs to the admin, cookie or not. */
     public function test_the_cookie_is_ignored_when_the_switch_is_off(): void
     {
