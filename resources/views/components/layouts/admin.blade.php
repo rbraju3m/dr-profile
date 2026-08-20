@@ -60,7 +60,38 @@
             </button>
         </div>
 
-        <nav class="flex-1 space-y-6 overflow-y-auto px-3 pb-6">
+        {{--
+            The menu is taller than a laptop viewport, and it used to simply stop
+            at whichever item ran out of room — with the divider above "View
+            site" making that cut look like the end of the list. The fades show
+            there is more in either direction, and the active item is scrolled
+            into view so a deep page is never hidden off-screen.
+        --}}
+        <div class="relative min-h-0 flex-1"
+             x-data="{
+                atTop: true,
+                atBottom: true,
+                measure() {
+                    const el = $refs.nav
+                    this.atTop = el.scrollTop <= 4
+                    this.atBottom = el.scrollTop + el.clientHeight >= el.scrollHeight - 4
+                },
+                init() {
+                    this.$nextTick(() => {
+                        $refs.nav.querySelector('[data-active]')
+                            ?.scrollIntoView({ block: 'nearest' })
+                        this.measure()
+                    })
+                },
+             }">
+
+            <div x-show="!atTop" x-cloak x-transition.opacity aria-hidden="true"
+                 class="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-primary-950 to-transparent"></div>
+            <div x-show="!atBottom" x-cloak x-transition.opacity aria-hidden="true"
+                 class="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-10 bg-gradient-to-t from-primary-950 to-transparent"></div>
+
+            <nav x-ref="nav" @scroll="measure()" @resize.window="measure()"
+                 class="sidebar-nav h-full space-y-6 overflow-y-auto px-3 pb-6">
             @foreach ($groups as $groupLabel => $items)
                 @php
                     $visible = collect($items)->reject(fn ($i) => ($i['admin'] ?? false) && ! $user?->isAdmin());
@@ -74,6 +105,7 @@
                             @php $active = request()->routeIs(Str::replaceLast('index', '*', $item['route'])) || request()->routeIs($item['route']); @endphp
                             <li>
                                 <a href="{{ route($item['route']) }}"
+                                   @if ($active) data-active @endif
                                    @class([
                                        'flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm transition',
                                        'bg-primary-600 font-medium text-white' => $active,
@@ -91,8 +123,9 @@
                         @endforeach
                     </ul>
                 </div>
-            @endforeach
-        </nav>
+                @endforeach
+            </nav>
+        </div>
 
         <div class="shrink-0 border-t border-white/10 p-3">
             <a href="{{ route('home') }}" target="_blank"
