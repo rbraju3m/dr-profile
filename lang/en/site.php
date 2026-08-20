@@ -64,6 +64,9 @@ return [
     ],
 
     'home' => [
+        'trust_experience' => 'Years in practice',
+        'trust_registration' => 'BMDC registered',
+        'explore' => 'Explore the practice',
         'hero_greeting' => 'Welcome',
         'hero_cta_secondary' => 'Learn More',
         'about_heading' => 'About the Doctor',
@@ -106,6 +109,9 @@ return [
     ],
 
     'chamber' => [
+        'today' => 'Today',
+        'sitting_today' => 'Sitting today',
+        'next_sitting' => 'Next sitting',
         'heading' => 'Chambers',
         'address' => 'Address',
         'phone' => 'Phone',

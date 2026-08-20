@@ -5,9 +5,13 @@
         ? $chamber->activeSchedules
         : $chamber->schedules->where('is_active', true);
     $byDay = $schedules->groupBy('day_of_week');
+
+    // The first thing a patient looks for is whether he sits today.
+    $today = now()->dayOfWeek;
+    $sittingToday = $byDay->has($today);
 @endphp
 
-<div class="card group flex flex-col overflow-hidden">
+<div class="card card-hover group flex flex-col overflow-hidden">
     {{-- The admin has always accepted a chamber photo; this is what shows it. --}}
     @if ($chamber->imageUrl())
         <a href="{{ route('chambers.show', $chamber) }}" class="block">
@@ -30,8 +34,15 @@
             @endif
         </div>
 
-        @if ($chamber->accepts_online_booking && feature('appointment'))
+        @if ($sittingToday)
             <span class="chip shrink-0 bg-accent-50 text-accent-700">
+                <span class="relative flex h-1.5 w-1.5">
+                    <span class="h-1.5 w-1.5 rounded-full bg-accent-500"></span>
+                </span>
+                {{ __('site.chamber.sitting_today') }}
+            </span>
+        @elseif ($chamber->accepts_online_booking && feature('appointment'))
+            <span class="chip shrink-0">
                 <x-icon name="check" class="h-3 w-3"/>{{ __('site.actions.book_now') }}
             </span>
         @endif
@@ -46,9 +57,17 @@
             <ul class="space-y-2">
                 @foreach (App\Support\Week::DAYS as $day)
                     @continue (! $byDay->has($day))
-                    <li class="flex items-baseline justify-between gap-3 text-sm">
-                        <span class="font-medium text-slate-700">{{ App\Support\Week::name($day) }}</span>
-                        <span class="text-end tabular-nums text-slate-500">
+                    <li @class([
+                        'flex items-baseline justify-between gap-3 rounded-lg px-2 py-1 text-sm transition',
+                        '-mx-2 bg-primary-50 ring-1 ring-inset ring-primary-100' => $day === $today,
+                    ])>
+                        <span @class(['font-medium', 'text-primary-800' => $day === $today, 'text-slate-700' => $day !== $today])>
+                            {{ App\Support\Week::name($day) }}
+                            @if ($day === $today)
+                                <span class="ms-1 text-[11px] font-semibold uppercase tracking-wide text-primary-600">{{ __('site.chamber.today') }}</span>
+                            @endif
+                        </span>
+                        <span @class(['text-end tabular-nums', 'text-primary-800' => $day === $today, 'text-slate-500' => $day !== $today])>
                             @foreach ($byDay[$day] as $sitting)
                                 <span class="block">{{ $sitting->timeRange() }}</span>
                             @endforeach

@@ -15,7 +15,7 @@
             </span>
         @endunless
 
-    <h3 class="mt-4 text-base font-semibold text-slate-900 group-hover:text-primary-700">
+    <h3 class="mt-4 text-[17px] font-semibold leading-snug text-slate-900 transition group-hover:text-primary-700">
         {{ $service->tr('name') }}
     </h3>
 
@@ -23,9 +23,9 @@
         {{ Str::limit($service->tr('short_description'), 110) }}
     </p>
 
-        <span class="mt-4 inline-flex items-center gap-1.5 text-sm font-medium text-primary-600">
+        <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600">
             {{ __('site.actions.view_details') }}
-            <x-icon name="arrow-right" class="h-4 w-4 transition group-hover:translate-x-1 rtl:rotate-180"/>
+            <x-icon name="arrow-right" class="lean h-4 w-4 rtl:rotate-180"/>
         </span>
     </div>
 </a>

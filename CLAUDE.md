@@ -225,6 +225,16 @@ switch being off, and the admin panel.
   check `prefers-reduced-motion` before registering any observer. **Alpine v3 only walks trees rooted
   at an `x-data`**, so an element carrying `x-reveal` needs its own — the markup was correct and
   nothing moved until each got one.
+- **One motion vocabulary, one curve** (`--ease-soft`). Everything that moves is one of: the reveal
+  (fade + 16px rise, 500ms, 70ms between siblings), a 2px hover lift with a shadow bloom
+  (`.card-hover`), a hairline that draws itself in (`.rule-draw`, `.line-draw`), the hero
+  photograph's single slow drift (`.ken-burns`), an arrow that leans towards its destination
+  (`.lean`), and `x-counter`. Nothing loops, and nothing moves that the reader did not cause. Adding
+  a seventh effect means asking whether it replaces one of these.
+- Headlines carry `.display`, which sets the tight tracking and line height in one place —
+  and unsets both for Bangla, whose conjuncts collide at Latin metrics.
+- Screenshots of anything below the fold catch reveals **mid-animation** and look half-drawn. Render
+  with `--force-prefers-reduced-motion` to photograph the settled state.
 - Icons are inline SVG in `resources/views/components/icon.blade.php` — add glyphs there rather than
   pulling in an icon package.
 - Tailwind v4 cannot `@apply` a class declared in the same layer; shared component shapes in

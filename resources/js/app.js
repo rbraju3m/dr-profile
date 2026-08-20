@@ -29,7 +29,7 @@ Alpine.directive('reveal', (el, { modifiers }) => {
 
     const delayIndex = modifiers.indexOf('delay')
     const base = delayIndex !== -1 ? parseInt(modifiers[delayIndex + 1] ?? 0, 10) : 0
-    const step = modifiers.includes('stagger') ? 90 : 0
+    const step = modifiers.includes('stagger') ? 70 : 0
 
     targets.forEach((t) => t.classList.add('reveal'))
 

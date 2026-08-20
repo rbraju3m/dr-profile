@@ -38,6 +38,10 @@
 
     --radius-card: 1rem;
 
+    /* One easing curve for everything that moves: quick to leave, slow to
+       settle. Motion that shares a curve reads as one system. */
+    --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+
     --shadow-soft: 0 1px 2px rgb(15 23 42 / 0.04), 0 8px 24px -12px rgb(15 23 42 / 0.12);
     --shadow-lift: 0 2px 4px rgb(15 23 42 / 0.05), 0 18px 40px -20px rgb(15 23 42 / 0.25);
 }
@@ -100,6 +104,19 @@
     html {
         scroll-behavior: smooth;
         -webkit-text-size-adjust: 100%;
+    }
+
+    /* Headlines. Tight and optically balanced in Latin; Bangla needs the
+       tracking back at zero and a much taller line box or the conjuncts touch. */
+    .display {
+        @apply font-bold text-balance;
+        letter-spacing: -0.02em;
+        line-height: 1.14;
+    }
+
+    html[lang='bn'] .display {
+        letter-spacing: 0;
+        line-height: 1.45;
     }
 
     /* Bangla needs a taller line box than Inter's default. */
@@ -226,7 +243,13 @@
     }
 
     .card-hover {
-        @apply transition duration-300 hover:-translate-y-1 hover:border-primary-200 hover:shadow-[var(--shadow-lift)];
+        @apply hover:border-primary-200 hover:shadow-[var(--shadow-lift)];
+        transition: transform 240ms var(--ease-soft), box-shadow 240ms var(--ease-soft),
+                    border-color 240ms var(--ease-soft);
+    }
+
+    .card-hover:hover {
+        transform: translateY(-2px);
     }
 
     .chip {
@@ -312,9 +335,8 @@
     /* Applied by x-reveal before the element enters the viewport. */
     .reveal {
         opacity: 0;
-        transform: translateY(14px);
-        transition: opacity 620ms cubic-bezier(0.22, 1, 0.36, 1),
-                    transform 620ms cubic-bezier(0.22, 1, 0.36, 1);
+        transform: translateY(16px);
+        transition: opacity 500ms var(--ease-soft), transform 500ms var(--ease-soft);
         will-change: opacity, transform;
     }
 
@@ -349,27 +371,57 @@
         transition: background-color 200ms, color 200ms, box-shadow 200ms, transform 120ms;
     }
 
-    /* A quiet sheen that crosses a card on hover — enough to feel responsive,
-       not enough to distract from a page about somebody's spine. */
     .card-hover {
         @apply relative overflow-hidden;
     }
 
-    .card-hover::before {
-        content: '';
-        @apply pointer-events-none absolute inset-0 z-10 opacity-0;
-        background: linear-gradient(105deg, transparent 40%, var(--sheen) 50%, transparent 60%);
-        transform: translateX(-100%);
-        transition: opacity 200ms;
+    /* ------------------------------------------------------------------
+       The vocabulary
+       Six effects, one curve. Anything that moves on this site is one of
+       these; nothing loops, and nothing moves that the reader did not cause.
+       ------------------------------------------------------------------ */
+
+    /* A hairline that draws itself under a heading as the heading arrives. */
+    .rule-draw {
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 700ms var(--ease-soft) 120ms;
     }
 
-    .card-hover:hover::before {
-        @apply opacity-100;
-        animation: sheen 900ms cubic-bezier(0.22, 1, 0.36, 1);
+    .is-revealed .rule-draw,
+    .is-revealed.rule-draw {
+        transform: scaleX(1);
     }
 
-    @keyframes sheen {
-        to { transform: translateX(100%); }
+    /* The hero photograph drifts, once, over its first quarter minute. */
+    .ken-burns {
+        animation: ken-burns 20s var(--ease-soft) forwards;
+    }
+
+    @keyframes ken-burns {
+        from { transform: scale(1); }
+        to { transform: scale(1.08); }
+    }
+
+    /* The line joining the booking steps, drawn in behind them. */
+    .line-draw {
+        transform: scaleX(0);
+        transform-origin: left center;
+        transition: transform 900ms var(--ease-soft) 200ms;
+    }
+
+    .is-revealed .line-draw {
+        transform: scaleX(1);
+    }
+
+    /* Anything that should follow the cursor's invitation: an arrow that
+       leans towards where it will take you. */
+    .lean {
+        transition: transform 240ms var(--ease-soft);
+    }
+
+    .group:hover .lean {
+        transform: translateX(4px);
     }
 
     .is-dragging {
@@ -471,7 +523,8 @@
         transform: none !important;
     }
 
-    .card-hover:hover::before { animation: none; opacity: 0; }
+    .ken-burns { animation: none; }
+    .rule-draw, .line-draw { transform: none !important; }
 }
 
 @media print {

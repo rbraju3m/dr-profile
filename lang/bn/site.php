@@ -64,6 +64,9 @@ return [
     ],
 
     'home' => [
+        'trust_experience' => 'অভিজ্ঞতা',
+        'trust_registration' => 'বিএমডিসি নিবন্ধিত',
+        'explore' => 'বিস্তারিত দেখুন',
         'hero_greeting' => 'স্বাগতম',
         'hero_cta_secondary' => 'আরও জানুন',
         'about_heading' => 'ডাক্তার সম্পর্কে',
@@ -106,6 +109,9 @@ return [
     ],
 
     'chamber' => [
+        'today' => 'আজ',
+        'sitting_today' => 'আজ বসছেন',
+        'next_sitting' => 'পরবর্তী বসা',
         'heading' => 'চেম্বার',
         'address' => 'ঠিকানা',
         'phone' => 'ফোন',

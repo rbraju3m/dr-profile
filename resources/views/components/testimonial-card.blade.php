@@ -3,7 +3,7 @@
 <figure class="card flex h-full flex-col p-6">
     <x-icon name="quote" class="h-7 w-7 text-primary-200"/>
 
-    <blockquote class="mt-3 flex-1 text-[15px] leading-relaxed text-slate-600">
+    <blockquote class="mt-4 flex-1 text-[17px] leading-relaxed text-slate-700">
         {{ $testimonial->tr('content') }}
     </blockquote>
 

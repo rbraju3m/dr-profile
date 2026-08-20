@@ -13,6 +13,7 @@
         'arrow-right' => '<path d="M5 12h14M12 5l7 7-7 7"/>',
         'arrow-left' => '<path d="M19 12H5M12 19l-7-7 7-7"/>',
         'arrow-up-right' => '<path d="M7 17 17 7M7 7h10v10"/>',
+        'plus' => '<path d="M12 5v14M5 12h14"/>',
         'check' => '<path d="M20 6 9 17l-5-5"/>',
         'check-circle' => '<path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><path d="m9 11 3 3L22 4"/>',
         'alert-circle' => '<circle cx="12" cy="12" r="10"/><path d="M12 8v4M12 16h.01"/>',
