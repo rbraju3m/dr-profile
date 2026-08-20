@@ -28,7 +28,7 @@ class ScheduleExceptionController extends ResourceController
         return [
             ['label' => __('site.booking.step_date'), 'type' => 'strong', 'value' => fn (ScheduleException $e) => $e->date->format('D, d M Y')],
             ['label' => __('admin.nav.chambers'), 'value' => fn (ScheduleException $e) => $e->chamber?->name_en ?? __('admin.exceptions.all_chambers')],
-            ['label' => 'Kind', 'value' => fn (ScheduleException $e) => $e->is_available ? __('admin.exceptions.extra') : __('admin.exceptions.closed')],
+            ['label' => __('admin.common.kind'), 'value' => fn (ScheduleException $e) => $e->is_available ? __('admin.exceptions.extra') : __('admin.exceptions.closed')],
             ['label' => __('admin.exceptions.reason'), 'type' => 'muted', 'key' => 'reason_en'],
         ];
     }

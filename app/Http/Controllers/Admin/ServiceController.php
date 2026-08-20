@@ -38,7 +38,7 @@ class ServiceController extends ResourceController
             ['label' => __('admin.common.order'), 'type' => 'number', 'key' => 'sort_order', 'class' => 'w-16'],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'name_en'],
             ['label' => __('admin.common.bangla'), 'type' => 'muted', 'key' => 'name_bn'],
-            ['label' => 'Fee', 'value' => fn (Service $s) => $s->fee ? Number::money($s->fee, 'en') : '—'],
+            ['label' => __('admin.common.fee'), 'value' => fn (Service $s) => $s->fee ? Number::money($s->fee, 'en') : '—'],
             ['label' => __('admin.common.featured'), 'type' => 'bool', 'key' => 'is_featured'],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],
         ];

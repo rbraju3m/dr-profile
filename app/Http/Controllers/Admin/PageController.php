@@ -35,8 +35,8 @@ class PageController extends ResourceController
     {
         return [
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'title_en'],
-            ['label' => 'Slug', 'type' => 'muted', 'key' => 'slug'],
-            ['label' => 'In footer', 'type' => 'bool', 'key' => 'show_in_footer'],
+            ['label' => __('admin.common.slug'), 'type' => 'muted', 'key' => 'slug'],
+            ['label' => __('admin.common.in_footer'), 'type' => 'bool', 'key' => 'show_in_footer'],
             ['label' => __('admin.common.published'), 'type' => 'bool', 'key' => 'is_published'],
         ];
     }

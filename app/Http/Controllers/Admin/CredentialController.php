@@ -29,7 +29,7 @@ class CredentialController extends ResourceController
     protected function columns(): array
     {
         return [
-            ['label' => 'Type', 'value' => fn (Credential $c) => __('site.about.'.match ($c->type) {
+            ['label' => __('admin.common.type'), 'value' => fn (Credential $c) => __('site.about.'.match ($c->type) {
                 'education' => 'education',
                 'experience' => 'experience',
                 'training' => 'training',
@@ -38,8 +38,8 @@ class CredentialController extends ResourceController
                 default => 'certifications',
             })],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'title_en'],
-            ['label' => 'Organisation', 'type' => 'muted', 'key' => 'organization_en'],
-            ['label' => 'Period', 'value' => fn (Credential $c) => $c->period() ?? '—'],
+            ['label' => __('admin.common.organisation'), 'type' => 'muted', 'key' => 'organization_en'],
+            ['label' => __('admin.common.period'), 'value' => fn (Credential $c) => $c->period() ?? '—'],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],
         ];
     }

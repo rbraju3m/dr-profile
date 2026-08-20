@@ -34,10 +34,10 @@ class UserController extends ResourceController
     {
         return [
             ['label' => __('admin.common.image'), 'type' => 'image', 'value' => fn (User $u) => $u->avatarUrl(), 'class' => 'w-20'],
-            ['label' => 'Name', 'type' => 'strong', 'key' => 'name'],
-            ['label' => 'Email', 'type' => 'muted', 'key' => 'email'],
-            ['label' => 'Role', 'key' => 'role'],
-            ['label' => 'Last login', 'value' => fn (User $u) => $u->last_login_at?->diffForHumans() ?? '—'],
+            ['label' => __('admin.common.name'), 'type' => 'strong', 'key' => 'name'],
+            ['label' => __('admin.common.email'), 'type' => 'muted', 'key' => 'email'],
+            ['label' => __('admin.common.role'), 'key' => 'role'],
+            ['label' => __('admin.common.last_login'), 'value' => fn (User $u) => $u->last_login_at?->diffForHumans() ?? '—'],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],
         ];
     }

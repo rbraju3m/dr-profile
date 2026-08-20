@@ -60,7 +60,11 @@ When adding a field, check it reaches a page. `tests/Feature/UploadedImagesAreSh
 Two mechanisms; do not mix them.
 
 1. **UI strings** → `lang/en/*.php` and `lang/bn/*.php`, via `__('site.…')` / `__('admin.…')`. The two
-   locales must stay key-for-key identical.
+   locales must stay key-for-key identical — `TranslationParityTest` fails on a key present in one
+   and absent from the other, which otherwise prints the key itself onto the page.
+   This includes the `columns()` labels in `Admin\ResourceController` children, where a plain string
+   is easy to write and left the listings half-English however the panel was switched;
+   `ListingLabelsTest` fails on one, and on any table that heads two columns the same.
 2. **Database content** → paired columns (`name_en` / `name_bn`). Models list the *base* names in
    `protected array $translatable` and use `App\Concerns\HasTranslations`, which resolves
    `$model->name` for the active locale and falls back to English when the Bangla column is blank.

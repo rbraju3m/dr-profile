@@ -29,7 +29,7 @@ class FaqController extends ResourceController
     protected function columns(): array
     {
         return [
-            ['label' => 'Group', 'value' => fn (Faq $f) => __('site.faq.groups.'.$f->group)],
+            ['label' => __('admin.common.group'), 'value' => fn (Faq $f) => __('site.faq.groups.'.$f->group)],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'question_en'],
             ['label' => __('admin.common.order'), 'type' => 'number', 'key' => 'sort_order', 'class' => 'w-16'],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],

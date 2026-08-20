@@ -43,14 +43,14 @@ class PostController extends ResourceController
     {
         return [
             ['label' => __('admin.common.image'), 'type' => 'image', 'value' => fn (Post $p) => $p->imageUrl(), 'class' => 'w-20'],
-            ['label' => 'Type', 'value' => fn (Post $p) => match ($p->type) {
+            ['label' => __('admin.common.type'), 'value' => fn (Post $p) => match ($p->type) {
                 'event' => __('site.nav.events'),
                 'blog' => __('site.nav.blog'),
                 default => __('site.nav.news'),
             }],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'title_en'],
             ['label' => __('site.posts.category'), 'value' => fn (Post $p) => $p->category?->name_en ?? '—'],
-            ['label' => __('site.posts.published_on'), 'value' => fn (Post $p) => $p->published_at?->format('d M Y') ?? '—'],
+            ['label' => __('admin.common.published_on'), 'value' => fn (Post $p) => $p->published_at?->format('d M Y') ?? '—'],
             ['label' => __('admin.common.published'), 'type' => 'bool', 'key' => 'is_published'],
         ];
     }

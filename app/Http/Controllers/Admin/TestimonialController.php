@@ -35,8 +35,8 @@ class TestimonialController extends ResourceController
         return [
             ['label' => __('admin.common.order'), 'type' => 'number', 'key' => 'sort_order', 'class' => 'w-16'],
             ['label' => __('site.stories.patient'), 'type' => 'strong', 'key' => 'patient_name'],
-            ['label' => 'Quote', 'value' => fn (Testimonial $t) => \Str::limit($t->content_en, 60)],
-            ['label' => 'Rating', 'type' => 'number', 'value' => fn (Testimonial $t) => str_repeat('★', $t->rating)],
+            ['label' => __('admin.common.quote'), 'value' => fn (Testimonial $t) => \Str::limit($t->content_en, 60)],
+            ['label' => __('admin.common.rating'), 'type' => 'number', 'value' => fn (Testimonial $t) => str_repeat('★', $t->rating)],
             ['label' => __('admin.common.published'), 'type' => 'bool', 'key' => 'is_published'],
         ];
     }

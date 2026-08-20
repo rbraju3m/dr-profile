@@ -32,10 +32,10 @@ class PublicationController extends ResourceController
     protected function columns(): array
     {
         return [
-            ['label' => 'Year', 'type' => 'number', 'key' => 'year', 'class' => 'w-20'],
-            ['label' => 'Type', 'value' => fn (Publication $p) => __('site.publications.types.'.$p->type)],
+            ['label' => __('admin.common.year'), 'type' => 'number', 'key' => 'year', 'class' => 'w-20'],
+            ['label' => __('admin.common.type'), 'value' => fn (Publication $p) => __('site.publications.types.'.$p->type)],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'title_en'],
-            ['label' => 'Venue', 'type' => 'muted', 'key' => 'venue_en'],
+            ['label' => __('admin.common.venue'), 'type' => 'muted', 'key' => 'venue_en'],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],
         ];
     }

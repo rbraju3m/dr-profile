@@ -43,7 +43,7 @@ class ChamberController extends ResourceController
                 'value' => fn (Chamber $c) => '<a href="'.route('admin.chambers.schedules.index', $c).'" class="inline-flex items-center gap-1.5 rounded-lg bg-primary-50 px-2.5 py-1 text-xs font-medium text-primary-700 hover:bg-primary-100">'
                     .$c->schedules_count.' · '.e(__('admin.actions.edit')).'</a>',
             ],
-            ['label' => 'Online booking', 'type' => 'bool', 'key' => 'accepts_online_booking'],
+            ['label' => __('admin.common.online_booking'), 'type' => 'bool', 'key' => 'accepts_online_booking'],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],
         ];
     }

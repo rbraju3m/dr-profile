@@ -31,7 +31,7 @@ class StatController extends ResourceController
             ['label' => __('admin.common.order'), 'type' => 'number', 'key' => 'sort_order', 'class' => 'w-16'],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'label_en'],
             ['label' => __('admin.common.bangla'), 'type' => 'muted', 'key' => 'label_bn'],
-            ['label' => 'Value', 'type' => 'number', 'value' => fn (Stat $s) => number_format($s->value).$s->suffix],
+            ['label' => __('admin.common.value'), 'type' => 'number', 'value' => fn (Stat $s) => number_format($s->value).$s->suffix],
             ['label' => __('admin.common.active'), 'type' => 'bool', 'key' => 'is_active'],
         ];
     }
