@@ -2,10 +2,43 @@
     @php $locale = app()->getLocale(); @endphp
 
     {{-- ============================ Hero ============================ --}}
-    <section class="relative overflow-hidden bg-primary-950">
+    @php
+        // Slides drive the headline, the lead and the backdrop together. With
+        // none configured the hero falls back to the profile's own wording.
+        $slides = $sliders->values();
+        $hasSlides = $slides->isNotEmpty();
+    @endphp
+
+    <section
+        x-data="heroCarousel({{ $hasSlides ? $slides->count() : 1 }})"
+        x-init="start()"
+        @mouseenter="pause()" @mouseleave="resume()"
+        @focusin="pause()" @focusout="resume()"
+        class="relative overflow-hidden bg-primary-950"
+        role="region" aria-roledescription="carousel"
+        aria-label="{{ __('site.home.hero_greeting') }}">
+
+        {{-- Backdrop: one layer per slide, cross-fading --}}
         <div aria-hidden="true" class="pointer-events-none absolute inset-0">
             <div class="absolute -end-40 -top-40 h-[30rem] w-[30rem] rounded-full bg-primary-600/30 blur-3xl"></div>
             <div class="absolute -bottom-48 -start-24 h-[26rem] w-[26rem] rounded-full bg-accent-500/20 blur-3xl"></div>
+
+            @foreach ($slides as $i => $slide)
+                @if ($slide->imageUrl())
+                    <div x-show="current === {{ $i }}" x-transition.opacity.duration.700ms class="absolute inset-0">
+                        <picture>
+                            @if ($slide->mobileImageUrl() && $slide->mobileImageUrl() !== $slide->imageUrl())
+                                <source media="(max-width: 640px)" srcset="{{ $slide->mobileImageUrl() }}">
+                            @endif
+                            <img src="{{ $slide->imageUrl() }}" alt=""
+                                 class="h-full w-full object-cover"
+                                 @if ($i === 0) fetchpriority="high" @else loading="lazy" @endif>
+                        </picture>
+                        {{-- Keeps the headline readable over any photograph --}}
+                        <div class="absolute inset-0 bg-gradient-to-r from-primary-950/95 via-primary-950/80 to-primary-950/40"></div>
+                    </div>
+                @endif
+            @endforeach
         </div>
 
         <div class="container-page relative grid items-center gap-12 py-16 lg:grid-cols-12 lg:py-24">
@@ -16,20 +49,42 @@
                     </span>
                 @endif
 
-                {{-- Falls all the way back to a greeting so a fresh install never
-                     renders a headline-shaped hole. --}}
-                <h1 class="mt-4 text-3xl font-bold leading-tight text-balance text-white sm:text-4xl lg:text-5xl">
-                    {{ $sliders->first()?->tr('title')
-                        ?: $doctor->tr('tagline')
-                        ?: ($doctor->fullName() ?: setting('site_name_'.$locale) ?: __('site.home.hero_greeting')) }}
-                </h1>
+                @if ($hasSlides)
+                    <div aria-live="polite">
+                        @foreach ($slides as $i => $slide)
+                            <div x-show="current === {{ $i }}"
+                                 x-transition:enter="transition ease-out duration-500"
+                                 x-transition:enter-start="opacity-0 translate-y-2"
+                                 x-transition:enter-end="opacity-100 translate-y-0"
+                                 role="group" aria-roledescription="slide">
+                                <h1 class="mt-4 text-3xl font-bold leading-tight text-balance text-white sm:text-4xl lg:text-5xl">
+                                    {{ $slide->tr('title') ?: $doctor->fullName() }}
+                                </h1>
+                                @if ($slide->tr('subtitle'))
+                                    <p class="mt-5 max-w-xl text-base leading-relaxed text-primary-100/90">
+                                        {{ $slide->tr('subtitle') }}
+                                    </p>
+                                @endif
+                                @if ($slide->cta_url && $slide->tr('cta_label'))
+                                    <a href="{{ $slide->cta_url }}" class="btn-secondary mt-6 !bg-white/10 !text-white !ring-white/25 hover:!bg-white/20">
+                                        {{ $slide->tr('cta_label') }}
+                                        <x-icon name="arrow-right" class="h-4 w-4 rtl:rotate-180"/>
+                                    </a>
+                                @endif
+                            </div>
+                        @endforeach
+                    </div>
+                @else
+                    <h1 class="mt-4 text-3xl font-bold leading-tight text-balance text-white sm:text-4xl lg:text-5xl">
+                        {{ $doctor->tr('tagline')
+                            ?: ($doctor->fullName() ?: setting('site_name_'.$locale) ?: __('site.home.hero_greeting')) }}
+                    </h1>
 
-                @php
-                    $heroLead = $sliders->first()?->tr('subtitle')
-                        ?: Str::limit(strip_tags((string) $doctor->tr('short_bio')), 220);
-                @endphp
-                @if ($heroLead)
-                    <p class="mt-5 max-w-xl text-base leading-relaxed text-primary-100/90">{{ $heroLead }}</p>
+                    @if ($doctor->tr('short_bio'))
+                        <p class="mt-5 max-w-xl text-base leading-relaxed text-primary-100/90">
+                            {{ Str::limit(strip_tags((string) $doctor->tr('short_bio')), 220) }}
+                        </p>
+                    @endif
                 @endif
 
                 <div class="mt-8 flex flex-wrap items-center gap-3">
@@ -49,6 +104,33 @@
                         {{ __('site.contact.hotline') }}
                         <a href="tel:{{ $doctor->hotline }}" class="font-semibold tabular-nums text-white underline underline-offset-4">{{ bn_digits($doctor->hotline) }}</a>
                     </p>
+                @endif
+
+                {{-- Slide controls, only worth showing when there is more than one --}}
+                @if ($slides->count() > 1)
+                    <div class="mt-8 flex items-center gap-3">
+                        <button type="button" @click="prev()"
+                                class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
+                                aria-label="{{ __('site.actions.previous') }}">
+                            <x-icon name="chevron-left" class="h-4 w-4 rtl:rotate-180"/>
+                        </button>
+
+                        <div class="flex gap-1.5" role="tablist">
+                            @foreach ($slides as $i => $slide)
+                                <button type="button" @click="go({{ $i }})" role="tab"
+                                        :aria-selected="current === {{ $i }}"
+                                        :class="current === {{ $i }} ? 'w-6 bg-white' : 'w-2 bg-white/60 hover:bg-white/90'"
+                                        class="h-2 rounded-full transition-all"
+                                        aria-label="{{ $i + 1 }}"></button>
+                            @endforeach
+                        </div>
+
+                        <button type="button" @click="next()"
+                                class="grid h-9 w-9 place-items-center rounded-full bg-white/10 text-white transition hover:bg-white/25"
+                                aria-label="{{ __('site.actions.next') }}">
+                            <x-icon name="chevron-right" class="h-4 w-4 rtl:rotate-180"/>
+                        </button>
+                    </div>
                 @endif
             </div>
 
@@ -91,6 +173,31 @@
             </div>
         </div>
     </section>
+
+    @push('scripts')
+        <script>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('heroCarousel', (count) => ({
+                    current: 0,
+                    timer: null,
+                    count,
+
+                    start() {
+                        // A hero that moves on its own is exactly what
+                        // prefers-reduced-motion is asking us not to do.
+                        const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                        if (this.count < 2 || still) return
+                        this.timer = setInterval(() => this.next(), 6000)
+                    },
+                    pause() { clearInterval(this.timer); this.timer = null },
+                    resume() { if (!this.timer) this.start() },
+                    go(i) { this.current = i; this.pause(); this.resume() },
+                    next() { this.current = (this.current + 1) % this.count },
+                    prev() { this.current = (this.current - 1 + this.count) % this.count },
+                }))
+            })
+        </script>
+    @endpush
 
     {{-- ============================ Stats ============================ --}}
     @if ($stats->isNotEmpty())

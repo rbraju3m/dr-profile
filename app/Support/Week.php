@@ -37,12 +37,4 @@ class Week
 
         return Number::localizeDigits($formatted);
     }
-
-    /** Ordered day numbers starting from today, for "next available" lookups. */
-    public static function fromToday(): array
-    {
-        $today = Carbon::today()->dayOfWeek;
-
-        return array_map(fn (int $offset) => ($today + $offset) % 7, range(0, 6));
-    }
 }

@@ -58,6 +58,56 @@
                     @endif
                 </div>
 
+                @if (session('cancelled') || $appointment->status === 'cancelled')
+                    <x-alert type="warning" class="mt-6">{{ __('site.booking.cancelled_notice') }}</x-alert>
+                @endif
+
+                @if ($errors->any())
+                    <x-alert type="error" class="mt-6">{{ $errors->first() }}</x-alert>
+                @endif
+
+                {{-- Cancelling needs the phone number from the booking: the serial
+                     is printed on a slip and is not proof of who is asking. --}}
+                @if ($appointment->isCancellable())
+                    <div class="no-print mt-6" x-data="{ open: false }">
+                        <button type="button" @click="open = !open" x-show="!open"
+                                class="btn-ghost w-full !text-rose-600 hover:!bg-rose-50">
+                            <x-icon name="calendar-x" class="h-4 w-4"/>{{ __('site.booking.cancel') }}
+                        </button>
+
+                        <div x-show="open" x-cloak x-collapse>
+                            <form method="POST" action="{{ route('appointment.cancel', $appointment) }}"
+                                  class="card space-y-4 p-6">
+                                @csrf
+                                <div>
+                                    <h2 class="text-base font-semibold text-slate-900">{{ __('site.booking.cancel_heading') }}</h2>
+                                    <p class="mt-1 text-sm text-slate-500">{{ __('site.booking.cancel_hint') }}</p>
+                                </div>
+
+                                <div>
+                                    <label for="phone" class="field-label">{{ __('site.booking.patient_phone') }} <span class="text-rose-500">*</span></label>
+                                    <input id="phone" name="phone" required inputmode="tel" autocomplete="tel"
+                                           placeholder="01712345678" class="field-input tabular-nums">
+                                </div>
+
+                                <div>
+                                    <label for="reason" class="field-label">{{ __('site.booking.cancel_reason') }}</label>
+                                    <input id="reason" name="reason" class="field-input">
+                                </div>
+
+                                <div class="flex flex-wrap gap-2">
+                                    <button type="submit" class="btn bg-rose-600 text-white hover:bg-rose-700">
+                                        {{ __('site.booking.cancel_confirm') }}
+                                    </button>
+                                    <button type="button" @click="open = false" class="btn-ghost">
+                                        {{ __('site.actions.back') }}
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                @endif
+
                 <div class="no-print mt-6 flex flex-wrap justify-center gap-3">
                     <button type="button" onclick="window.print()" class="btn-secondary">
                         <x-icon name="printer" class="h-4 w-4"/>{{ __('site.actions.print') }}

@@ -94,6 +94,39 @@ class AppointmentController extends Controller
         ]);
     }
 
+    /**
+     * Cancel from the confirmation page.
+     *
+     * The serial alone is a weak authenticator — it is short and printed on a
+     * slip anyone might see — so the phone number given at booking has to match
+     * as well. Wrong number, no cancellation, and the route is throttled.
+     */
+    public function cancel(Request $request, Appointment $appointment, BookingService $booking): RedirectResponse
+    {
+        if (! $appointment->isCancellable()) {
+            return back()->withErrors(['phone' => __('site.booking.cannot_cancel')]);
+        }
+
+        $validated = $request->validate([
+            'phone' => ['required', 'string'],
+            'reason' => ['nullable', 'string', 'max:200'],
+        ]);
+
+        $given = preg_replace('/\\D/', '', $validated['phone']);
+        $onFile = preg_replace('/\\D/', '', $appointment->patient_phone);
+
+        // Compare the last nine digits so +8801… and 01… both match.
+        if (substr($given, -9) !== substr($onFile, -9) || strlen($given) < 9) {
+            return back()->withErrors(['phone' => __('site.booking.phone_mismatch')]);
+        }
+
+        $booking->cancel($appointment, $validated['reason'] ?? __('site.booking.cancelled_by_patient'));
+
+        return redirect()
+            ->route('appointment.show', $appointment)
+            ->with('cancelled', true);
+    }
+
     /** Serial-number lookup so a patient can re-open their confirmation. */
     public function lookup(Request $request): View|RedirectResponse
     {

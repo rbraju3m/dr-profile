@@ -18,7 +18,6 @@ class ProfileController extends Controller
     private const MEDIA = [
         'photo' => 'profile',
         'hero_image' => 'profile',
-        'signature' => 'profile',
         'og_image' => 'profile',
         'cv_file' => 'profile',
     ];
@@ -71,7 +70,6 @@ class ProfileController extends Controller
             'meta_description_bn' => ['nullable', 'string', 'max:300'],
             'photo' => ['nullable', 'image', 'max:4096'],
             'hero_image' => ['nullable', 'image', 'max:6144'],
-            'signature' => ['nullable', 'image', 'max:2048'],
             'og_image' => ['nullable', 'image', 'max:4096'],
             'cv_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
         ]);

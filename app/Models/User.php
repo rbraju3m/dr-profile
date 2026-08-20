@@ -42,13 +42,4 @@ class User extends Authenticatable
     {
         return $this->mediaUrl('avatar');
     }
-
-    public function initials(): string
-    {
-        return collect(explode(' ', trim($this->name)))
-            ->filter()
-            ->take(2)
-            ->map(fn (string $part) => mb_strtoupper(mb_substr($part, 0, 1)))
-            ->implode('');
-    }
 }

@@ -14,6 +14,7 @@
         ['route' => 'gallery.index', 'label' => __('site.nav.gallery'), 'icon' => 'image'],
         ['route' => 'publications.index', 'label' => __('site.nav.publications'), 'icon' => 'graduation-cap'],
         ['route' => 'faq.index', 'label' => __('site.nav.faq'), 'icon' => 'info'],
+        ['route' => 'search', 'label' => __('site.actions.search'), 'icon' => 'search'],
     ];
 @endphp
 
@@ -106,6 +107,12 @@
             </nav>
 
             <div class="flex items-center gap-2">
+                <a href="{{ route('search') }}"
+                   class="hidden h-11 w-11 place-items-center rounded-xl text-slate-500 transition hover:bg-slate-100 hover:text-slate-800 lg:grid"
+                   aria-label="{{ __('site.actions.search') }}">
+                    <x-icon name="search" class="h-5 w-5"/>
+                </a>
+
                 <a href="{{ route('appointment.create') }}" class="btn-primary hidden sm:inline-flex">
                     <x-icon name="calendar-check" class="h-4 w-4"/>
                     {{ __('site.nav.appointment') }}

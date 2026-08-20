@@ -11,6 +11,7 @@ use App\Http\Controllers\PageController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\PublicationController;
+use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SuccessStoryController;
@@ -47,6 +48,9 @@ Route::prefix('{locale}')
             ->name('appointment.store');
         Route::get('appointment/lookup', [AppointmentController::class, 'lookup'])->name('appointment.lookup');
         Route::get('appointment/{appointment}', [AppointmentController::class, 'show'])->name('appointment.show');
+        Route::post('appointment/{appointment}/cancel', [AppointmentController::class, 'cancel'])
+            ->middleware('throttle:6,1')
+            ->name('appointment.cancel');
 
         Route::get('success-stories', [SuccessStoryController::class, 'index'])->name('stories.index');
         Route::get('success-stories/{story}', [SuccessStoryController::class, 'show'])->name('stories.show');
@@ -63,6 +67,7 @@ Route::prefix('{locale}')
 
         Route::get('publications', [PublicationController::class, 'index'])->name('publications.index');
         Route::get('faq', [FaqController::class, 'index'])->name('faq.index');
+        Route::get('search', [SearchController::class, 'index'])->name('search');
 
         Route::get('contact', [ContactController::class, 'create'])->name('contact.create');
         Route::post('contact', [ContactController::class, 'store'])

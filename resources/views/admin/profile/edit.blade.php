@@ -69,7 +69,6 @@
                         <x-admin.image-upload name="photo" label="Portrait" :current="$profile->photoUrl()"/>
                         <x-admin.image-upload name="hero_image" label="Hero image" :current="$profile->heroImageUrl()"/>
                         <x-admin.image-upload name="og_image" label="Share image" :current="$profile->mediaUrl('og_image')"/>
-                        <x-admin.image-upload name="signature" label="Signature" :current="$profile->mediaUrl('signature')"/>
                         <x-admin.image-upload name="cv_file" label="CV (PDF)" accept="application/pdf" :current="null"/>
                         @if ($profile->cv_file)
                             <a href="{{ $profile->mediaUrl('cv_file') }}" target="_blank"
