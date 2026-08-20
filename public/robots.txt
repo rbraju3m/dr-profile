@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /admin
+Disallow: /en/appointment/lookup
+Disallow: /bn/appointment/lookup
+
+Sitemap: /sitemap.xml
