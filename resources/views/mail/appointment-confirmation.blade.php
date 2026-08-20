@@ -25,7 +25,9 @@
 {{ $chamber->tr('note') }}
 @endif
 
-<x-mail::button :url="route('appointment.show', $appointment)">
+{{-- Both parameters are named: this view may render from a queue worker,
+     where the locale URL-default set during a web request does not exist. --}}
+<x-mail::button :url="route('appointment.show', ['locale' => app()->getLocale(), 'appointment' => $appointment])">
 {{ __('site.actions.view_details') }}
 </x-mail::button>
 

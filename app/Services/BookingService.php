@@ -93,7 +93,8 @@ class BookingService
 
         try {
             Mail::to($appointment->patient_email)
-                ->send(new AppointmentConfirmation($appointment, app()->getLocale()));
+                ->locale(app()->getLocale())
+                ->send(new AppointmentConfirmation($appointment));
         } catch (\Throwable $e) {
             Log::warning('Appointment confirmation email failed', [
                 'appointment' => $appointment->appointment_no,
