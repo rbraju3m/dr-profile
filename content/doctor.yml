@@ -1,143 +1,192 @@
 # ============================================================================
-#  Doctor details
+#  SAMPLE DATA — NOT A REAL DOCTOR
 # ----------------------------------------------------------------------------
-#  Fill this in and run:   php artisan doctor:import
+#  Everything below is invented so you can see the site populated and judge the
+#  design. The person, the clinics, the qualifications and the registration
+#  number do not exist.
 #
-#  Every field with an `_en` / `_bn` pair is bilingual. Leave `_bn` blank and
-#  the English text is shown to Bangla visitors as a fallback — nothing breaks,
-#  the page just isn't translated yet.
+#  Before this site belongs to anyone real:
+#    1. php artisan demo:purge --all
+#    2. replace every value here with the real practice's details
+#    3. verify the BMDC number against the register yourself
 #
-#  Delete any block you don't need. Anything left as a "REPLACE ME" value is
-#  reported by the importer and not written to the database.
+#  Import with:  php artisan doctor:import
+#  Preview with: php artisan doctor:import --dry-run
 # ============================================================================
 
 profile:
-  title_en: "Prof. Dr."            # honorific shown before the name
-  title_bn: "অধ্যাপক ডা."
-  name_en: "REPLACE ME"
-  name_bn: ""
-  designation_en: "REPLACE ME"     # e.g. Senior Consultant, Cardiology
-  designation_bn: ""
-  tagline_en: ""                   # one line under the name on the homepage
-  tagline_bn: ""
+  title_en: "Dr."
+  title_bn: "ডা."
+  name_en: "Imran Kabir"
+  name_bn: "ইমরান কবির"
+  designation_en: "Consultant Cardiologist"
+  designation_bn: "কনসালট্যান্ট কার্ডিওলজিস্ট"
+  tagline_en: "Straight answers about your heart, in language you can use."
+  tagline_bn: "আপনার হৃদযন্ত্র নিয়ে সহজ ভাষায় স্পষ্ট উত্তর।"
 
-  # Exactly as they should appear publicly, comma separated.
-  degrees_en: "REPLACE ME"         # e.g. MBBS, FCPS (Medicine), MD (Cardiology)
-  degrees_bn: ""
+  degrees_en: "MBBS, FCPS (Medicine), MD (Cardiology)"
+  degrees_bn: "এমবিবিএস, এফসিপিএস (মেডিসিন), এমডি (কার্ডিওলজি)"
 
-  # Verify this against the BMDC register before publishing it.
-  bmdc_reg_no: "REPLACE ME"
-  experience_years: 0
+  # Deliberately not a valid registration format — this is sample data.
+  bmdc_reg_no: "SAMPLE-NOT-A-REAL-REGISTRATION"
+  experience_years: 16
 
-  gender: ""                       # male | female | other | (blank)
+  gender: "male"
   languages_en: "Bangla, English"
   languages_bn: "বাংলা, ইংরেজি"
 
-  short_bio_en: "REPLACE ME"       # 2–3 sentences, used on the homepage
-  short_bio_bn: ""
+  short_bio_en: "Dr. Imran Kabir is a consultant cardiologist with sixteen years of clinical practice. He runs a general cardiology clinic alongside a dedicated service for blood pressure that has not responded to treatment."
+  short_bio_bn: "ডা. ইমরান কবির একজন কনসালট্যান্ট কার্ডিওলজিস্ট, যাঁর ষোলো বছরের চিকিৎসা অভিজ্ঞতা রয়েছে। সাধারণ কার্ডিওলজি সেবার পাশাপাশি তিনি নিয়ন্ত্রণে না আসা উচ্চ রক্তচাপের জন্য বিশেষ ক্লিনিক পরিচালনা করেন।"
 
-  # Long biography. Use <p>…</p> around each paragraph.
-  bio_en: "REPLACE ME"
-  bio_bn: ""
+  bio_en: "<p>Dr. Imran Kabir completed his MBBS in 2009, followed by FCPS in Medicine and an MD in Cardiology. He has since worked across public and private practice in Dhaka.</p><p>His consultations are built around one habit: nothing is prescribed until the patient can explain, in their own words, what the problem is and why the treatment helps. Reports are read aloud and a written summary goes home with every patient.</p><p>He keeps a standing interest in medication review, and a first appointment usually ends with fewer tablets than it began with.</p>"
+  bio_bn: "<p>ডা. ইমরান কবির ২০০৯ সালে এমবিবিএস সম্পন্ন করেন, এরপর মেডিসিনে এফসিপিএস এবং কার্ডিওলজিতে এমডি ডিগ্রি অর্জন করেন। তারপর থেকে তিনি ঢাকার সরকারি ও বেসরকারি উভয় ক্ষেত্রেই কাজ করেছেন।</p><p>তাঁর পরামর্শের কেন্দ্রে একটি অভ্যাস — রোগী নিজের ভাষায় সমস্যাটি এবং চিকিৎসা কেন প্রয়োজন তা ব্যাখ্যা করতে না পারা পর্যন্ত কোনো ওষুধ দেওয়া হয় না। রিপোর্ট পড়ে শোনানো হয় এবং প্রত্যেক রোগী লিখিত সারসংক্ষেপ নিয়ে বাড়ি ফেরেন।</p><p>ওষুধ পর্যালোচনায় তাঁর নিয়মিত আগ্রহ রয়েছে; প্রথম সাক্ষাৎ সাধারণত শুরুর চেয়ে কম সংখ্যক ওষুধ দিয়ে শেষ হয়।</p>"
 
-  philosophy_en: ""                # optional: how they approach patient care
-  philosophy_bn: ""
+  philosophy_en: "<p>A prescription the patient does not understand is a prescription they will stop taking. I would rather spend ten minutes explaining why a drug matters than see someone back in six months having quietly abandoned it.</p>"
+  philosophy_bn: "<p>রোগী যে ব্যবস্থাপত্র বোঝেন না, সেটি তিনি একসময় বন্ধ করে দেন। কেন একটি ওষুধ জরুরি তা বোঝাতে দশ মিনিট ব্যয় করা আমার কাছে ভালো — ছয় মাস পর কেউ চুপচাপ ওষুধ ছেড়ে দিয়ে ফিরে আসার চেয়ে।</p>"
 
-  email: ""
-  phone: ""
-  hotline: ""
-  whatsapp: ""
+  email: "chamber@example.test"
+  phone: "+880 1700 000000"
+  hotline: "16000"
+  whatsapp: "+8801700000000"
 
   facebook_url: ""
   youtube_url: ""
   linkedin_url: ""
   instagram_url: ""
 
-  meta_title_en: ""                # blank = generated from name + designation
-  meta_title_bn: ""
-  meta_description_en: ""
-  meta_description_bn: ""
+  meta_title_en: "Dr. Imran Kabir — Consultant Cardiologist, Dhaka (sample site)"
+  meta_title_bn: "ডা. ইমরান কবির — কনসালট্যান্ট কার্ডিওলজিস্ট, ঢাকা (নমুনা সাইট)"
+  meta_description_en: "Chamber schedules, fees and online appointment booking. Sample content."
+  meta_description_bn: "চেম্বারের সময়সূচি, ফি ও অনলাইন অ্যাপয়েন্টমেন্ট। নমুনা তথ্য।"
 
 # ----------------------------------------------------------------------------
-#  Chambers. One block each. Delete the extras or add more.
-#  `slug` must be unique and URL-safe; it becomes /en/chambers/<slug>.
+#  Chambers — invented clinics, deliberately not real institutions.
 # ----------------------------------------------------------------------------
 chambers:
-  - slug: "REPLACE-ME"
-    name_en: "REPLACE ME"
-    name_bn: ""
-    address_en: "REPLACE ME"
-    address_bn: ""
+  - slug: "city-heart-centre"
+    name_en: "City Heart Centre"
+    name_bn: "সিটি হার্ট সেন্টার"
+    address_en: "Road 11, Banani, Dhaka 1213"
+    address_bn: "রোড ১১, বনানী, ঢাকা ১২১৩"
     city_en: "Dhaka"
     city_bn: "ঢাকা"
-    room_no: ""
-    phone: ""
-    appointment_phone: ""
-    consultation_fee: 0            # BDT, new patient. 0 shows a dash.
-    followup_fee: 0
-    note_en: ""                    # shown on the booking confirmation
-    note_bn: ""
-    accepts_online_booking: true   # false = serials issued at the counter only
-    map_url: ""
-
-    # Weekly sittings. day: 0=Sunday … 6=Saturday. 24-hour times.
-    # slot_minutes decides how many patients fit in the sitting.
+    room_no: "Level 4, Room 402"
+    phone: "+880 1700 000001"
+    appointment_phone: "16000"
+    consultation_fee: 1500
+    followup_fee: 900
+    note_en: "Please bring all previous reports and the actual strips of every medicine you are taking."
+    note_bn: "পূর্ববর্তী সব রিপোর্ট এবং বর্তমানে যেসব ওষুধ খাচ্ছেন তার পাতাগুলো সঙ্গে আনুন।"
+    accepts_online_booking: true
     schedules:
-      - { day: 0, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: null }
+      - { day: 0, start: "18:00", end: "21:00", slot_minutes: 20, max_patients: null }
+      - { day: 1, start: "18:00", end: "21:00", slot_minutes: 20, max_patients: null }
+      - { day: 2, start: "18:00", end: "21:00", slot_minutes: 20, max_patients: null }
+      - { day: 3, start: "18:00", end: "21:00", slot_minutes: 20, max_patients: null }
 
-# ----------------------------------------------------------------------------
-#  Areas of expertise. `icon` picks a glyph — see the list in
-#  resources/views/components/icon.blade.php.
+  - slug: "dhanmondi-consultation-chamber"
+    name_en: "Dhanmondi Consultation Chamber"
+    name_bn: "ধানমন্ডি কনসালটেশন চেম্বার"
+    address_en: "House 18, Road 7, Dhanmondi, Dhaka 1205"
+    address_bn: "বাড়ি ১৮, রোড ৭, ধানমন্ডি, ঢাকা ১২০৫"
+    city_en: "Dhaka"
+    city_bn: "ঢাকা"
+    room_no: "Ground Floor"
+    phone: "+880 1700 000002"
+    appointment_phone: "+880 1700 000002"
+    consultation_fee: 1200
+    followup_fee: 700
+    note_en: "Morning chamber. Serials close thirty minutes before the sitting ends."
+    note_bn: "সকালের চেম্বার। বসা শেষ হওয়ার ত্রিশ মিনিট আগে সিরিয়াল বন্ধ হয়।"
+    accepts_online_booking: true
+    schedules:
+      - { day: 5, start: "09:00", end: "12:00", slot_minutes: 15, max_patients: null }
+      - { day: 6, start: "09:00", end: "12:00", slot_minutes: 15, max_patients: 30 }
+
 # ----------------------------------------------------------------------------
 services:
-  - slug: "REPLACE-ME"
-    name_en: "REPLACE ME"
-    name_bn: ""
-    short_description_en: ""
-    short_description_bn: ""
-    description_en: ""
-    description_bn: ""
+  - slug: "general-cardiology-consultation"
+    name_en: "General Cardiology Consultation"
+    name_bn: "সাধারণ কার্ডিওলজি পরামর্শ"
+    short_description_en: "A full cardiac history, examination and an explanation of what your reports actually say."
+    short_description_bn: "সম্পূর্ণ হৃদরোগ ইতিহাস, পরীক্ষা এবং আপনার রিপোর্ট আসলে কী বলছে তার ব্যাখ্যা।"
     icon: "stethoscope"
-    fee: null
+    fee: 1500
+    is_featured: true
+
+  - slug: "resistant-hypertension-clinic"
+    name_en: "Resistant Hypertension Clinic"
+    name_bn: "নিয়ন্ত্রণহীন উচ্চ রক্তচাপ ক্লিনিক"
+    short_description_en: "For blood pressure that stays high on three or more drugs — we look for the cause instead of adding a fourth."
+    short_description_bn: "তিন বা তার বেশি ওষুধেও যে রক্তচাপ কমে না — চতুর্থ ওষুধ যোগ না করে কারণ খোঁজা হয়।"
+    icon: "gauge"
+    fee: 1500
+    is_featured: true
+
+  - slug: "echocardiography"
+    name_en: "Echocardiography"
+    name_bn: "ইকোকার্ডিওগ্রাফি"
+    short_description_en: "Ultrasound of the heart valves, chambers and pumping function, reported the same day."
+    short_description_bn: "হৃদযন্ত্রের ভাল্ভ, প্রকোষ্ঠ ও পাম্পিং ক্ষমতার আল্ট্রাসাউন্ড, একই দিনে রিপোর্ট।"
+    icon: "scan-heart"
+    fee: 2500
+    is_featured: true
+
+  - slug: "heart-failure-follow-up"
+    name_en: "Heart Failure Follow-up"
+    name_bn: "হার্ট ফেইলিওর ফলো-আপ"
+    short_description_en: "Regular review of breathlessness, weight and medication for people living with heart failure."
+    short_description_bn: "হার্ট ফেইলিওরে আক্রান্তদের শ্বাসকষ্ট, ওজন ও ওষুধের নিয়মিত পর্যালোচনা।"
+    icon: "activity"
+    fee: 1200
+    is_featured: true
+
+  - slug: "medication-review"
+    name_en: "Medication Review"
+    name_bn: "ওষুধ পর্যালোচনা"
+    short_description_en: "Bring every tablet you take. We work out which ones are still earning their place."
+    short_description_bn: "আপনার সব ওষুধ নিয়ে আসুন। কোনগুলো এখনো প্রয়োজন তা যাচাই করা হবে।"
+    icon: "clipboard-check"
+    fee: 1200
+    is_featured: true
+
+  - slug: "preventive-heart-check"
+    name_en: "Preventive Heart Check"
+    name_bn: "প্রতিরোধমূলক হৃদপরীক্ষা"
+    short_description_en: "Risk assessment for people with a family history but no symptoms yet."
+    short_description_bn: "পারিবারিক ইতিহাস আছে কিন্তু এখনো উপসর্গ নেই — তাঁদের ঝুঁকি নির্ণয়।"
+    icon: "shield-check"
+    fee: 2000
     is_featured: true
 
 # ----------------------------------------------------------------------------
-#  Credentials — the "About" timeline.
-#  type: education | experience | training | award | membership | certification
-#  Set end_year to null and is_current to true for an ongoing post.
-# ----------------------------------------------------------------------------
 credentials:
-  - type: "education"
-    title_en: "REPLACE ME"
-    title_bn: ""
-    organization_en: ""
-    organization_bn: ""
-    start_year: null
-    end_year: null
-    is_current: false
+  - { type: "education", title_en: "MBBS", title_bn: "এমবিবিএস", organization_en: "Sample Medical College", organization_bn: "নমুনা মেডিকেল কলেজ", start_year: 2003, end_year: 2009, is_current: false }
+  - { type: "education", title_en: "FCPS (Medicine)", title_bn: "এফসিপিএস (মেডিসিন)", organization_en: "Bangladesh College of Physicians & Surgeons", organization_bn: "বাংলাদেশ কলেজ অব ফিজিশিয়ানস অ্যান্ড সার্জনস", start_year: 2011, end_year: 2014, is_current: false }
+  - { type: "education", title_en: "MD (Cardiology)", title_bn: "এমডি (কার্ডিওলজি)", organization_en: "Sample Institute of Cardiology", organization_bn: "নমুনা কার্ডিওলজি ইনস্টিটিউট", start_year: 2015, end_year: 2018, is_current: false }
+  - { type: "training", title_en: "Advanced Echocardiography Course", title_bn: "অ্যাডভান্সড ইকোকার্ডিওগ্রাফি কোর্স", organization_en: "Sample Training Centre", organization_bn: "নমুনা প্রশিক্ষণ কেন্দ্র", start_year: 2019, end_year: 2019, is_current: false }
+  - { type: "experience", title_en: "Consultant Cardiologist", title_bn: "কনসালট্যান্ট কার্ডিওলজিস্ট", organization_en: "City Heart Centre", organization_bn: "সিটি হার্ট সেন্টার", start_year: 2019, end_year: null, is_current: true }
+  - { type: "experience", title_en: "Registrar, Cardiology", title_bn: "রেজিস্ট্রার, কার্ডিওলজি", organization_en: "Sample General Hospital", organization_bn: "নমুনা জেনারেল হাসপাতাল", start_year: 2014, end_year: 2019, is_current: false }
+  - { type: "membership", title_en: "Life Member", title_bn: "আজীবন সদস্য", organization_en: "Bangladesh Cardiac Society", organization_bn: "বাংলাদেশ কার্ডিয়াক সোসাইটি", start_year: 2015, end_year: null, is_current: true }
+  - { type: "certification", title_en: "Basic Life Support Instructor", title_bn: "বেসিক লাইফ সাপোর্ট প্রশিক্ষক", organization_en: "Sample Resuscitation Council", organization_bn: "নমুনা রিসাসিটেশন কাউন্সিল", start_year: 2020, end_year: null, is_current: true }
 
-# ----------------------------------------------------------------------------
-#  Homepage counters. Only claim numbers the practice can stand behind.
 # ----------------------------------------------------------------------------
 stats:
-  - label_en: "Years of Experience"
-    label_bn: "বছরের অভিজ্ঞতা"
-    value: 0
-    suffix: "+"
-    icon: "award"
+  - { label_en: "Years of Experience", label_bn: "বছরের অভিজ্ঞতা", value: 16, suffix: "+", icon: "award" }
+  - { label_en: "Patients Seen", label_bn: "চিকিৎসা নেওয়া রোগী", value: 21000, suffix: "+", icon: "users" }
+  - { label_en: "Echo Studies Reported", label_bn: "ইকো রিপোর্ট", value: 4800, suffix: "+", icon: "scan-heart" }
+  - { label_en: "Chambers", label_bn: "চেম্বার", value: 2, suffix: "", icon: "building" }
 
 # ----------------------------------------------------------------------------
-#  Site-wide settings shown in the header and footer.
-# ----------------------------------------------------------------------------
 settings:
-  site_name_en: ""                 # blank = the doctor's full name
-  site_name_bn: ""
-  footer_note_en: ""
-  footer_note_bn: ""
-  contact_email: ""
-  contact_phone: ""
-  contact_hotline: ""
-  contact_address_en: ""
-  contact_address_bn: ""
+  site_name_en: "Dr. Imran Kabir"
+  site_name_bn: "ডা. ইমরান কবির"
+  footer_note_en: "Cardiology consultation in Dhaka. Sample content for demonstration."
+  footer_note_bn: "ঢাকায় কার্ডিওলজি পরামর্শ সেবা। প্রদর্শনের জন্য নমুনা তথ্য।"
+  contact_email: "chamber@example.test"
+  contact_phone: "+880 1700 000000"
+  contact_hotline: "16000"
+  contact_address_en: "Road 11, Banani, Dhaka 1213"
+  contact_address_bn: "রোড ১১, বনানী, ঢাকা ১২১৩"
   appointment_notice_en: "Online serials close one hour before each sitting begins."
   appointment_notice_bn: "প্রতিটি বসার এক ঘণ্টা আগে অনলাইন সিরিয়াল বন্ধ হয়ে যায়।"
