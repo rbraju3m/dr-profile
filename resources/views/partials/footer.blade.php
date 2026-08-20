@@ -22,7 +22,7 @@
                         <x-icon name="heart-pulse" class="h-6 w-6"/>
                     </span>
                     <span class="leading-tight">
-                        <span class="block font-semibold text-white">{{ $doctor->fullName() }}</span>
+                        <span class="block font-semibold text-white">{{ $doctor->fullName() ?: setting('site_name_'.$locale) }}</span>
                         <span class="block text-xs">{{ $doctor->tr('designation') }}</span>
                     </span>
                 </div>
@@ -111,7 +111,8 @@
 
     <div class="border-t border-white/10">
         <div class="container-page flex flex-col items-center justify-between gap-3 py-5 text-xs sm:flex-row">
-            <p>© {{ bn_digits(date('Y')) }} {{ $doctor->fullName() }}. {{ __('site.footer.rights') }}</p>
+            @php $owner = $doctor->fullName() ?: setting('site_name_'.$locale); @endphp
+            <p>© {{ bn_digits(date('Y')) }}@if ($owner) {{ $owner }}.@endif {{ __('site.footer.rights') }}</p>
             <div class="flex items-center gap-4">
                 @foreach ($footerPages as $page)
                     <a href="{{ route('pages.show', $page) }}" class="transition hover:text-white">{{ $page->tr('title') }}</a>

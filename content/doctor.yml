@@ -1,0 +1,143 @@
+# ============================================================================
+#  Doctor details
+# ----------------------------------------------------------------------------
+#  Fill this in and run:   php artisan doctor:import
+#
+#  Every field with an `_en` / `_bn` pair is bilingual. Leave `_bn` blank and
+#  the English text is shown to Bangla visitors as a fallback — nothing breaks,
+#  the page just isn't translated yet.
+#
+#  Delete any block you don't need. Anything left as a "REPLACE ME" value is
+#  reported by the importer and not written to the database.
+# ============================================================================
+
+profile:
+  title_en: "Prof. Dr."            # honorific shown before the name
+  title_bn: "অধ্যাপক ডা."
+  name_en: "REPLACE ME"
+  name_bn: ""
+  designation_en: "REPLACE ME"     # e.g. Senior Consultant, Cardiology
+  designation_bn: ""
+  tagline_en: ""                   # one line under the name on the homepage
+  tagline_bn: ""
+
+  # Exactly as they should appear publicly, comma separated.
+  degrees_en: "REPLACE ME"         # e.g. MBBS, FCPS (Medicine), MD (Cardiology)
+  degrees_bn: ""
+
+  # Verify this against the BMDC register before publishing it.
+  bmdc_reg_no: "REPLACE ME"
+  experience_years: 0
+
+  gender: ""                       # male | female | other | (blank)
+  languages_en: "Bangla, English"
+  languages_bn: "বাংলা, ইংরেজি"
+
+  short_bio_en: "REPLACE ME"       # 2–3 sentences, used on the homepage
+  short_bio_bn: ""
+
+  # Long biography. Use <p>…</p> around each paragraph.
+  bio_en: "REPLACE ME"
+  bio_bn: ""
+
+  philosophy_en: ""                # optional: how they approach patient care
+  philosophy_bn: ""
+
+  email: ""
+  phone: ""
+  hotline: ""
+  whatsapp: ""
+
+  facebook_url: ""
+  youtube_url: ""
+  linkedin_url: ""
+  instagram_url: ""
+
+  meta_title_en: ""                # blank = generated from name + designation
+  meta_title_bn: ""
+  meta_description_en: ""
+  meta_description_bn: ""
+
+# ----------------------------------------------------------------------------
+#  Chambers. One block each. Delete the extras or add more.
+#  `slug` must be unique and URL-safe; it becomes /en/chambers/<slug>.
+# ----------------------------------------------------------------------------
+chambers:
+  - slug: "REPLACE-ME"
+    name_en: "REPLACE ME"
+    name_bn: ""
+    address_en: "REPLACE ME"
+    address_bn: ""
+    city_en: "Dhaka"
+    city_bn: "ঢাকা"
+    room_no: ""
+    phone: ""
+    appointment_phone: ""
+    consultation_fee: 0            # BDT, new patient. 0 shows a dash.
+    followup_fee: 0
+    note_en: ""                    # shown on the booking confirmation
+    note_bn: ""
+    accepts_online_booking: true   # false = serials issued at the counter only
+    map_url: ""
+
+    # Weekly sittings. day: 0=Sunday … 6=Saturday. 24-hour times.
+    # slot_minutes decides how many patients fit in the sitting.
+    schedules:
+      - { day: 0, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: null }
+
+# ----------------------------------------------------------------------------
+#  Areas of expertise. `icon` picks a glyph — see the list in
+#  resources/views/components/icon.blade.php.
+# ----------------------------------------------------------------------------
+services:
+  - slug: "REPLACE-ME"
+    name_en: "REPLACE ME"
+    name_bn: ""
+    short_description_en: ""
+    short_description_bn: ""
+    description_en: ""
+    description_bn: ""
+    icon: "stethoscope"
+    fee: null
+    is_featured: true
+
+# ----------------------------------------------------------------------------
+#  Credentials — the "About" timeline.
+#  type: education | experience | training | award | membership | certification
+#  Set end_year to null and is_current to true for an ongoing post.
+# ----------------------------------------------------------------------------
+credentials:
+  - type: "education"
+    title_en: "REPLACE ME"
+    title_bn: ""
+    organization_en: ""
+    organization_bn: ""
+    start_year: null
+    end_year: null
+    is_current: false
+
+# ----------------------------------------------------------------------------
+#  Homepage counters. Only claim numbers the practice can stand behind.
+# ----------------------------------------------------------------------------
+stats:
+  - label_en: "Years of Experience"
+    label_bn: "বছরের অভিজ্ঞতা"
+    value: 0
+    suffix: "+"
+    icon: "award"
+
+# ----------------------------------------------------------------------------
+#  Site-wide settings shown in the header and footer.
+# ----------------------------------------------------------------------------
+settings:
+  site_name_en: ""                 # blank = the doctor's full name
+  site_name_bn: ""
+  footer_note_en: ""
+  footer_note_bn: ""
+  contact_email: ""
+  contact_phone: ""
+  contact_hotline: ""
+  contact_address_en: ""
+  contact_address_bn: ""
+  appointment_notice_en: "Online serials close one hour before each sitting begins."
+  appointment_notice_bn: "প্রতিটি বসার এক ঘণ্টা আগে অনলাইন সিরিয়াল বন্ধ হয়ে যায়।"

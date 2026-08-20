@@ -64,7 +64,7 @@
                     <x-icon name="heart-pulse" class="h-6 w-6"/>
                 </span>
                 <span class="leading-tight">
-                    <span class="block text-[15px] font-semibold text-slate-900">{{ $doctor->fullName() }}</span>
+                    <span class="block text-[15px] font-semibold text-slate-900">{{ $doctor->fullName() ?: setting('site_name_'.$locale) }}</span>
                     <span class="block text-xs text-slate-500">{{ Str::limit($doctor->tr('designation'), 42) }}</span>
                 </span>
             </a>

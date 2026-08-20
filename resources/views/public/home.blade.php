@@ -10,17 +10,27 @@
 
         <div class="container-page relative grid items-center gap-12 py-16 lg:grid-cols-12 lg:py-24">
             <div class="lg:col-span-7">
-                <span class="eyebrow !text-primary-300">
-                    <span class="h-px w-6 bg-primary-400"></span>{{ $doctor->tr('degrees') }}
-                </span>
+                @if ($doctor->tr('degrees'))
+                    <span class="eyebrow !text-primary-300">
+                        <span class="h-px w-6 bg-primary-400"></span>{{ $doctor->tr('degrees') }}
+                    </span>
+                @endif
 
+                {{-- Falls all the way back to a greeting so a fresh install never
+                     renders a headline-shaped hole. --}}
                 <h1 class="mt-4 text-3xl font-bold leading-tight text-balance text-white sm:text-4xl lg:text-5xl">
-                    {{ $sliders->first()?->tr('title') ?: $doctor->tr('tagline') ?: $doctor->fullName() }}
+                    {{ $sliders->first()?->tr('title')
+                        ?: $doctor->tr('tagline')
+                        ?: ($doctor->fullName() ?: setting('site_name_'.$locale) ?: __('site.home.hero_greeting')) }}
                 </h1>
 
-                <p class="mt-5 max-w-xl text-base leading-relaxed text-primary-100/90">
-                    {{ $sliders->first()?->tr('subtitle') ?: Str::limit(strip_tags((string) $doctor->tr('short_bio')), 220) }}
-                </p>
+                @php
+                    $heroLead = $sliders->first()?->tr('subtitle')
+                        ?: Str::limit(strip_tags((string) $doctor->tr('short_bio')), 220);
+                @endphp
+                @if ($heroLead)
+                    <p class="mt-5 max-w-xl text-base leading-relaxed text-primary-100/90">{{ $heroLead }}</p>
+                @endif
 
                 <div class="mt-8 flex flex-wrap items-center gap-3">
                     <a href="{{ route('appointment.create') }}" class="btn-primary btn-lg">
@@ -70,10 +80,13 @@
                         </div>
                     </div>
 
-                    <div class="absolute -bottom-5 -start-5 hidden rounded-2xl bg-accent-600 px-5 py-4 text-white shadow-xl sm:block">
-                        <p class="text-2xl font-bold tabular-nums">{{ bn_digits($stats->first()?->value ?? $doctor->experience_years) }}+</p>
-                        <p class="text-xs opacity-90">{{ $stats->first()?->tr('label') ?? __('site.about.experience_years') }}</p>
-                    </div>
+                    @php $badgeValue = $stats->first()?->value ?: $doctor->experience_years; @endphp
+                    @if ($badgeValue)
+                        <div class="absolute -bottom-5 -start-5 hidden rounded-2xl bg-accent-600 px-5 py-4 text-white shadow-xl sm:block">
+                            <p class="text-2xl font-bold tabular-nums">{{ bn_digits($badgeValue) }}+</p>
+                            <p class="text-xs opacity-90">{{ $stats->first()?->tr('label') ?? __('site.about.experience_years') }}</p>
+                        </div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -99,6 +112,7 @@
     @endif
 
     {{-- ============================ About ============================ --}}
+    @if ($doctor->tr('bio') || $doctor->tr('short_bio'))
     <section class="section bg-slate-50">
         <div class="container-page grid items-center gap-12 lg:grid-cols-2">
             <div class="relative">
@@ -148,6 +162,8 @@
             </div>
         </div>
     </section>
+
+    @endif
 
     {{-- ============================ Expertise ============================ --}}
     @if ($services->isNotEmpty())
