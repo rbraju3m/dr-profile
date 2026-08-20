@@ -61,10 +61,10 @@ class GalleryItemController extends Controller
         return back()->with('success', __('admin.flash.created', ['item' => __('site.gallery.photos')]));
     }
 
-    public function destroy(GalleryItem $item, MediaService $media): RedirectResponse
+    public function destroy(GalleryItem $item): RedirectResponse
     {
         $album = $item->album;
-        $media->delete($item->image);
+        // The model deletes its own file.
         $item->delete();
 
         return redirect()

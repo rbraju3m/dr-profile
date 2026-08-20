@@ -6,6 +6,8 @@ use App\Models\Chamber;
 use App\Models\ChamberSchedule;
 use App\Models\Credential;
 use App\Models\DoctorProfile;
+use App\Models\Faq;
+use App\Models\Page;
 use App\Models\Service;
 use App\Models\Setting;
 use App\Models\Stat;
@@ -68,6 +70,8 @@ class ImportDoctorDetails extends Command
             $this->importServices($data['services'] ?? []);
             $this->importCredentials($data['credentials'] ?? []);
             $this->importStats($data['stats'] ?? []);
+            $this->importFaqs($data['faqs'] ?? []);
+            $this->importPages($data['pages'] ?? []);
             $this->importSettings($data['settings'] ?? []);
         } catch (\Throwable $e) {
             DB::rollBack();
@@ -203,6 +207,45 @@ class ImportDoctorDetails extends Command
                 ['label_en' => $clean['label_en']],
                 $clean + ['sort_order' => $i, 'is_active' => true]
             );
+        }
+    }
+
+    private function importFaqs(array $faqs): void
+    {
+        $written = 0;
+
+        foreach ($faqs as $i => $row) {
+            $clean = $this->clean($row, "faqs[$i]");
+
+            if (blank($clean['question_en'] ?? null)) {
+                continue;
+            }
+
+            Faq::updateOrCreate(
+                ['question_en' => $clean['question_en']],
+                $clean + ['group' => $clean['group'] ?? 'general', 'sort_order' => $i, 'is_active' => true]
+            );
+            $written++;
+        }
+
+        if ($written) {
+            $this->line("  faqs         {$written} written");
+        }
+    }
+
+    private function importPages(array $pages): void
+    {
+        foreach ($pages as $row) {
+            $clean = $this->clean($row, 'pages');
+
+            if (blank($clean['slug'] ?? null) || blank($clean['title_en'] ?? null)) {
+                continue;
+            }
+
+            $clean['slug'] = Str::slug($clean['slug']);
+
+            Page::updateOrCreate(['slug' => $clean['slug']], $clean + ['is_published' => true]);
+            $this->line('  page         '.$clean['slug']);
         }
     }
 

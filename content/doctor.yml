@@ -180,3 +180,81 @@ settings:
   contact_address_bn: "ইনসাফ বারাকাহ কিডনি অ্যান্ড জেনারেল হাসপাতাল, ১১ শহীদ তাজউদ্দীন আহমদ সরণি, মগবাজার, ঢাকা ১২১৭"
   appointment_notice_en: "Online serials close one hour before each sitting begins."
   appointment_notice_bn: "প্রতিটি বসার এক ঘণ্টা আগে অনলাইন সিরিয়াল বন্ধ হয়ে যায়।"
+
+# ----------------------------------------------------------------------------
+#  Frequently asked questions.
+#
+#  Every answer below is derived from something already known: his chamber
+#  hours as published on saadiul.com, or a setting in this application
+#  (config/site.php: 30-day booking window, serials closing an hour before a
+#  sitting, three open appointments per phone number). Nothing here is invented
+#  — but he should still read them, because they speak on his behalf.
+# ----------------------------------------------------------------------------
+faqs:
+  - group: "appointment"
+    question_en: "How do I take an appointment?"
+    question_bn: "কীভাবে অ্যাপয়েন্টমেন্ট নেব?"
+    answer_en: "<p>Use the booking form on this site. Choose the chamber, pick a date, choose a free time and enter your name and mobile number. You receive a serial number straight away. You can also call the chamber number listed on the contact page.</p>"
+    answer_bn: "<p>এই সাইটের বুকিং ফর্ম ব্যবহার করুন। চেম্বার নির্বাচন করুন, তারিখ বাছুন, খালি সময় বেছে নিন এবং আপনার নাম ও মোবাইল নম্বর দিন। সঙ্গে সঙ্গেই সিরিয়াল নম্বর পাবেন। চাইলে যোগাযোগ পাতায় দেওয়া নম্বরেও কল করতে পারেন।</p>"
+
+  - group: "appointment"
+    question_en: "When does the chamber sit?"
+    question_bn: "চেম্বার কখন বসে?"
+    answer_en: "<p>Saturday to Thursday, 7:00 PM to 10:00 PM, at Insaf Barakah Kidney and General Hospital, Mogbazar. Friday is closed.</p>"
+    answer_bn: "<p>শনিবার থেকে বৃহস্পতিবার, সন্ধ্যা ৭টা থেকে রাত ১০টা, ইনসাফ বারাকাহ কিডনি অ্যান্ড জেনারেল হাসপাতাল, মগবাজার। শুক্রবার বন্ধ।</p>"
+
+  - group: "appointment"
+    question_en: "How far ahead can I book?"
+    question_bn: "কত দিন আগে বুক করা যায়?"
+    answer_en: "<p>Online booking is open for the next thirty days. For a date beyond that, please call the chamber.</p>"
+    answer_bn: "<p>অনলাইনে আগামী ত্রিশ দিনের জন্য বুকিং করা যায়। এর পরের তারিখের জন্য চেম্বারে কল করুন।</p>"
+
+  - group: "appointment"
+    question_en: "Until when can I take a serial for tonight?"
+    question_bn: "আজ সন্ধ্যার সিরিয়াল কখন পর্যন্ত নেওয়া যাবে?"
+    answer_en: "<p>Online serials close one hour before the sitting begins. After that, please call the chamber.</p>"
+    answer_bn: "<p>বসার এক ঘণ্টা আগে অনলাইন সিরিয়াল বন্ধ হয়ে যায়। এরপর চেম্বারে কল করুন।</p>"
+
+  - group: "appointment"
+    question_en: "Can I cancel or change my appointment?"
+    question_bn: "অ্যাপয়েন্টমেন্ট বাতিল বা পরিবর্তন করা যাবে?"
+    answer_en: "<p>Yes. Open your confirmation page using the serial number, confirm the mobile number you booked with, and cancel. The time is released for another patient. You can also call the chamber.</p>"
+    answer_bn: "<p>হ্যাঁ। সিরিয়াল নম্বর দিয়ে আপনার নিশ্চিতকরণ পাতাটি খুলুন, বুকিংয়ের সময় ব্যবহৃত মোবাইল নম্বরটি নিশ্চিত করুন এবং বাতিল করুন। সময়টি অন্য রোগীর জন্য খুলে যাবে। চাইলে চেম্বারেও কল করতে পারেন।</p>"
+
+  - group: "appointment"
+    question_en: "What should I bring with me?"
+    question_bn: "সঙ্গে কী কী আনতে হবে?"
+    answer_en: "<p>Any previous X-rays and MRI films, all earlier reports and prescriptions, and the actual strips of every medicine you are taking now.</p>"
+    answer_bn: "<p>পূর্ববর্তী এক্স-রে ও এমআরআই ফিল্ম, আগের সব রিপোর্ট ও ব্যবস্থাপত্র এবং বর্তমানে যেসব ওষুধ খাচ্ছেন তার প্রকৃত পাতাগুলো।</p>"
+
+  - group: "fees"
+    question_en: "Do I pay when I book online?"
+    question_bn: "অনলাইনে বুক করার সময় কি টাকা দিতে হয়?"
+    answer_en: "<p>No. Booking online reserves a serial number only; no payment is taken on this site. You pay at the chamber counter on the day of your visit.</p>"
+    answer_bn: "<p>না। অনলাইনে বুকিং শুধু সিরিয়াল নম্বর সংরক্ষণ করে; এই সাইটে কোনো টাকা নেওয়া হয় না। ভিজিটের দিন চেম্বারের কাউন্টারে পরিশোধ করবেন।</p>"
+
+  - group: "treatment"
+    question_en: "Which problems does he treat?"
+    question_bn: "তিনি কোন কোন সমস্যার চিকিৎসা করেন?"
+    answer_en: "<p>Orthopaedic surgery, spine surgery, joint and knee pain, bone deformities and congenital problems, sports injuries, and long-term pain management. Each of these is described under Expertise.</p>"
+    answer_bn: "<p>অর্থোপেডিক সার্জারি, স্পাইন সার্জারি, জয়েন্ট ও হাঁটু ব্যথা, হাড়ের বিকৃতি ও জন্মগত সমস্যা, স্পোর্টস ইনজুরি এবং দীর্ঘমেয়াদি ব্যথা ব্যবস্থাপনা। প্রতিটি সম্পর্কে বিস্তারিত “বিশেষজ্ঞতা” অংশে আছে।</p>"
+
+# ----------------------------------------------------------------------------
+#  The footer links to these two, so their absence left dead links. The wording
+#  describes only what this site actually does. It is not legal advice and
+#  should be read by whoever is responsible for the practice before launch.
+# ----------------------------------------------------------------------------
+pages:
+  - slug: "privacy-policy"
+    title_en: "Privacy Policy"
+    title_bn: "গোপনীয়তা নীতি"
+    show_in_footer: true
+    content_en: "<p>This site collects only what is needed to give you an appointment: your name, your mobile number, and anything you choose to add in the optional fields. If you write to us through the contact form, we keep that message so we can reply.</p><p>Appointment records are visible to the chamber staff who manage the schedule. We do not sell your information and we do not share it with anyone outside the practice.</p><p>No payment is taken on this site, so no card or banking details are ever collected here.</p><p>If you would like your details removed from our records, contact the chamber and we will remove them.</p>"
+    content_bn: "<p>আপনাকে অ্যাপয়েন্টমেন্ট দিতে যা প্রয়োজন কেবল তা-ই এই সাইট সংগ্রহ করে: আপনার নাম, মোবাইল নম্বর এবং ঐচ্ছিক ঘরে আপনি যা লিখতে চান। যোগাযোগ ফর্মে বার্তা পাঠালে উত্তর দেওয়ার জন্য সেটি সংরক্ষণ করা হয়।</p><p>অ্যাপয়েন্টমেন্টের তথ্য কেবল চেম্বারের দায়িত্বপ্রাপ্ত কর্মীরা দেখতে পান। আমরা আপনার তথ্য বিক্রি করি না এবং চেম্বারের বাইরে কারও সঙ্গে ভাগ করি না।</p><p>এই সাইটে কোনো পেমেন্ট নেওয়া হয় না, তাই কার্ড বা ব্যাংকিং তথ্য কখনোই সংগ্রহ করা হয় না।</p><p>রেকর্ড থেকে তথ্য মুছে ফেলতে চাইলে চেম্বারে যোগাযোগ করুন।</p>"
+
+  - slug: "terms-of-use"
+    title_en: "Terms of Use"
+    title_bn: "ব্যবহারের শর্তাবলি"
+    show_in_footer: true
+    content_en: "<p>The health information on this site is general. It does not replace an examination, and it should not be used to diagnose or treat a condition on your own.</p><p>Booking reserves a serial number. It is not a payment, and it cannot guarantee an exact consultation time — an emergency may delay a sitting, and occasionally a sitting has to be cancelled. Where that happens the chamber will contact you on the number you booked with.</p><p>For a medical emergency, go to your nearest hospital. Do not wait for an appointment.</p>"
+    content_bn: "<p>এই সাইটের স্বাস্থ্য তথ্য সাধারণ প্রকৃতির। এটি সরাসরি পরীক্ষার বিকল্প নয় এবং নিজে থেকে রোগ নির্ণয় বা চিকিৎসার জন্য ব্যবহার করা উচিত নয়।</p><p>বুকিং একটি সিরিয়াল নম্বর সংরক্ষণ করে। এটি পেমেন্ট নয় এবং নির্দিষ্ট সময়ে পরামর্শের নিশ্চয়তা দেয় না — জরুরি পরিস্থিতিতে সময় পিছিয়ে যেতে পারে, কখনো বসা বাতিলও হতে পারে। এমন হলে আপনি যে নম্বরে বুক করেছেন সেখানে চেম্বার থেকে জানানো হবে।</p><p>জরুরি চিকিৎসার প্রয়োজনে অ্যাপয়েন্টমেন্টের অপেক্ষা না করে নিকটস্থ হাসপাতালে যান।</p>"

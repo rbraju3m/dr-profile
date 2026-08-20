@@ -24,6 +24,18 @@ class GalleryAlbum extends Model
         ];
     }
 
+    /**
+     * The database cascade would remove the item rows without ever loading
+     * them, so their images were left on disk with nothing pointing at them.
+     * Deleting through Eloquent lets each item clean up after itself.
+     */
+    protected static function booted(): void
+    {
+        static::deleting(function (self $album) {
+            $album->items()->get()->each->delete();
+        });
+    }
+
     public function getRouteKeyName(): string
     {
         return 'slug';
