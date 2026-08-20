@@ -41,7 +41,15 @@ return [
         'public' => [
             'driver' => 'local',
             'root' => storage_path('app/public'),
-            'url' => rtrim(env('APP_URL', 'http://localhost'), '/').'/storage',
+            /*
+             * Root-relative on purpose. Tying image URLs to APP_URL means every
+             * uploaded picture breaks the moment the app is reached on a host or
+             * port other than the one in .env — which is exactly what happened
+             * when the dev server moved from :8000 to :8080. Absolute URLs are
+             * built explicitly where they are actually required, such as
+             * og:image and structured data.
+             */
+            'url' => '/storage',
             'visibility' => 'public',
             'throw' => false,
             'report' => false,

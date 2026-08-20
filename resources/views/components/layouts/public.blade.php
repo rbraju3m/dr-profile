@@ -14,7 +14,7 @@
         'url' => route('home'),
         'telephone' => $doctor->phone,
         'email' => $doctor->email,
-        'image' => $doctor->photoUrl(),
+        'image' => $doctor->photoUrl() ? url($doctor->photoUrl()) : null,
         'address' => $navChambers->map(fn ($chamber) => [
             '@type' => 'PostalAddress',
             'name' => $chamber->tr('name'),
@@ -46,7 +46,7 @@
     <meta property="og:description" content="{{ Str::limit(strip_tags((string) $metaDescription), 200) }}">
     <meta property="og:url" content="{{ url()->current() }}">
     @if ($doctor->mediaUrl('og_image') ?? $doctor->photoUrl())
-        <meta property="og:image" content="{{ $doctor->mediaUrl('og_image') ?? $doctor->photoUrl() }}">
+        <meta property="og:image" content="{{ url($doctor->mediaUrl('og_image') ?? $doctor->photoUrl()) }}">
     @endif
     <meta name="twitter:card" content="summary_large_image">
 

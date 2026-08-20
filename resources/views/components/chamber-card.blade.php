@@ -7,7 +7,15 @@
     $byDay = $schedules->groupBy('day_of_week');
 @endphp
 
-<div class="card flex flex-col overflow-hidden">
+<div class="card group flex flex-col overflow-hidden">
+    {{-- The admin has always accepted a chamber photo; this is what shows it. --}}
+    @if ($chamber->imageUrl())
+        <a href="{{ route('chambers.show', $chamber) }}" class="block">
+            <x-media-frame :src="$chamber->imageUrl()" :alt="$chamber->tr('name')"
+                           icon="building" ratio="aspect-[16/9]" :seed="$chamber->slug"/>
+        </a>
+    @endif
+
     <div class="flex items-start justify-between gap-4 border-b border-slate-100 p-6">
         <div class="min-w-0">
             <div class="flex items-center gap-2">
