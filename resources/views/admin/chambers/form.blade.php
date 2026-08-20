@@ -3,7 +3,7 @@
         <div class="space-y-6 lg:col-span-2">
             <x-admin.card :title="__('admin.nav.chambers')">
                 <div class="space-y-4">
-                    <x-admin.bilingual name="name" :label="__('admin.nav.chambers')" :record="$record" required/>
+                    <x-admin.bilingual name="name" :label="__('admin.fields.name')" :record="$record" required/>
                     <x-admin.bilingual name="address" :label="__('site.chamber.address')" :record="$record" type="textarea" rows="3"/>
                     <x-admin.bilingual name="city" :label="__('admin.fields.city')" :record="$record"/>
                     <x-admin.bilingual name="note" :label="__('site.booking.notes')" :record="$record" type="textarea" rows="3"/>
