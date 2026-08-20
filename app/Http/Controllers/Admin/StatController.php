@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Stat;
+use App\Support\Icons;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Validation\Rule;
 
 class StatController extends ResourceController
 {
@@ -43,7 +45,8 @@ class StatController extends ResourceController
             'label_bn' => ['nullable', 'string', 'max:120'],
             'value' => ['required', 'integer', 'min:0'],
             'suffix' => ['nullable', 'string', 'max:10'],
-            'icon' => ['nullable', 'string', 'max:60'],
+            // Only a glyph the site can draw; anything else renders as a bare circle.
+            'icon' => ['nullable', 'string', Rule::in(Icons::names())],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ];

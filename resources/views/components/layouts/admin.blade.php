@@ -203,5 +203,9 @@
             {{ $slot }}
         </main>
     </div>
+
+    {{-- The public layout has always had this; without it here, anything an
+         admin component pushed was dropped on the floor. --}}
+    @stack('scripts')
 </body>
 </html>

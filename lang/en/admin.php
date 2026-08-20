@@ -331,6 +331,13 @@ return [
         'title_example' => 'Prof. Dr.',
     ],
 
+    'icons' => [
+        'search' => 'Search icons…',
+        'clear' => 'Clear',
+        'none' => 'No icon matches that name.',
+        'unknown' => '“:name” is not an icon this site can draw — pick one below.',
+    ],
+
     'settings' => [
         'fields' => [
             'site_name_en' => 'Site name (English)',

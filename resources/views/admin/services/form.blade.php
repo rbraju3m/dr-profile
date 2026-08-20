@@ -22,8 +22,7 @@
             <x-admin.card>
                 <div class="space-y-4">
                     <x-admin.image-upload name="image" :label="__('admin.common.image')" :current="$record?->imageUrl()"/>
-                    <x-admin.input name="icon" :label="__('admin.fields.icon')" :value="$record?->icon"
-                                   hint="heart-pulse, activity, gauge, waves, shield-check, droplet, cpu, siren, stethoscope"/>
+                    <x-admin.icon-picker name="icon" :value="$record?->icon"/>
                     <x-admin.input name="fee" type="number" step="0.01" :label="__('admin.fields.fee')" :value="$record?->fee"/>
                     <x-admin.bilingual name="duration" :label="__('site.duration')" :record="$record"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>

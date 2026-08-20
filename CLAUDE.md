@@ -239,8 +239,11 @@ switch being off, and the admin panel.
   stays invisible when JS fails is not a trade worth making.
 - Screenshots of anything below the fold catch reveals **mid-animation** and look half-drawn. Render
   with `--force-prefers-reduced-motion` to photograph the settled state.
-- Icons are inline SVG in `resources/views/components/icon.blade.php` — add glyphs there rather than
-  pulling in an icon package.
+- Icons are inline SVG in `App\Support\Icons` — add glyphs there rather than pulling in an icon
+  package. They live in PHP rather than in the Blade component so the admin can *offer* the list:
+  the icon field used to be free text, and "hero" and "admin" were duly typed in and drawn as bare
+  circles on the public page. `<x-admin.icon-picker>` shows every glyph and `Rule::in(Icons::names())`
+  refuses anything else.
 - Tailwind v4 cannot `@apply` a class declared in the same layer; shared component shapes in
   `resources/css/app.css` use grouped selectors (`.btn, .btn-primary, … { @apply … }`).
 - Social links come from `DoctorProfile::socialLinks()` and render through `<x-social-links>`. Header

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Service;
+use App\Support\Icons;
 use App\Support\Number;
 use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
@@ -54,7 +55,8 @@ class ServiceController extends ResourceController
             'short_description_bn' => ['nullable', 'string', 'max:500'],
             'description_en' => ['nullable', 'string'],
             'description_bn' => ['nullable', 'string'],
-            'icon' => ['nullable', 'string', 'max:60'],
+            // Only a glyph the site can draw; anything else renders as a bare circle.
+            'icon' => ['nullable', 'string', Rule::in(Icons::names())],
             'image' => Uploads::imageRules(),
             'fee' => ['nullable', 'numeric', 'min:0', 'max:9999999'],
             'duration_en' => ['nullable', 'string', 'max:80'],

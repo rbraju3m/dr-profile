@@ -272,4 +272,32 @@ Alpine.data('themeToggle', (initial, labels) => ({
     },
 }))
 
+/**
+ * iconPicker — pick a glyph the site can actually draw.
+ *
+ * The SVG paths are printed once into a JSON block, so the grid can preview
+ * every icon without a request and without a second copy of the icon set.
+ */
+Alpine.data('iconPicker', (initial, names) => ({
+    chosen: initial || null,
+    query: '',
+    names,
+    paths: JSON.parse(document.getElementById('icon-paths')?.textContent ?? '{}'),
+
+    matches() {
+        const q = this.query.trim().toLowerCase()
+
+        return q ? this.names.filter((n) => n.includes(q)) : this.names
+    },
+
+    glyph(name) {
+        const path = this.paths[name]
+        if (!path) return ''
+
+        return `<svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                     stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"
+                     aria-hidden="true">${path}</svg>`
+    },
+}))
+
 Alpine.start()
