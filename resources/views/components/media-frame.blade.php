@@ -12,9 +12,19 @@
     'ratio' => 'aspect-[4/3]',
     'seed' => null,
     'label' => null,
+    // 'cover'   crops to fill the tile — right for photographs.
+    // 'contain' fits the whole image inside the tile, letterboxed. Right when
+    //           the picture carries text, as a poster does: a centre crop
+    //           through a headline loses the point of the image.
+    // 'natural' drops the fixed ratio entirely, for the one place a reader
+    //           expects to see the picture exactly as uploaded.
+    'fit' => 'cover',
 ])
 
 @php
+    $natural = $fit === 'natural' && $src;
+    $contain = $fit === 'contain' && $src;
+
     // Five tints that stay inside the medical palette. Chosen deterministically
     // so a card keeps the same colour between page loads.
     $palettes = [
@@ -38,10 +48,21 @@
 @endphp
 
 {{-- @container so the monogram can scale with the frame, not the viewport --}}
-<div {{ $attributes->merge(['class' => "@container $ratio relative w-full overflow-hidden bg-slate-100"]) }}>
+<div {{ $attributes->merge(['class' => '@container relative w-full overflow-hidden bg-slate-100 '.($natural ? '' : $ratio)]) }}>
     @if ($src)
-        <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"
-             class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+        @if ($contain)
+            <div class="absolute inset-0 {{ $surface }}"></div>
+            <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"
+                 class="relative h-full w-full object-contain transition duration-500 group-hover:scale-[1.03]">
+        @elseif ($natural)
+            {{-- The uploader's own proportions, capped so a very tall image
+                 does not push the article off the screen. --}}
+            <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"
+                 class="mx-auto block h-auto w-full max-h-[75vh] object-contain">
+        @else
+            <img src="{{ $src }}" alt="{{ $alt }}" loading="lazy"
+                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105">
+        @endif
     @else
         <div class="relative grid h-full w-full place-items-center {{ $surface }}">
             {{-- Faint dot field: gives the panel texture so it reads as a designed

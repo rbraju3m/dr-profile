@@ -12,7 +12,7 @@
 <a href="{{ route($route, $post) }}" class="card-hover group flex flex-col overflow-hidden">
     <x-media-frame :src="$post->imageUrl()" :alt="$post->tr('title')"
                    :icon="$post->type === 'event' ? 'calendar' : 'file-text'"
-                   ratio="aspect-[16/10]" :seed="$post->slug">
+                   ratio="aspect-[16/10]" fit="contain" :seed="$post->slug">
         @if ($post->type === 'event')
             <span @class([
                 'absolute start-3 top-3 rounded-full px-3 py-1 text-xs font-semibold shadow-sm',

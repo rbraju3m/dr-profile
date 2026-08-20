@@ -43,7 +43,7 @@
 
                 @if ($post->imageUrl())
                     <div class="mb-8 overflow-hidden rounded-2xl">
-                        <x-media-frame :src="$post->imageUrl()" :alt="$post->tr('title')" ratio="aspect-[16/9]"
+                        <x-media-frame :src="$post->imageUrl()" :alt="$post->tr('title')" fit="natural" ratio="aspect-[16/9]"
                                        :icon="$post->type === 'event' ? 'calendar' : 'file-text'" :seed="$post->slug"/>
                     </div>
                 @endif
