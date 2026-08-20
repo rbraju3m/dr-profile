@@ -19,7 +19,7 @@
 
                     <x-admin.bilingual name="title" label="Title" :record="$record" required/>
                     <x-admin.bilingual name="excerpt" label="Excerpt" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="content" label="Content" :record="$record" type="textarea" rows="14"/>
+                    <x-admin.bilingual name="content" label="Content" :record="$record" type="rich"/>
                 </div>
             </x-admin.card>
 

@@ -65,7 +65,9 @@
                     <div class="max-h-[85vh] w-full max-w-4xl" @click.outside="open = false">
                         <template x-if="items[index]?.type === 'video' && items[index]?.embed">
                             <div class="aspect-video overflow-hidden rounded-xl bg-black">
-                                <iframe :src="items[index].embed" class="h-full w-full" allowfullscreen loading="lazy" :title="items[index].title"></iframe>
+                                <iframe :src="items[index].embed" class="h-full w-full" allowfullscreen loading="lazy"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                                        referrerpolicy="strict-origin-when-cross-origin" :title="items[index].title"></iframe>
                             </div>
                         </template>
 

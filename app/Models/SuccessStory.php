@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Concerns\HasMedia;
 use App\Concerns\HasTranslations;
+use App\Support\VideoEmbed;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -51,6 +52,12 @@ class SuccessStory extends Model
     public function scopeLatestFirst(Builder $query): Builder
     {
         return $query->orderByDesc('published_at')->orderByDesc('id');
+    }
+
+    /** A framable address for whatever video link was pasted in. */
+    public function embedUrl(): ?string
+    {
+        return VideoEmbed::url($this->video_url);
     }
 
     public function imageUrl(): ?string

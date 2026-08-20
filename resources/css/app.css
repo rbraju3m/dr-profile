@@ -264,6 +264,46 @@
         to { transform: translateX(100%); }
     }
 
+    /* Quill, dressed to match the rest of the admin's inputs. */
+    .rich-editor {
+        min-height: 16rem;
+    }
+
+    .ql-toolbar.ql-snow {
+        @apply rounded-t-xl border-slate-300 bg-slate-50;
+    }
+
+    .ql-container.ql-snow {
+        @apply rounded-b-xl border-slate-300 text-[15px];
+    }
+
+    .ql-editor {
+        @apply leading-relaxed text-slate-800;
+    }
+
+    .ql-editor:focus {
+        @apply outline-none;
+    }
+
+    .ql-snow .ql-picker,
+    .ql-snow .ql-stroke {
+        @apply text-slate-600;
+    }
+
+    .ql-editor.ql-blank::before {
+        @apply not-italic text-slate-400;
+    }
+
+    /* The editor writes the same elements the public pages style, so what is
+       typed here looks like what a patient will read. */
+    .ql-editor h2 { @apply mt-4 mb-2 text-xl font-semibold text-slate-900; }
+    .ql-editor h3 { @apply mt-3 mb-2 text-lg font-semibold text-slate-900; }
+    .ql-editor p  { @apply mb-3; }
+    .ql-editor ul { @apply mb-3 list-disc ps-5; }
+    .ql-editor ol { @apply mb-3 list-decimal ps-5; }
+    .ql-editor blockquote { @apply border-s-4 border-primary-300 ps-4 text-slate-600; }
+    .ql-editor a { @apply text-primary-700 underline; }
+
     /* The admin sidebar scrolls; on platforms that hide overlay scrollbars
        there was nothing at all to say so. */
     .sidebar-nav {

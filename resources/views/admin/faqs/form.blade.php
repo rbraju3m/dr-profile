@@ -4,7 +4,7 @@
             <x-admin.card>
                 <div class="space-y-4">
                     <x-admin.bilingual name="question" label="Question" :record="$record" required/>
-                    <x-admin.bilingual name="answer" label="Answer" :record="$record" type="textarea" rows="6" required/>
+                    <x-admin.bilingual name="answer" label="Answer" :record="$record" type="rich" required/>
                 </div>
             </x-admin.card>
         </div>

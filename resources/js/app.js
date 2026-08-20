@@ -1,5 +1,7 @@
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
+import Quill from 'quill'
+import 'quill/dist/quill.snow.css'
 
 Alpine.plugin(collapse)
 
@@ -88,6 +90,45 @@ Alpine.directive('counter', (el, { expression }) => {
 
     observer.observe(el)
 })
+
+/**
+ * Rich text for the fields that are rendered as HTML.
+ *
+ * Quill reads the initial content out of its own container, so the server
+ * renders the stored HTML there and no separate loading step is needed. The
+ * hidden input is what actually submits; Quill only ever writes to it.
+ */
+Alpine.data('richText', (fieldName) => ({
+    init() {
+        const editor = new Quill(this.$refs.editor, {
+            theme: 'snow',
+            modules: {
+                toolbar: [
+                    [{ header: [2, 3, false] }],
+                    ['bold', 'italic', 'underline'],
+                    [{ list: 'ordered' }, { list: 'bullet' }],
+                    ['blockquote', 'link'],
+                    ['clean'],
+                ],
+            },
+        })
+
+        const sync = () => {
+            const html = editor.root.innerHTML
+            // Quill's idea of empty still contains a paragraph and a break.
+            this.$refs.input.value = html === '<p><br></p>' ? '' : html
+        }
+
+        editor.on('text-change', sync)
+        sync()
+
+        // Bangla needs its own face inside the editor too, not just on the page.
+        if (fieldName.endsWith('_bn')) {
+            editor.root.style.fontFamily = 'var(--font-bangla)'
+            editor.root.style.lineHeight = '1.85'
+        }
+    },
+}))
 
 /** Reading progress for long articles. */
 Alpine.data('readingProgress', () => ({

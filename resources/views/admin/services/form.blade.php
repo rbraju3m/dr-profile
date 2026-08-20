@@ -5,7 +5,7 @@
                 <div class="space-y-4">
                     <x-admin.bilingual name="name" :label="__('admin.nav.services')" :record="$record" required/>
                     <x-admin.bilingual name="short_description" :label="__('site.home.expertise_subheading')" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="description" :label="__('admin.profile.biography')" :record="$record" type="textarea" rows="10"/>
+                    <x-admin.bilingual name="description" :label="__('admin.profile.biography')" :record="$record" type="rich"/>
                 </div>
             </x-admin.card>
 

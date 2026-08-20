@@ -37,7 +37,14 @@
         @endphp
 
         <div x-show="lang === '{{ $code }}'" x-cloak>
-            @if ($type === 'textarea')
+            @if ($type === 'rich')
+                {{-- The stored HTML is rendered into the editor container;
+                     Quill adopts it, and writes back to the hidden input. --}}
+                <div x-data="richText('{{ $field }}')" wire:ignore>
+                    <input type="hidden" name="{{ $field }}" x-ref="input" value="{{ old($field, $record?->{$field}) }}">
+                    <div x-ref="editor" class="rich-editor @if ($isBangla) font-[var(--font-bangla)] @endif">{!! old($field, $record?->{$field}) !!}</div>
+                </div>
+            @elseif ($type === 'textarea')
                 <textarea name="{{ $field }}" rows="{{ $rows }}"
                           @required($required && ! $isBangla)
                           @class(['field-input', 'ring-rose-400' => $errors->has($field), 'font-[var(--font-bangla)]' => $isBangla])>{{ old($field, $record?->{$field}) }}</textarea>

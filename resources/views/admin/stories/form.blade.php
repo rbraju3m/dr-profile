@@ -6,7 +6,7 @@
                     <x-admin.bilingual name="title" label="Title" :record="$record" required/>
                     <x-admin.bilingual name="condition" :label="__('site.stories.condition')" :record="$record" type="textarea" rows="3"/>
                     <x-admin.bilingual name="summary" label="Summary" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="content" label="Story" :record="$record" type="textarea" rows="12"/>
+                    <x-admin.bilingual name="content" label="Story" :record="$record" type="rich"/>
                 </div>
             </x-admin.card>
 

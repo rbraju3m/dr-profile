@@ -28,11 +28,21 @@
 
                 <div id="article-body" class="prose-content">{!! $story->tr('content') !!}</div>
 
-                @if ($story->video_url)
+                @if ($story->embedUrl())
                     <div class="mt-8 aspect-video overflow-hidden rounded-2xl bg-slate-900">
-                        <iframe src="{{ $story->video_url }}" title="{{ $story->tr('title') }}" loading="lazy"
-                                allowfullscreen class="h-full w-full"></iframe>
+                        <iframe src="{{ $story->embedUrl() }}" title="{{ $story->tr('title') }}" loading="lazy"
+                                allowfullscreen
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
+                                referrerpolicy="strict-origin-when-cross-origin"
+                                class="h-full w-full"></iframe>
                     </div>
+                @elseif ($story->video_url)
+                    {{-- Not a platform we can frame; a link beats an empty black box. --}}
+                    <a href="{{ $story->video_url }}" target="_blank" rel="noopener noreferrer"
+                       class="btn-secondary mt-8">
+                        <x-icon name="play" class="h-4 w-4"/>{{ __('site.stories.watch') }}
+                        <x-icon name="external-link" class="h-3.5 w-3.5"/>
+                    </a>
                 @endif
             </article>
 

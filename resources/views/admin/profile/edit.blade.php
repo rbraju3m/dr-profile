@@ -33,8 +33,8 @@
                 <x-admin.card :title="__('admin.profile.biography')">
                     <div class="space-y-4">
                         <x-admin.bilingual name="short_bio" label="Short bio" :record="$profile" type="textarea" rows="4"/>
-                        <x-admin.bilingual name="bio" label="Full biography" :record="$profile" type="textarea" rows="14"/>
-                        <x-admin.bilingual name="philosophy" :label="__('site.about.philosophy')" :record="$profile" type="textarea" rows="8"/>
+                        <x-admin.bilingual name="bio" label="Full biography" :record="$profile" type="rich"/>
+                        <x-admin.bilingual name="philosophy" :label="__('site.about.philosophy')" :record="$profile" type="rich"/>
                     </div>
                 </x-admin.card>
 

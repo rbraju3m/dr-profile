@@ -5,9 +5,9 @@ namespace App\Models;
 use App\Concerns\HasMedia;
 use App\Concerns\HasTranslations;
 use App\Concerns\Sortable;
+use App\Support\VideoEmbed;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Support\Str;
 
 class GalleryItem extends Model
 {
@@ -32,24 +32,10 @@ class GalleryItem extends Model
         return $this->mediaUrl('image');
     }
 
-    /** Turn a YouTube/Vimeo watch URL into an embeddable one. */
+    /** Turn whatever link was pasted into one that can be framed. */
     public function embedUrl(): ?string
     {
-        $url = $this->video_url;
-
-        if (blank($url)) {
-            return null;
-        }
-
-        if (preg_match('~youtu\.be/([\w-]+)~', $url, $m) || preg_match('~youtube\.com/watch\?v=([\w-]+)~', $url, $m)) {
-            return 'https://www.youtube.com/embed/'.$m[1];
-        }
-
-        if (preg_match('~vimeo\.com/(\d+)~', $url, $m)) {
-            return 'https://player.vimeo.com/video/'.$m[1];
-        }
-
-        return Str::startsWith($url, ['http://', 'https://']) ? $url : null;
+        return VideoEmbed::url($this->video_url);
     }
 
     public function thumbnailUrl(): ?string
@@ -58,9 +44,7 @@ class GalleryItem extends Model
             return $this->imageUrl();
         }
 
-        if ($this->video_url && preg_match('~(?:youtu\.be/|youtube\.com/watch\?v=)([\w-]+)~', $this->video_url, $m)) {
-            return "https://img.youtube.com/vi/{$m[1]}/hqdefault.jpg";
-        }
+        return VideoEmbed::thumbnail($this->video_url);
 
         return null;
     }
