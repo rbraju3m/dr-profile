@@ -140,7 +140,7 @@
                                             <span class="block text-[11px] opacity-80" x-text="day.dayName"></span>
                                             <span class="block text-lg font-semibold tabular-nums" x-text="day.dayNumber"></span>
                                             <span class="block text-[10px] opacity-80"
-                                                  x-text="day.open ? day.count + ' ' + '{{ __('site.booking.step_slot') }}' : '{{ __('site.chamber.closed') }}'"></span>
+                                                  x-text="day.open ? slotsLeftLabel(day.count) : @js(__('site.chamber.closed'))"></span>
                                         </button>
                                     </template>
                                 </div>
@@ -332,6 +332,7 @@
             const DAY_NAMES = @js(collect(App\Support\Week::DAYS)->map(fn ($d) => App\Support\Week::shortName($d))->all());
             const MONTH_NAMES = @js(collect(range(1, 12))->mapWithKeys(fn ($m) => [$m => __('site.months.'.$m)])->all());
             const LOCALE = @js(app()->getLocale());
+            const SLOTS_LEFT = @js(__('site.booking.slots_left', ['count' => ':count']));
 
             const toLocalDigits = (value) => LOCALE === 'bn'
                 ? String(value).replace(/[0-9]/g, (d) => '০১২৩৪৫৬৭৮৯'[d])
@@ -373,6 +374,11 @@
                                 count: toLocalDigits(day.count),
                             }
                         })
+                    },
+
+                    /** ":count slots left", with the count already localised. */
+                    slotsLeftLabel(count) {
+                        return SLOTS_LEFT.replace(':count', count)
                     },
 
                     humanDate() {
