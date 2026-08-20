@@ -34,6 +34,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ ($title ?? __('admin.panel')).' — '.__('admin.panel') }}</title>
     <meta name="robots" content="noindex, nofollow">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚙️</text></svg>">
@@ -185,6 +186,11 @@
                 </div>
             </div>
         </header>
+
+        {{-- Result of a drag, shown briefly so reordering is not silent. --}}
+        <div id="reorder-note" class="hidden"
+             data-saved="{{ __('admin.common.order_saved') }}"
+             data-failed="{{ __('admin.common.order_failed') }}"></div>
 
         <main class="p-4 sm:p-6 lg:p-8">
             <x-admin.flash/>

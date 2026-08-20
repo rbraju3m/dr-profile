@@ -29,6 +29,6 @@ class Publication extends Model
 
     public function scopeNewestFirst(Builder $query): Builder
     {
-        return $query->orderByDesc('year')->orderBy('sort_order');
+        return $query->orderBy('sort_order')->orderByDesc('year');
     }
 }

@@ -174,6 +174,7 @@ return [
         'treated_on' => 'Treated',
         'patient' => 'Patient',
         'watch' => 'Watch the video',
+        'watch_on_facebook' => 'Watch on Facebook',
         'related' => 'More Stories',
         'empty' => 'Stories will be published here soon.',
     ],

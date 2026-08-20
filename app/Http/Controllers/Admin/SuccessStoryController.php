@@ -19,6 +19,8 @@ class SuccessStoryController extends ResourceController
 
     protected string $labelKey = 'admin.nav.stories';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['title_en', 'title_bn', 'patient_name'];
 
     protected array $mediaFields = ['image' => 'stories'];

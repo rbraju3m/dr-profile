@@ -18,6 +18,8 @@ class PublicationController extends ResourceController
 
     protected string $labelKey = 'admin.nav.publications';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['title_en', 'authors', 'venue_en'];
 
     protected array $mediaFields = ['file' => 'publications'];

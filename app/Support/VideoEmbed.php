@@ -37,7 +37,11 @@ class VideoEmbed
         }
 
         if (self::isFacebook($url)) {
-            return 'https://www.facebook.com/plugins/video.php?href='.urlencode($url).'&show_text=false';
+            return 'https://www.facebook.com/plugins/video.php?'.http_build_query([
+                'href' => $url,
+                'show_text' => 'false',
+                'autoplay' => 'false',
+            ]);
         }
 
         return null;
@@ -76,8 +80,31 @@ class VideoEmbed
         return null;
     }
 
+    /**
+     * Facebook has several shapes for the same thing and keeps adding more:
+     * a page video, a watch link, a reel, a share link, and the fb.watch
+     * shortener. All of them go through the video plugin.
+     */
     private static function isFacebook(string $url): bool
     {
-        return (bool) preg_match('~(facebook\.com/.+/videos/|facebook\.com/watch/?\?v=|fb\.watch/)~i', $url);
+        return (bool) preg_match(
+            '~(facebook\.com/.+/videos/|facebook\.com/watch/?\?v=|facebook\.com/reel/|facebook\.com/share/[vr]/|facebook\.com/.+/posts/|fb\.watch/)~i',
+            $url
+        );
+    }
+
+    /** True for a link Facebook serves; those need their own escape hatch. */
+    public static function isFacebookVideo(?string $url): bool
+    {
+        return $url !== null && self::isFacebook(trim($url));
+    }
+
+    /**
+     * Reels are shot vertically, so framing one at 16:9 leaves it a sliver in
+     * the middle of a black band.
+     */
+    public static function isPortrait(?string $url): bool
+    {
+        return (bool) preg_match('~(facebook\.com/reel/|youtube\.com/shorts/|facebook\.com/share/r/)~i', (string) $url);
     }
 }

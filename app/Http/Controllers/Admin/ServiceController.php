@@ -19,6 +19,8 @@ class ServiceController extends ResourceController
 
     protected string $labelKey = 'admin.nav.services';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['name_en', 'name_bn'];
 
     protected array $mediaFields = ['image' => 'services'];

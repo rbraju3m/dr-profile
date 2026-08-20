@@ -18,6 +18,8 @@ class PageController extends ResourceController
 
     protected string $labelKey = 'admin.nav.pages';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['title_en', 'title_bn', 'slug'];
 
     protected array $mediaFields = ['banner_image' => 'pages'];

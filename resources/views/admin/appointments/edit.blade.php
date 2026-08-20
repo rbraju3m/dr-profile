@@ -36,11 +36,6 @@
             </x-admin.card>
         </div>
 
-        <div class="flex items-center gap-3 border-t border-slate-200 pt-6">
-            <button type="submit" class="btn-primary btn-lg">
-                <x-icon name="check" class="h-5 w-5"/>{{ __('admin.actions.save_changes') }}
-            </button>
-            <a href="{{ route('admin.appointments.show', $appointment) }}" class="btn-ghost">{{ __('admin.actions.cancel') }}</a>
-        </div>
+        <x-admin.form-actions :cancel="route('admin.appointments.show', $appointment)"/>
     </form>
 </x-layouts.admin>

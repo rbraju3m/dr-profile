@@ -19,6 +19,7 @@
     "dependencies": {
         "@alpinejs/collapse": "^3.16.2",
         "alpinejs": "^3.16.2",
-        "quill": "^2.0.3"
+        "quill": "^2.0.3",
+        "sortablejs": "^1.15.7"
     }
 }

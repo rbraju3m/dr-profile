@@ -17,6 +17,8 @@ class PostCategoryController extends ResourceController
 
     protected string $labelKey = 'admin.nav.post_categories';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['name_en', 'name_bn'];
 
     protected ?string $slugSource = 'name_en';

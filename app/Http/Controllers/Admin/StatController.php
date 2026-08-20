@@ -16,6 +16,8 @@ class StatController extends ResourceController
 
     protected string $labelKey = 'admin.nav.stats';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['label_en', 'label_bn'];
 
     protected function indexQuery(): Builder

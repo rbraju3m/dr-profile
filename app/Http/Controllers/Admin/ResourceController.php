@@ -7,9 +7,12 @@ use App\Services\MediaService;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
+use Illuminate\Validation\Rule;
 
 /**
  * Shared CRUD for the admin resources.
@@ -44,6 +47,15 @@ abstract class ResourceController extends Controller
 
     protected int $perPage = 20;
 
+    /** The only flags the listing switches may change. */
+    public const TOGGLEABLE = [
+        'is_active', 'is_published', 'is_featured',
+        'accepts_online_booking', 'show_in_footer', 'is_read',
+    ];
+
+    /** Whether rows can be dragged into a manual order. */
+    protected bool $reorderable = false;
+
     /** @return array<int, array{key?: string, label: string, type?: string, value?: callable, class?: string}> */
     abstract protected function columns(): array;
 
@@ -68,6 +80,7 @@ abstract class ResourceController extends Controller
 
         return view('admin.resource.index', [
             'records' => $records,
+            'reorderable' => $this->reorderable && $records->currentPage() === 1,
             'columns' => $this->columns(),
             'routeName' => $this->routeName,
             'label' => __($this->labelKey),
@@ -125,6 +138,58 @@ abstract class ResourceController extends Controller
         return redirect()
             ->route("{$this->routeName}.index")
             ->with('success', __('admin.flash.deleted', ['item' => __($this->labelKey)]));
+    }
+
+    /**
+     * Persist a new hand-made order.
+     *
+     * The row ids arrive in the order they now appear. Anything not belonging
+     * to this resource is ignored rather than trusted, and the writes go in one
+     * transaction so a half-applied order cannot survive a failure.
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        abort_unless($this->reorderable, 404);
+
+        $ids = $request->validate([
+            'ids' => ['required', 'array', 'max:500'],
+            'ids.*' => ['required', 'integer'],
+        ])['ids'];
+
+        $known = $this->model::query()->whereIn('id', $ids)->pluck('id')->all();
+
+        DB::transaction(function () use ($ids, $known) {
+            foreach (array_values($ids) as $position => $id) {
+                if (in_array($id, $known, true)) {
+                    $this->model::query()->whereKey($id)->update(['sort_order' => $position]);
+                }
+            }
+        });
+
+        return response()->json(['ok' => true, 'count' => count($known)]);
+    }
+
+    /**
+     * Flip a boolean straight from the listing.
+     *
+     * Only the flags below can be switched, whatever the request asks for —
+     * otherwise this endpoint would happily set any column on any row.
+     */
+    public function toggle(Request $request, string $record): JsonResponse
+    {
+        $column = $request->validate([
+            'column' => ['required', 'string', Rule::in(self::TOGGLEABLE)],
+        ])['column'];
+
+        $model = $this->resolveRecord($record);
+
+        abort_unless(array_key_exists($column, $model->getAttributes()), 404);
+
+        $model->forceFill([$column => ! $model->{$column}])->save();
+
+        return response()->json([
+            'value' => (bool) $model->{$column},
+        ]);
     }
 
     // ------------------------------------------------------------- Hooks

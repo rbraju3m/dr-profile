@@ -35,7 +35,7 @@ class AppServiceProvider extends ServiceProvider
             $view->with([
                 'doctor' => DoctorProfile::current(),
                 'navChambers' => Chamber::active()->ordered()->get(),
-                'footerPages' => Page::published()->where('show_in_footer', true)->get(),
+                'footerPages' => Page::published()->where('show_in_footer', true)->orderBy('sort_order')->orderBy('id')->get(),
             ]);
         });
 

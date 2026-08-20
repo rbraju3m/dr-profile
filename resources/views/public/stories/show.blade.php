@@ -29,13 +29,35 @@
                 <div id="article-body" class="prose-content">{!! $story->tr('content') !!}</div>
 
                 @if ($story->embedUrl())
-                    <div class="mt-8 aspect-video overflow-hidden rounded-2xl bg-slate-900">
+                    @php
+                        $portrait = App\Support\VideoEmbed::isPortrait($story->video_url);
+                        $fromFacebook = App\Support\VideoEmbed::isFacebookVideo($story->video_url);
+                    @endphp
+
+                    {{-- Reels are shot vertically; framing one at 16:9 leaves a
+                         sliver between two black bands. --}}
+                    <div @class([
+                        'mt-8 overflow-hidden rounded-2xl bg-slate-900',
+                        'aspect-video' => ! $portrait,
+                        'mx-auto aspect-[9/16] max-w-sm' => $portrait,
+                    ])>
                         <iframe src="{{ $story->embedUrl() }}" title="{{ $story->tr('title') }}" loading="lazy"
-                                allowfullscreen
+                                allowfullscreen scrolling="no" frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; picture-in-picture; web-share"
                                 referrerpolicy="strict-origin-when-cross-origin"
                                 class="h-full w-full"></iframe>
                     </div>
+
+                    @if ($fromFacebook)
+                        {{-- A Facebook embed shows an empty frame when the video
+                             is not public, and says nothing. There is no way to
+                             detect that from here, so always leave a way out. --}}
+                        <a href="{{ $story->video_url }}" target="_blank" rel="noopener noreferrer"
+                           class="mt-3 inline-flex items-center gap-1.5 text-sm font-medium text-primary-600 hover:text-primary-800">
+                            <x-icon name="facebook" class="h-4 w-4"/>{{ __('site.stories.watch_on_facebook') }}
+                            <x-icon name="external-link" class="h-3.5 w-3.5"/>
+                        </a>
+                    @endif
                 @elseif ($story->video_url)
                     {{-- Not a platform we can frame; a link beats an empty black box. --}}
                     <a href="{{ $story->video_url }}" target="_blank" rel="noopener noreferrer"

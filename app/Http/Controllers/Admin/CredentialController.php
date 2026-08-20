@@ -17,6 +17,8 @@ class CredentialController extends ResourceController
 
     protected string $labelKey = 'admin.nav.credentials';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['title_en', 'title_bn', 'organization_en'];
 
     protected function indexQuery(): Builder

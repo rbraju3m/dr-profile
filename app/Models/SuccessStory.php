@@ -49,9 +49,10 @@ class SuccessStory extends Model
             ->where(fn (Builder $q) => $q->whereNull('published_at')->orWhere('published_at', '<=', Carbon::now()));
     }
 
+    /** A hand-made order leads; the rest stay newest first. */
     public function scopeLatestFirst(Builder $query): Builder
     {
-        return $query->orderByDesc('published_at')->orderByDesc('id');
+        return $query->orderBy('sort_order')->orderByDesc('published_at')->orderByDesc('id');
     }
 
     /** A framable address for whatever video link was pasted in. */

@@ -18,6 +18,8 @@ class ChamberController extends ResourceController
 
     protected string $labelKey = 'admin.nav.chambers';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['name_en', 'name_bn', 'city_en'];
 
     protected array $mediaFields = ['image' => 'chambers'];

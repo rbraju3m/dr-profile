@@ -23,14 +23,26 @@
         </x-slot:actions>
     </x-admin.page-header>
 
+    @if (($reorderable ?? false) && $records->count() > 1)
+        <p class="mb-3 flex items-center gap-2 text-xs text-slate-500">
+            <x-icon name="grip" class="h-3.5 w-3.5"/>{{ __('admin.common.reorder_hint') }}
+        </p>
+    @endif
+
     @if ($records->isEmpty())
         <x-empty-state icon="inbox" :title="__('admin.common.empty')" :text="__('admin.common.empty_hint')"/>
     @else
         <div class="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-            <div class="overflow-x-auto">
+            <div class="overflow-x-auto"
+                 @if ($reorderable ?? false)
+                     x-data="sortableList('{{ route($routeName.'.reorder') }}')"
+                 @endif>
                 <table class="w-full text-sm">
                     <thead class="bg-slate-50 text-xs uppercase tracking-wider text-slate-500">
                         <tr>
+                            @if ($reorderable ?? false)
+                                <th scope="col" class="w-10 px-3 py-3"><span class="sr-only">{{ __('admin.common.order') }}</span></th>
+                            @endif
                             @foreach ($columns as $column)
                                 <th scope="col" class="px-5 py-3 text-start font-semibold {{ $column['class'] ?? '' }}">
                                     {{ $column['label'] }}
@@ -40,9 +52,17 @@
                         </tr>
                     </thead>
 
-                    <tbody class="divide-y divide-slate-100">
+                    <tbody class="divide-y divide-slate-100" @if ($reorderable ?? false) x-ref="rows" @endif>
                         @foreach ($records as $record)
-                            <tr class="transition hover:bg-slate-50/70">
+                            <tr class="transition hover:bg-slate-50/70" data-id="{{ $record->getKey() }}">
+                                @if ($reorderable ?? false)
+                                    <td class="px-3 py-3.5">
+                                        <span class="drag-handle grid h-7 w-7 cursor-grab place-items-center rounded text-slate-300 transition hover:bg-slate-100 hover:text-slate-500 active:cursor-grabbing"
+                                              title="{{ __('admin.common.reorder_hint') }}">
+                                            <x-icon name="grip" class="h-4 w-4"/>
+                                        </span>
+                                    </td>
+                                @endif
                                 @foreach ($columns as $column)
                                     @php
                                         $value = isset($column['value'])
@@ -54,7 +74,15 @@
                                     <td class="px-5 py-3.5 {{ $column['class'] ?? '' }}">
                                         @switch($type)
                                             @case('bool')
-                                                <x-admin.status-badge :active="(bool) $value"/>
+                                                @if (isset($column['key']) && in_array($column['key'], App\Http\Controllers\Admin\ResourceController::TOGGLEABLE, true))
+                                                    <x-admin.toggle-switch
+                                                        :url="route($routeName.'.toggle', $record)"
+                                                        :column="$column['key']"
+                                                        :value="(bool) $value"
+                                                        :on-label="$column['label']"/>
+                                                @else
+                                                    <x-admin.status-badge :active="(bool) $value"/>
+                                                @endif
                                                 @break
 
                                             @case('status')

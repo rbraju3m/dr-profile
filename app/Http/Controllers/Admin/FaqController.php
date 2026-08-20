@@ -17,6 +17,8 @@ class FaqController extends ResourceController
 
     protected string $labelKey = 'admin.nav.faqs';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['question_en', 'question_bn'];
 
     protected function indexQuery(): Builder

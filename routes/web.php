@@ -106,9 +106,16 @@ Route::prefix('admin')->name('admin.')->middleware('admin.locale')->group(functi
          * Every resource handled by Admin\ResourceController names its route
          * parameter "record", matching the base controller's signature.
          */
-        $resource = fn (string $uri, string $controller) => Route::resource($uri, $controller)
-            ->parameters([$uri => 'record'])
-            ->except('show');
+        $resource = function (string $uri, string $controller) {
+            // Drag-and-drop ordering posts here. Declared before the resource
+            // routes so "reorder" is never mistaken for a record key.
+            Route::post($uri.'/reorder', [$controller, 'reorder'])->name($uri.'.reorder');
+            Route::post($uri.'/{record}/toggle', [$controller, 'toggle'])->name($uri.'.toggle');
+
+            return Route::resource($uri, $controller)
+                ->parameters([$uri => 'record'])
+                ->except('show');
+        };
 
         $resource('credentials', Admin\CredentialController::class);
         $resource('services', Admin\ServiceController::class);

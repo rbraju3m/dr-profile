@@ -20,6 +20,8 @@ class PostController extends ResourceController
 
     protected string $labelKey = 'admin.nav.posts';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['title_en', 'title_bn'];
 
     protected array $mediaFields = ['image' => 'posts'];

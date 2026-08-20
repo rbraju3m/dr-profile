@@ -18,6 +18,8 @@ class GalleryAlbumController extends ResourceController
 
     protected string $labelKey = 'admin.nav.albums';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['title_en', 'title_bn'];
 
     protected array $mediaFields = ['cover_image' => 'albums'];

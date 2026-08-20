@@ -1,5 +1,6 @@
 import Alpine from 'alpinejs'
 import collapse from '@alpinejs/collapse'
+import Sortable from 'sortablejs'
 import Quill from 'quill'
 import 'quill/dist/quill.snow.css'
 
@@ -126,6 +127,106 @@ Alpine.data('richText', (fieldName) => ({
         if (fieldName.endsWith('_bn')) {
             editor.root.style.fontFamily = 'var(--font-bangla)'
             editor.root.style.lineHeight = '1.85'
+        }
+    },
+}))
+
+/**
+ * Drag-and-drop ordering for the admin lists.
+ *
+ * The new order is sent as soon as a row is dropped — no separate save step,
+ * because a list that looks reordered but has not been saved is worse than one
+ * that cannot be reordered at all.
+ */
+Alpine.data('sortableList', (endpoint) => ({
+    saving: false,
+
+    init() {
+        Sortable.create(this.$refs.rows, {
+            handle: '.drag-handle',
+            animation: 150,
+            ghostClass: 'is-dragging',
+            onEnd: () => this.persist(),
+        })
+    },
+
+    async persist() {
+        const ids = [...this.$refs.rows.querySelectorAll('tr[data-id]')].map((row) => Number(row.dataset.id))
+
+        this.saving = true
+
+        try {
+            const response = await fetch(endpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                },
+                body: JSON.stringify({ ids }),
+            })
+
+            if (!response.ok) throw new Error(response.status)
+            this.flash(true)
+        } catch (e) {
+            // Reload rather than leave the screen showing an order that was
+            // never stored.
+            this.flash(false)
+            setTimeout(() => window.location.reload(), 1200)
+        } finally {
+            this.saving = false
+        }
+    },
+
+    flash(ok) {
+        const note = document.getElementById('reorder-note')
+        if (!note) return
+
+        note.textContent = ok ? note.dataset.saved : note.dataset.failed
+        note.className = ok
+            ? 'fixed bottom-6 end-6 z-50 rounded-xl bg-accent-600 px-4 py-2.5 text-sm text-white shadow-lg'
+            : 'fixed bottom-6 end-6 z-50 rounded-xl bg-rose-600 px-4 py-2.5 text-sm text-white shadow-lg'
+
+        clearTimeout(this._t)
+        this._t = setTimeout(() => { note.className = 'hidden' }, 2000)
+    },
+}))
+
+/** A status flag switched from the listing rather than the edit form. */
+Alpine.data('toggleSwitch', (url, column, initial) => ({
+    on: initial,
+    busy: false,
+
+    async flip() {
+        const previous = this.on
+
+        this.on = !this.on          // move first; correct later if the write fails
+        this.busy = true
+
+        try {
+            const response = await fetch(url, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Accept: 'application/json',
+                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content ?? '',
+                },
+                body: JSON.stringify({ column }),
+            })
+
+            if (!response.ok) throw new Error(response.status)
+
+            this.on = (await response.json()).value
+        } catch (e) {
+            this.on = previous
+            const note = document.getElementById('reorder-note')
+            if (note) {
+                note.textContent = note.dataset.failed
+                note.className = 'fixed bottom-6 end-6 z-50 rounded-xl bg-rose-600 px-4 py-2.5 text-sm text-white shadow-lg'
+                setTimeout(() => { note.className = 'hidden' }, 2000)
+            }
+        } finally {
+            this.busy = false
         }
     },
 }))

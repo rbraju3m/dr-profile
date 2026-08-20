@@ -21,10 +21,6 @@
             @endforeach
         </div>
 
-        <div class="flex items-center gap-3 border-t border-slate-200 pt-6">
-            <button type="submit" class="btn-primary btn-lg">
-                <x-icon name="check" class="h-5 w-5"/>{{ __('admin.actions.save_changes') }}
-            </button>
-        </div>
+        <x-admin.form-actions/>
     </form>
 </x-layouts.admin>

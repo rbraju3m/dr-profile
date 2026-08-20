@@ -82,9 +82,14 @@ class Post extends Model
         return $query->ofType('blog');
     }
 
+    /**
+     * Anything dragged into place in the admin leads; everything else falls
+     * back to newest first. sort_order defaults to 0, so a list nobody has
+     * reordered behaves exactly as it did before.
+     */
     public function scopeLatestFirst(Builder $query): Builder
     {
-        return $query->orderByDesc('published_at')->orderByDesc('id');
+        return $query->orderBy('sort_order')->orderByDesc('published_at')->orderByDesc('id');
     }
 
     /** Events sort by when they happen, upcoming first. */

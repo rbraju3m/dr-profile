@@ -19,6 +19,8 @@ class TestimonialController extends ResourceController
 
     protected string $labelKey = 'admin.nav.testimonials';
 
+    protected bool $reorderable = true;
+
     protected array $searchable = ['patient_name', 'content_en'];
 
     protected array $mediaFields = ['photo' => 'testimonials'];
