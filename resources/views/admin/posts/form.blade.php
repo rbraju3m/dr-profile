@@ -17,9 +17,9 @@
                         @error('type') <p class="field-error">{{ $message }}</p> @enderror
                     </div>
 
-                    <x-admin.bilingual name="title" label="Title" :record="$record" required/>
-                    <x-admin.bilingual name="excerpt" label="Excerpt" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="content" label="Content" :record="$record" type="rich"/>
+                    <x-admin.bilingual name="title" :label="__('admin.fields.title')" :record="$record" required/>
+                    <x-admin.bilingual name="excerpt" :label="__('admin.fields.excerpt')" :record="$record" type="textarea" rows="3"/>
+                    <x-admin.bilingual name="content" :label="__('admin.fields.content')" :record="$record" type="rich"/>
                 </div>
             </x-admin.card>
 
@@ -29,13 +29,13 @@
                     <div class="grid gap-4 sm:grid-cols-2">
                         <x-admin.input name="event_start_at" type="datetime-local" :label="__('site.posts.event_when')"
                                        :value="$record?->event_start_at?->format('Y-m-d\TH:i')"/>
-                        <x-admin.input name="event_end_at" type="datetime-local" label="Ends"
+                        <x-admin.input name="event_end_at" type="datetime-local" :label="__('admin.fields.ends')"
                                        :value="$record?->event_end_at?->format('Y-m-d\TH:i')"/>
                         <div class="sm:col-span-2">
                             <x-admin.bilingual name="event_venue" :label="__('site.posts.event_where')" :record="$record"/>
                         </div>
                         <div class="sm:col-span-2">
-                            <x-admin.input name="event_registration_url" label="Registration link" :value="$record?->event_registration_url"/>
+                            <x-admin.input name="event_registration_url" :label="__('admin.fields.registration_url')" :value="$record?->event_registration_url"/>
                         </div>
                         <div class="sm:col-span-2">
                             <x-admin.toggle name="event_is_online" :label="__('site.posts.event_online')" :value="$record?->event_is_online ?? false"/>
@@ -46,9 +46,9 @@
 
             <x-admin.card :title="__('admin.profile.seo')">
                 <div class="space-y-4">
-                    <x-admin.bilingual name="meta_title" label="Meta title" :record="$record"/>
-                    <x-admin.bilingual name="meta_description" label="Meta description" :record="$record" type="textarea" rows="2"/>
-                    <x-admin.input name="slug" label="Slug" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
+                    <x-admin.bilingual name="meta_title" :label="__('admin.fields.meta_title')" :record="$record"/>
+                    <x-admin.bilingual name="meta_description" :label="__('admin.fields.meta_description')" :record="$record" type="textarea" rows="2"/>
+                    <x-admin.input name="slug" :label="__('admin.fields.slug')" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
                 </div>
             </x-admin.card>
         </div>
@@ -61,10 +61,10 @@
                                     :value="$record?->post_category_id" :placeholder="__('admin.common.none')"/>
                     <x-admin.input name="published_at" type="date" :label="__('site.posts.published_on')"
                                    :value="$record?->published_at?->toDateString() ?? now()->toDateString()"/>
-                    <x-admin.input name="tags" label="Tags" :value="$record?->tags ? implode(', ', $record->tags) : null"
-                                   hint="Comma separated"/>
+                    <x-admin.input name="tags" :label="__('admin.fields.tags')" :value="$record?->tags ? implode(', ', $record->tags) : null"
+                                   :hint="__('admin.hints.comma_separated')"/>
                     <div x-show="type === 'blog'" x-cloak>
-                        <x-admin.input name="reading_minutes" type="number" label="Reading minutes" :value="$record?->reading_minutes"/>
+                        <x-admin.input name="reading_minutes" type="number" :label="__('admin.fields.reading_minutes')" :value="$record?->reading_minutes"/>
                     </div>
                 </div>
             </x-admin.card>

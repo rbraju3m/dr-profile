@@ -3,9 +3,9 @@
         <div class="lg:col-span-2">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.bilingual name="title" label="Title" :record="$record" required/>
-                    <x-admin.bilingual name="description" label="Description" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.input name="slug" label="Slug" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
+                    <x-admin.bilingual name="title" :label="__('admin.fields.title')" :record="$record" required/>
+                    <x-admin.bilingual name="description" :label="__('admin.fields.description')" :record="$record" type="textarea" rows="3"/>
+                    <x-admin.input name="slug" :label="__('admin.fields.slug')" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
                 </div>
             </x-admin.card>
         </div>
@@ -13,8 +13,8 @@
         <div class="space-y-6">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.image-upload name="cover_image" label="Cover" :current="$record?->mediaUrl('cover_image')"/>
-                    <x-admin.input name="event_date" type="date" label="Date" :value="$record?->event_date?->toDateString()"/>
+                    <x-admin.image-upload name="cover_image" :label="__('admin.fields.cover')" :current="$record?->mediaUrl('cover_image')"/>
+                    <x-admin.input name="event_date" type="date" :label="__('admin.fields.date')" :value="$record?->event_date?->toDateString()"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>
                     <x-admin.toggle name="is_active" :label="__('admin.common.active')" :value="$record?->is_active ?? true"/>
                 </div>

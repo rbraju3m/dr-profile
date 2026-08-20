@@ -59,7 +59,7 @@
                 </div>
                 <x-admin.input name="slot_minutes" type="number" :label="__('admin.schedules.slot_minutes')" required value="20"/>
                 <x-admin.input name="max_patients" type="number" :label="__('admin.schedules.max_patients')"
-                               hint="Leave blank for no cap."/>
+                               :hint="__('admin.hints.no_cap')"/>
                 <button type="submit" class="btn-primary w-full">
                     <x-icon name="plus" class="h-4 w-4"/>{{ __('admin.actions.add_row') }}
                 </button>

@@ -5,16 +5,16 @@
                 <div class="space-y-4">
                     <x-admin.bilingual name="name" :label="__('admin.nav.chambers')" :record="$record" required/>
                     <x-admin.bilingual name="address" :label="__('site.chamber.address')" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="city" label="City" :record="$record"/>
+                    <x-admin.bilingual name="city" :label="__('admin.fields.city')" :record="$record"/>
                     <x-admin.bilingual name="note" :label="__('site.booking.notes')" :record="$record" type="textarea" rows="3"/>
                 </div>
             </x-admin.card>
 
             <x-admin.card title="Map">
                 <div class="space-y-4">
-                    <x-admin.input name="map_url" label="Google Maps link" :value="$record?->map_url" placeholder="https://maps.app.goo.gl/…"/>
-                    <x-admin.textarea name="map_embed" label="Map embed HTML" :value="$record?->map_embed" rows="4" rich
-                                      hint="Paste the &lt;iframe&gt; snippet from Google Maps → Share → Embed a map."/>
+                    <x-admin.input name="map_url" :label="__('admin.fields.map_url')" :value="$record?->map_url" placeholder="https://maps.app.goo.gl/…"/>
+                    <x-admin.textarea name="map_embed" :label="__('admin.fields.map_embed')" :value="$record?->map_embed" rows="4" rich
+                                      :hint="__('admin.hints.map_embed')"/>
                 </div>
             </x-admin.card>
         </div>
@@ -29,15 +29,15 @@
                     <x-admin.input name="consultation_fee" type="number" step="0.01" :label="__('site.chamber.consultation_fee')" :value="$record?->consultation_fee"/>
                     <x-admin.input name="followup_fee" type="number" step="0.01" :label="__('site.chamber.followup_fee')" :value="$record?->followup_fee"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>
-                    <x-admin.input name="slug" label="Slug" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
+                    <x-admin.input name="slug" :label="__('admin.fields.slug')" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
                 </div>
             </x-admin.card>
 
             <x-admin.card>
                 <div class="space-y-3">
-                    <x-admin.toggle name="accepts_online_booking" label="Accept online booking"
+                    <x-admin.toggle name="accepts_online_booking" :label="__('admin.fields.accept_online_booking')"
                                     :value="$record?->accepts_online_booking ?? true"
-                                    hint="Turn off for chambers where serials are issued at the counter."/>
+                                    :hint="__('admin.hints.online_booking_off')"/>
                     <x-admin.toggle name="is_active" :label="__('admin.common.active')" :value="$record?->is_active ?? true"/>
                 </div>
             </x-admin.card>

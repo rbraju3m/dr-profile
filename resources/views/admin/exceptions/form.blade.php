@@ -8,7 +8,7 @@
                 <div class="space-y-4">
                     <x-admin.select name="chamber_id" :label="__('admin.nav.chambers')" :options="$chambers"
                                     :value="$record?->chamber_id" :placeholder="__('admin.exceptions.all_chambers')"
-                                    hint="Leave blank when the doctor is away from every chamber that day."/>
+                                    :hint="__('admin.hints.all_chambers')"/>
 
                     <x-admin.input name="date" type="date" :label="__('site.booking.step_date')" required
                                    :value="$record?->date?->toDateString()"/>

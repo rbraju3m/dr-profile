@@ -50,7 +50,7 @@
                 </div>
 
                 <div x-show="type === 'video'" x-cloak>
-                    <x-admin.input name="video_url" label="Video URL" placeholder="https://youtube.com/watch?v=…"/>
+                    <x-admin.input name="video_url" :label="__('admin.fields.video_url')" placeholder="https://youtube.com/watch?v=…"/>
                 </div>
 
                 <x-admin.input name="title_en" :label="__('admin.common.english')"/>

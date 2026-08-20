@@ -11,9 +11,9 @@
 
             <x-admin.card :title="__('admin.profile.seo')">
                 <div class="space-y-4">
-                    <x-admin.bilingual name="meta_title" label="Meta title" :record="$record"/>
-                    <x-admin.bilingual name="meta_description" label="Meta description" :record="$record" type="textarea" rows="2"/>
-                    <x-admin.input name="slug" label="Slug" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
+                    <x-admin.bilingual name="meta_title" :label="__('admin.fields.meta_title')" :record="$record"/>
+                    <x-admin.bilingual name="meta_description" :label="__('admin.fields.meta_description')" :record="$record" type="textarea" rows="2"/>
+                    <x-admin.input name="slug" :label="__('admin.fields.slug')" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
                 </div>
             </x-admin.card>
         </div>
@@ -22,9 +22,9 @@
             <x-admin.card>
                 <div class="space-y-4">
                     <x-admin.image-upload name="image" :label="__('admin.common.image')" :current="$record?->imageUrl()"/>
-                    <x-admin.input name="icon" label="Icon name" :value="$record?->icon"
+                    <x-admin.input name="icon" :label="__('admin.fields.icon')" :value="$record?->icon"
                                    hint="heart-pulse, activity, gauge, waves, shield-check, droplet, cpu, siren, stethoscope"/>
-                    <x-admin.input name="fee" type="number" step="0.01" label="Fee (BDT)" :value="$record?->fee"/>
+                    <x-admin.input name="fee" type="number" step="0.01" :label="__('admin.fields.fee')" :value="$record?->fee"/>
                     <x-admin.bilingual name="duration" :label="__('site.duration')" :record="$record"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>
                 </div>

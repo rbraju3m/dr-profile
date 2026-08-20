@@ -11,9 +11,9 @@
                     <div class="space-y-4">
                         @foreach ($fields as $key => $type)
                             @if ($type === 'textarea')
-                                <x-admin.textarea :name="$key" :label="Str::headline($key)" :value="$values->get($key)" rows="3"/>
+                                <x-admin.textarea :name="$key" :label="__('admin.settings.fields.'.$key)" :value="$values->get($key)" rows="3"/>
                             @else
-                                <x-admin.input :name="$key" :label="Str::headline($key)" :value="$values->get($key)"/>
+                                <x-admin.input :name="$key" :label="__('admin.settings.fields.'.$key)" :value="$values->get($key)"/>
                             @endif
                         @endforeach
                     </div>

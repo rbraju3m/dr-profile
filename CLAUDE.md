@@ -62,9 +62,13 @@ Two mechanisms; do not mix them.
 1. **UI strings** → `lang/en/*.php` and `lang/bn/*.php`, via `__('site.…')` / `__('admin.…')`. The two
    locales must stay key-for-key identical — `TranslationParityTest` fails on a key present in one
    and absent from the other, which otherwise prints the key itself onto the page.
-   This includes the `columns()` labels in `Admin\ResourceController` children, where a plain string
-   is easy to write and left the listings half-English however the panel was switched;
-   `ListingLabelsTest` fails on one, and on any table that heads two columns the same.
+   This includes everything the admin renders, where a plain string is easy to write and used to
+   leave the panel half-English however it was switched: the `columns()` labels in
+   `Admin\ResourceController` children (`ListingLabelsTest`, which also fails on a table heading two
+   columns the same) and every `label=` / `hint=` on a form field (`FormLabelsTest`). Shared field
+   names live in `admin.fields.*` — a slug is a slug whichever table it belongs to. `FormLabelsTest`
+   also walks every admin form in both languages looking for a raw `admin.…` key on the page, since
+   a key that does not exist prints its own name rather than failing.
 2. **Database content** → paired columns (`name_en` / `name_bn`). Models list the *base* names in
    `protected array $translatable` and use `App\Concerns\HasTranslations`, which resolves
    `$model->name` for the active locale and falls back to English when the Bangla column is blank.

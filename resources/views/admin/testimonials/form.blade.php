@@ -4,8 +4,8 @@
             <x-admin.card>
                 <div class="space-y-4">
                     <x-admin.input name="patient_name" :label="__('site.booking.patient_name')" :value="$record?->patient_name" required/>
-                    <x-admin.bilingual name="patient_title" label="Occupation" :record="$record"/>
-                    <x-admin.bilingual name="content" label="Testimonial" :record="$record" type="textarea" rows="6" required/>
+                    <x-admin.bilingual name="patient_title" :label="__('admin.fields.occupation')" :record="$record"/>
+                    <x-admin.bilingual name="content" :label="__('admin.fields.testimonial')" :record="$record" type="textarea" rows="6" required/>
                 </div>
             </x-admin.card>
         </div>
@@ -13,12 +13,12 @@
         <div class="space-y-6">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.image-upload name="photo" label="Photo" :current="$record?->photoUrl()"/>
-                    <x-admin.select name="rating" label="Rating" :value="$record?->rating ?? 5" required
+                    <x-admin.image-upload name="photo" :label="__('admin.fields.photo')" :current="$record?->photoUrl()"/>
+                    <x-admin.select name="rating" :label="__('admin.fields.rating')" :value="$record?->rating ?? 5" required
                                     :options="[5 => '★★★★★', 4 => '★★★★', 3 => '★★★', 2 => '★★', 1 => '★']"/>
                     <x-admin.select name="service_id" :label="__('admin.nav.services')" :options="$services"
                                     :value="$record?->service_id" :placeholder="__('admin.common.none')"/>
-                    <x-admin.input name="visited_on" type="date" label="Visited on" :value="$record?->visited_on?->toDateString()"/>
+                    <x-admin.input name="visited_on" type="date" :label="__('admin.fields.visited_on')" :value="$record?->visited_on?->toDateString()"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>
                 </div>
             </x-admin.card>

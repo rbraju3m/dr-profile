@@ -3,10 +3,10 @@
         <div class="space-y-6 lg:col-span-2">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.bilingual name="title" label="Title" :record="$record" required/>
+                    <x-admin.bilingual name="title" :label="__('admin.fields.title')" :record="$record" required/>
                     <x-admin.bilingual name="condition" :label="__('site.stories.condition')" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="summary" label="Summary" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.bilingual name="content" label="Story" :record="$record" type="rich"/>
+                    <x-admin.bilingual name="summary" :label="__('admin.fields.summary')" :record="$record" type="textarea" rows="3"/>
+                    <x-admin.bilingual name="content" :label="__('admin.fields.story')" :record="$record" type="rich"/>
                 </div>
             </x-admin.card>
 
@@ -15,16 +15,16 @@
                     <x-admin.input name="patient_name" :label="__('site.booking.patient_name')" :value="$record?->patient_name"/>
                     <x-admin.input name="patient_age" type="number" :label="__('site.booking.patient_age')" :value="$record?->patient_age"/>
                     <div class="sm:col-span-2">
-                        <x-admin.bilingual name="patient_location" label="Location" :record="$record"/>
+                        <x-admin.bilingual name="patient_location" :label="__('admin.fields.location')" :record="$record"/>
                     </div>
                 </div>
             </x-admin.card>
 
             <x-admin.card :title="__('admin.profile.seo')">
                 <div class="space-y-4">
-                    <x-admin.bilingual name="meta_title" label="Meta title" :record="$record"/>
-                    <x-admin.bilingual name="meta_description" label="Meta description" :record="$record" type="textarea" rows="2"/>
-                    <x-admin.input name="slug" label="Slug" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
+                    <x-admin.bilingual name="meta_title" :label="__('admin.fields.meta_title')" :record="$record"/>
+                    <x-admin.bilingual name="meta_description" :label="__('admin.fields.meta_description')" :record="$record" type="textarea" rows="2"/>
+                    <x-admin.input name="slug" :label="__('admin.fields.slug')" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
                 </div>
             </x-admin.card>
         </div>
@@ -33,7 +33,7 @@
             <x-admin.card>
                 <div class="space-y-4">
                     <x-admin.image-upload name="image" :label="__('admin.common.image')" :current="$record?->imageUrl()"/>
-                    <x-admin.input name="video_url" label="Video URL" :value="$record?->video_url" placeholder="https://youtube.com/embed/…"/>
+                    <x-admin.input name="video_url" :label="__('admin.fields.video_url')" :value="$record?->video_url" placeholder="https://youtube.com/embed/…"/>
                     <x-admin.select name="service_id" :label="__('admin.nav.services')" :options="$services"
                                     :value="$record?->service_id" :placeholder="__('admin.common.none')"/>
                     <x-admin.input name="treatment_date" type="date" :label="__('site.stories.treated_on')"

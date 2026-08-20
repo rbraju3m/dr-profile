@@ -3,9 +3,9 @@
         <div class="lg:col-span-2">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.bilingual name="name" label="Name" :record="$record" required/>
-                    <x-admin.bilingual name="description" label="Description" :record="$record" type="textarea" rows="3"/>
-                    <x-admin.input name="slug" label="Slug" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
+                    <x-admin.bilingual name="name" :label="__('admin.fields.name')" :record="$record" required/>
+                    <x-admin.bilingual name="description" :label="__('admin.fields.description')" :record="$record" type="textarea" rows="3"/>
+                    <x-admin.input name="slug" :label="__('admin.fields.slug')" :value="$record?->slug" :hint="__('admin.common.slug_hint')"/>
                 </div>
             </x-admin.card>
         </div>

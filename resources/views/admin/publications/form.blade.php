@@ -3,10 +3,10 @@
         <div class="space-y-6 lg:col-span-2">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.bilingual name="title" label="Title" :record="$record" required/>
-                    <x-admin.input name="authors" label="Authors" :value="$record?->authors" placeholder="Rahman A, Islam S"/>
-                    <x-admin.bilingual name="venue" label="Journal / conference" :record="$record"/>
-                    <x-admin.bilingual name="abstract" label="Abstract" :record="$record" type="textarea" rows="6"/>
+                    <x-admin.bilingual name="title" :label="__('admin.fields.title')" :record="$record" required/>
+                    <x-admin.input name="authors" :label="__('admin.fields.authors')" :value="$record?->authors" placeholder="Rahman A, Islam S"/>
+                    <x-admin.bilingual name="venue" :label="__('admin.fields.venue')" :record="$record"/>
+                    <x-admin.bilingual name="abstract" :label="__('admin.fields.abstract')" :record="$record" type="textarea" rows="6"/>
                 </div>
             </x-admin.card>
         </div>
@@ -14,17 +14,17 @@
         <div class="space-y-6">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.select name="type" label="Type" required :value="$record?->type"
+                    <x-admin.select name="type" :label="__('admin.fields.type')" required :value="$record?->type"
                                     :options="collect(App\Models\Publication::TYPES)->mapWithKeys(fn ($t) => [$t => __('site.publications.types.'.$t)])"/>
                     <div class="grid grid-cols-2 gap-3">
-                        <x-admin.input name="year" type="number" label="Year" :value="$record?->year"/>
-                        <x-admin.input name="volume" label="Volume" :value="$record?->volume"/>
+                        <x-admin.input name="year" type="number" :label="__('admin.fields.year')" :value="$record?->year"/>
+                        <x-admin.input name="volume" :label="__('admin.fields.volume')" :value="$record?->volume"/>
                     </div>
-                    <x-admin.input name="pages" label="Pages" :value="$record?->pages"/>
-                    <x-admin.input name="doi" label="DOI" :value="$record?->doi"/>
-                    <x-admin.input name="url" label="Link" :value="$record?->url"/>
-                    <x-admin.image-upload name="file" label="PDF" accept="application/pdf"
-                                          :current="null" hint="PDF, max 10 MB"/>
+                    <x-admin.input name="pages" :label="__('admin.fields.pages')" :value="$record?->pages"/>
+                    <x-admin.input name="doi" :label="__('admin.fields.doi')" :value="$record?->doi"/>
+                    <x-admin.input name="url" :label="__('admin.fields.link')" :value="$record?->url"/>
+                    <x-admin.image-upload name="file" :label="__('admin.fields.pdf')" accept="application/pdf"
+                                          :current="null" :hint="__('admin.hints.pdf_limit')"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>
                 </div>
             </x-admin.card>
