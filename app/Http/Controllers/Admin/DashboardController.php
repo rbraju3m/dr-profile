@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\Cookie;
 
 class DashboardController extends Controller
 {
@@ -54,6 +55,9 @@ class DashboardController extends Controller
 
         if (array_key_exists($locale, config('site.locales'))) {
             $request->session()->put('admin_locale', $locale);
+            // Also as a cookie, so errors raised before the session starts —
+            // an oversized upload, for one — still speak the right language.
+            Cookie::queue('locale', $locale, 60 * 24 * 365);
         }
 
         return back();

@@ -82,6 +82,7 @@ return [
         'empty' => 'Nothing here yet.',
         'empty_hint' => 'Use the “Add new” button to create the first entry.',
         'image' => 'Image',
+        'upload_hint' => 'JPG, PNG or WebP, up to :max.',
         'remove_image' => 'Remove current image',
         'slug_hint' => 'Leave blank to generate from the title.',
     ],

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Page;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -46,7 +47,7 @@ class PageController extends ResourceController
             'slug' => ['nullable', 'string', 'max:200', Rule::unique('pages', 'slug')->ignore($record?->id)],
             'content_en' => ['nullable', 'string'],
             'content_bn' => ['nullable', 'string'],
-            'banner_image' => ['nullable', 'image', 'max:4096'],
+            'banner_image' => Uploads::imageRules(),
             'meta_title_en' => ['nullable', 'string', 'max:180'],
             'meta_title_bn' => ['nullable', 'string', 'max:180'],
             'meta_description_en' => ['nullable', 'string', 'max:300'],

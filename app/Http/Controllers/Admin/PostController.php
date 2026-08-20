@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Post;
 use App\Models\PostCategory;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
@@ -98,7 +99,7 @@ class PostController extends ResourceController
             'excerpt_bn' => ['nullable', 'string', 'max:600'],
             'content_en' => ['nullable', 'string'],
             'content_bn' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => Uploads::imageRules(),
             'event_start_at' => ['nullable', 'date', 'required_if:type,event'],
             'event_end_at' => ['nullable', 'date', 'after_or_equal:event_start_at'],
             'event_venue_en' => ['nullable', 'string', 'max:200'],

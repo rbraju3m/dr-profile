@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Service;
 use App\Models\Testimonial;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -55,7 +56,7 @@ class TestimonialController extends ResourceController
             'content_en' => ['required', 'string', 'max:1000'],
             'content_bn' => ['nullable', 'string', 'max:1000'],
             'rating' => ['required', 'integer', 'min:1', 'max:5'],
-            'photo' => ['nullable', 'image', 'max:2048'],
+            'photo' => Uploads::imageRules(),
             'visited_on' => ['nullable', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_featured' => ['boolean'],

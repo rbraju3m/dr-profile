@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\GalleryAlbum;
 use App\Models\GalleryItem;
 use App\Services\MediaService;
+use App\Support\Uploads;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -27,7 +28,7 @@ class GalleryItemController extends Controller
             'title_en' => ['nullable', 'string', 'max:150'],
             'title_bn' => ['nullable', 'string', 'max:150'],
             'images' => ['nullable', 'array', 'max:20'],
-            'images.*' => ['image', 'max:6144'],
+            'images.*' => Uploads::imageRules(required: true),
             'video_url' => ['nullable', 'url', 'max:500', 'required_if:type,video'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
         ]);

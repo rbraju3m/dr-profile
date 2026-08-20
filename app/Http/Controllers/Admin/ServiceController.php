@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Service;
 use App\Support\Number;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -52,7 +53,7 @@ class ServiceController extends ResourceController
             'description_en' => ['nullable', 'string'],
             'description_bn' => ['nullable', 'string'],
             'icon' => ['nullable', 'string', 'max:60'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => Uploads::imageRules(),
             'fee' => ['nullable', 'numeric', 'min:0', 'max:9999999'],
             'duration_en' => ['nullable', 'string', 'max:80'],
             'duration_bn' => ['nullable', 'string', 'max:80'],

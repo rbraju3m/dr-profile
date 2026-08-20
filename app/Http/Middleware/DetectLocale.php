@@ -19,9 +19,14 @@ class DetectLocale
         $locales = config('site.locales');
         $segment = $request->segment(1);
 
-        $locale = array_key_exists($segment, $locales)
-            ? $segment
-            : ($request->hasSession() ? $request->session()->get('locale') : null);
+        // URL first, then the cookie, which is the only signal available when
+        // this runs ahead of the session — as it does for an error thrown by
+        // global middleware.
+        $locale = match (true) {
+            array_key_exists($segment, $locales) => $segment,
+            $request->hasSession() && $request->session()->has('locale') => $request->session()->get('locale'),
+            default => $request->cookie('locale'),
+        };
 
         if (! array_key_exists($locale, $locales)) {
             $locale = config('site.default_locale');

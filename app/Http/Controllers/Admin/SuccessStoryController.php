@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Service;
 use App\Models\SuccessStory;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -65,7 +66,7 @@ class SuccessStoryController extends ResourceController
             'summary_bn' => ['nullable', 'string', 'max:600'],
             'content_en' => ['nullable', 'string'],
             'content_bn' => ['nullable', 'string'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => Uploads::imageRules(),
             'video_url' => ['nullable', 'url', 'max:500'],
             'treatment_date' => ['nullable', 'date'],
             'published_at' => ['nullable', 'date'],

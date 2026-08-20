@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Chamber;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -58,7 +59,7 @@ class ChamberController extends ResourceController
             'room_no' => ['nullable', 'string', 'max:60'],
             'phone' => ['nullable', 'string', 'max:40'],
             'appointment_phone' => ['nullable', 'string', 'max:40'],
-            'image' => ['nullable', 'image', 'max:4096'],
+            'image' => Uploads::imageRules(),
             'map_embed' => ['nullable', 'string', 'max:2000'],
             'map_url' => ['nullable', 'url', 'max:500'],
             'consultation_fee' => ['nullable', 'numeric', 'min:0', 'max:9999999'],

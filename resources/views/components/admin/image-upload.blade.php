@@ -1,6 +1,42 @@
 @props(['name', 'label', 'current' => null, 'hint' => null, 'accept' => 'image/*'])
 
-<div x-data="{ preview: null, name: null }">
+@php
+    $maxBytes = App\Support\Uploads::maxBytes();
+    $maxLabel = App\Support\Uploads::maxLabel();
+@endphp
+
+{{--
+    Size is checked here as well as on the server. Catching it in the browser
+    saves a round trip and, more to the point, saves the operator retyping a
+    long form they had just filled in.
+--}}
+<div x-data="{
+        preview: null,
+        rejected: null,
+        max: {{ $maxBytes }},
+
+        pick(event) {
+            const file = event.target.files[0]
+            this.preview = null
+            this.rejected = null
+
+            if (!file) return
+
+            if (file.size > this.max) {
+                this.rejected = this.human(file.size)
+                event.target.value = ''
+                return
+            }
+
+            this.preview = URL.createObjectURL(file)
+        },
+
+        human(bytes) {
+            return bytes >= 1048576
+                ? (bytes / 1048576).toFixed(1) + ' MB'
+                : Math.ceil(bytes / 1024) + ' KB'
+        },
+     }">
     <span class="field-label">{{ $label }}</span>
 
     <div class="flex items-start gap-4">
@@ -20,14 +56,19 @@
         </div>
 
         <div class="min-w-0 flex-1">
-            <input type="file" name="{{ $name }}" accept="{{ $accept }}"
-                   @change="const f = $event.target.files[0]; name = f?.name; preview = f ? URL.createObjectURL(f) : null"
+            <input type="file" name="{{ $name }}" accept="{{ $accept }}" @change="pick($event)"
                    class="block w-full text-sm text-slate-500 file:me-3 file:rounded-lg file:border-0 file:bg-primary-50 file:px-4 file:py-2 file:text-sm file:font-medium file:text-primary-700 hover:file:bg-primary-100">
 
+            {{-- Refused in the browser, before anything is sent --}}
+            <p x-show="rejected" x-cloak class="field-error"
+               x-text="@js(__('validation_custom.upload.too_large', ['size' => '__SIZE__', 'max' => $maxLabel])).replace('__SIZE__', rejected)"></p>
+
+            {{-- Refused by the server --}}
             @error($name) <p class="field-error">{{ $message }}</p> @enderror
-            @if ($hint)
-                <p class="mt-1.5 text-xs text-slate-400">{{ $hint }}</p>
-            @endif
+
+            <p class="mt-1.5 text-xs text-slate-400">
+                {{ $hint ?? __('admin.common.upload_hint', ['max' => $maxLabel]) }}
+            </p>
 
             @if ($current)
                 <label class="mt-2 inline-flex items-center gap-2 text-xs text-slate-500">

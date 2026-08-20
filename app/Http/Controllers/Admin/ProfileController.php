@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\DoctorProfile;
 use App\Services\MediaService;
+use App\Support\Uploads;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -68,10 +69,10 @@ class ProfileController extends Controller
             'meta_title_bn' => ['nullable', 'string', 'max:180'],
             'meta_description_en' => ['nullable', 'string', 'max:300'],
             'meta_description_bn' => ['nullable', 'string', 'max:300'],
-            'photo' => ['nullable', 'image', 'max:4096'],
-            'hero_image' => ['nullable', 'image', 'max:6144'],
-            'og_image' => ['nullable', 'image', 'max:4096'],
-            'cv_file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            'photo' => Uploads::imageRules(),
+            'hero_image' => Uploads::imageRules(),
+            'og_image' => Uploads::imageRules(),
+            'cv_file' => Uploads::pdfRules(),
         ]);
 
         foreach (self::MEDIA as $field => $folder) {

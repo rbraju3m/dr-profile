@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Publication;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -51,7 +52,7 @@ class PublicationController extends ResourceController
             'pages' => ['nullable', 'string', 'max:60'],
             'doi' => ['nullable', 'string', 'max:120'],
             'url' => ['nullable', 'url', 'max:500'],
-            'file' => ['nullable', 'file', 'mimes:pdf', 'max:10240'],
+            'file' => Uploads::pdfRules(),
             'abstract_en' => ['nullable', 'string'],
             'abstract_bn' => ['nullable', 'string'],
             'sort_order' => ['nullable', 'integer', 'min:0'],

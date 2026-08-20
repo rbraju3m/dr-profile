@@ -7,7 +7,10 @@ use App\Models\Chamber;
 use App\Models\ContactMessage;
 use App\Models\DoctorProfile;
 use App\Models\Page;
+use App\Support\Uploads;
+use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -20,6 +23,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        $this->registerUploadMessages();
+
         Paginator::defaultView('vendor.pagination.tailwind');
         Paginator::defaultSimpleView('vendor.pagination.simple-tailwind');
 
@@ -41,5 +46,37 @@ class AppServiceProvider extends ServiceProvider
                 'unreadMessages' => ContactMessage::unread()->count() ?: null,
             ]);
         });
+    }
+
+    /**
+     * Laravel's stock upload wording ("The photo failed to upload.") does not
+     * say why or what the limit is. These replace it everywhere a file is
+     * accepted, with the server's real limit filled in.
+     */
+    private function registerUploadMessages(): void
+    {
+        Validator::replacer('max', function ($message, $attribute, $rule, $parameters, $validator) {
+            $value = $validator->getData()[$attribute] ?? null;
+
+            if (! $value instanceof UploadedFile) {
+                return $message;
+            }
+
+            return __('validation_custom.upload.too_large', [
+                'size' => Uploads::formatBytes($value->getSize() ?: 0),
+                'max' => Uploads::maxLabel(),
+            ]);
+        });
+
+        Validator::replacer('image', fn () => __('validation_custom.upload.not_an_image'));
+
+        Validator::replacer('uploaded', fn () => __('validation_custom.upload.failed', [
+            'max' => Uploads::maxLabel(),
+        ]));
+
+        Validator::replacer('mimes', fn ($message, $attribute, $rule, $parameters) => __(
+            'validation_custom.upload.wrong_type',
+            ['values' => implode(', ', $parameters)]
+        ));
     }
 }

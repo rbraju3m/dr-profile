@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\GalleryAlbum;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -52,7 +53,7 @@ class GalleryAlbumController extends ResourceController
             'slug' => ['nullable', 'string', 'max:180', Rule::unique('gallery_albums', 'slug')->ignore($record?->id)],
             'description_en' => ['nullable', 'string', 'max:600'],
             'description_bn' => ['nullable', 'string', 'max:600'],
-            'cover_image' => ['nullable', 'image', 'max:4096'],
+            'cover_image' => Uploads::imageRules(),
             'event_date' => ['nullable', 'date'],
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\RedirectResponse;
@@ -76,7 +77,7 @@ class UserController extends ResourceController
             'password' => [$record ? 'nullable' : 'required', 'confirmed', Password::min(8)],
             'role' => ['required', Rule::in(User::ROLES)],
             'phone' => ['nullable', 'string', 'max:40'],
-            'avatar' => ['nullable', 'image', 'max:2048'],
+            'avatar' => Uploads::imageRules(),
             'is_active' => ['boolean'],
         ];
     }

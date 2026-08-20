@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Slider;
+use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
@@ -43,8 +44,8 @@ class SliderController extends ResourceController
             'title_bn' => ['nullable', 'string', 'max:200'],
             'subtitle_en' => ['nullable', 'string', 'max:400'],
             'subtitle_bn' => ['nullable', 'string', 'max:400'],
-            'image' => [$record ? 'nullable' : 'nullable', 'image', 'max:6144'],
-            'mobile_image' => ['nullable', 'image', 'max:6144'],
+            'image' => Uploads::imageRules(),
+            'mobile_image' => Uploads::imageRules(),
             'cta_label_en' => ['nullable', 'string', 'max:60'],
             'cta_label_bn' => ['nullable', 'string', 'max:60'],
             'cta_url' => ['nullable', 'string', 'max:500'],
