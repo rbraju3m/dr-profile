@@ -37,9 +37,10 @@
                 {{ $items->links() }}
 
                 {{-- Lightbox --}}
-                <div x-show="open" x-cloak @keydown.escape.window="open = false"
-                     @keydown.arrow-right.window="index = (index + 1) % items.length"
-                     @keydown.arrow-left.window="index = (index - 1 + items.length) % items.length"
+                <div x-show="open" x-cloak @click.self="open = false"
+                     @keydown.escape.window="open = false"
+                     @keydown.arrow-right.window="open && (index = (index + 1) % items.length)"
+                     @keydown.arrow-left.window="open && (index = (index - 1 + items.length) % items.length)"
                      x-transition.opacity
                      class="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4"
                      role="dialog" aria-modal="true">
@@ -50,19 +51,21 @@
                         <x-icon name="x" class="h-5 w-5"/>
                     </button>
 
-                    <button type="button" @click="index = (index - 1 + items.length) % items.length"
-                            class="absolute start-4 grid h-11 w-11 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"
+                    <button type="button" x-show="items.length > 1"
+                            @click="index = (index - 1 + items.length) % items.length"
+                            class="absolute start-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"
                             aria-label="{{ __('site.actions.previous') }}">
                         <x-icon name="chevron-left" class="h-5 w-5 rtl:rotate-180"/>
                     </button>
 
-                    <button type="button" @click="index = (index + 1) % items.length"
+                    <button type="button" x-show="items.length > 1"
+                            @click="index = (index + 1) % items.length"
                             class="absolute end-4 top-1/2 grid h-11 w-11 -translate-y-1/2 place-items-center rounded-full bg-white/10 text-white hover:bg-white/20"
                             aria-label="{{ __('site.actions.next') }}">
                         <x-icon name="chevron-right" class="h-5 w-5 rtl:rotate-180"/>
                     </button>
 
-                    <div class="max-h-[85vh] w-full max-w-4xl" @click.outside="open = false">
+                    <div class="max-h-[85vh] w-full max-w-4xl" @click.self="open = false">
                         <template x-if="items[index]?.type === 'video' && items[index]?.embed">
                             <div class="aspect-video overflow-hidden rounded-xl bg-black">
                                 <iframe :src="items[index].embed" class="h-full w-full" allowfullscreen loading="lazy"
