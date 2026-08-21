@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Setting;
 use App\Support\Features;
+use App\Support\HomeLayout;
 use App\Support\Theme;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +25,7 @@ class FeatureController extends Controller
         return view('admin.visibility.edit', [
             'groups' => Features::groups(),
             'theme' => Theme::default(),
+            'layout' => HomeLayout::current(),
         ]);
     }
 
@@ -33,6 +35,7 @@ class FeatureController extends Controller
             'features' => ['array'],
             'features.*' => ['boolean'],
             'theme_default' => ['required', 'string', 'in:'.implode(',', Theme::CHOICES)],
+            'home_layout' => ['required', 'string', 'in:'.implode(',', HomeLayout::CHOICES)],
         ]);
 
         $submitted = $request->input('features', []);
@@ -47,6 +50,7 @@ class FeatureController extends Controller
         }
 
         Setting::put(Theme::SETTING, $data['theme_default'], 'appearance', 'text');
+        Setting::put(HomeLayout::SETTING, $data['home_layout'], 'appearance', 'text');
 
         return redirect()
             ->route('admin.visibility.edit')

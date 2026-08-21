@@ -84,6 +84,7 @@ reader sees it. Every guard below exists because that check was skipped once:
 | `ListingLabelsTest` / `FormLabelsTest` | an admin string that will not translate |
 | `TranslationParityTest` | a key in one language and not the other |
 | `IconPickerTest` | an icon offered that the site cannot draw, and a layout that drops what a component pushes |
+| `HomeLayoutTest` | a homepage design that ignores a visibility switch, or drops a band the other two carry |
 
 ## Bilingual architecture
 
@@ -184,6 +185,29 @@ one checks that no page a visitor can still reach links into a hidden section, i
 the other goes further for booking, which is offered from more places than anything else — the
 header, the phone bar, every chamber card, four sidebars and the error pages — and checks its
 wording is gone too.
+
+## Three homepage layouts
+
+The homepage has three designs and the admin picks one in **Sections & Visibility**, beside the
+theme. `App\Support\HomeLayout` resolves it exactly as `Theme` does: a `home_layout` settings row,
+`CHOICES` of `classic`, `spotlight` and `editorial`, and anything else falling back to `classic` —
+the design the site shipped with — so an install that never touches this looks unchanged.
+
+- `HomeController` renders `HomeLayout::view()`, which is `public.home.<layout>`. The three views
+  live in `resources/views/public/home/`; the composer registered for `public.*` still reaches them.
+- **All three carry the same bands from the same data and obey the same switches.** A layout changes
+  the shape of the page, never what is on it — so every band keeps its `@feature(...)` guard and its
+  emptiness guard in each design, and a "view all" link stays gated on the section it points at.
+  `HomeLayoutTest` walks the bands and the switches through all three; the recurring defect wearing a
+  new hat is a band that reaches one design and not the others.
+- Shared pieces stay shared. The trust facts (experience, registration, hotline, languages) are built
+  once in `HomeController::trustFacts()`, and the slide machinery is one partial,
+  `public.home.partials.carousel-script`, pushed by whichever design drew a hero — built twice, the
+  designs drift.
+- Classic stacks full-width bands; Spotlight is card-led, with the hero photograph off the end edge
+  and the statistics riding up over it; Editorial is a magazine — hairline rules, large type, a
+  numbered contents list in place of the expertise grid. All three use the one motion vocabulary and
+  the same component classes, so dark mode needs nothing per layout.
 
 ## Light and dark
 

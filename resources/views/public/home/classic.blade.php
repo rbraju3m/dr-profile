@@ -110,32 +110,6 @@
                     </div>
 
                     {{-- The three things a patient weighs before booking, on one line. --}}
-                    @php
-                        $trust = array_values(array_filter([
-                            $doctor->experience_years ? [
-                                'icon' => 'award',
-                                'value' => bn_digits($doctor->experience_years).'+',
-                                'label' => __('site.home.trust_experience'),
-                            ] : null,
-                            $doctor->bmdc_reg_no ? [
-                                'icon' => 'badge-check',
-                                'value' => $doctor->bmdc_reg_no,
-                                'label' => __('site.home.trust_registration'),
-                            ] : null,
-                            $doctor->hotline ? [
-                                'icon' => 'phone',
-                                'value' => bn_digits($doctor->hotline),
-                                'label' => __('site.contact.hotline'),
-                                'href' => 'tel:'.$doctor->hotline,
-                            ] : null,
-                            $doctor->tr('languages') ? [
-                                'icon' => 'globe',
-                                'value' => $doctor->tr('languages'),
-                                'label' => __('site.about.languages'),
-                            ] : null,
-                        ]));
-                    @endphp
-
                     @if ($trust)
                         <dl class="mt-10 flex flex-wrap gap-x-10 gap-y-6 border-t border-white/10 pt-8">
                             @foreach ($trust as $fact)
@@ -223,28 +197,7 @@
         </section>
 
         @push('scripts')
-            <script>
-                document.addEventListener('alpine:init', () => {
-                    Alpine.data('heroCarousel', (count) => ({
-                        current: 0,
-                        timer: null,
-                        count,
-
-                        start() {
-                            // A hero that moves on its own is exactly what
-                            // prefers-reduced-motion is asking us not to do.
-                            const still = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-                            if (this.count < 2 || still) return
-                            this.timer = setInterval(() => this.next(), 6000)
-                        },
-                        pause() { clearInterval(this.timer); this.timer = null },
-                        resume() { if (!this.timer) this.start() },
-                        go(i) { this.current = i; this.pause(); this.resume() },
-                        next() { this.current = (this.current + 1) % this.count },
-                        prev() { this.current = (this.current - 1 + this.count) % this.count },
-                    }))
-                })
-            </script>
+            @include('public.home.partials.carousel-script')
         @endpush
     @endfeature
 
@@ -340,11 +293,11 @@
                     <x-section-heading :eyebrow="__('site.nav.services')" :title="__('site.home.expertise_heading')"
                                        :subtitle="__('site.home.expertise_subheading')"/>
 
-                    <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                    <x-card-grid x-data x-reveal.stagger :count="$services->count()">
                         @foreach ($services as $service)
                             <x-service-card :service="$service"/>
                         @endforeach
-                    </div>
+                    </x-card-grid>
 
                     <div x-data x-reveal class="mt-12 text-center">
                         <a href="{{ route('services.index') }}" class="group btn-secondary">
@@ -364,11 +317,7 @@
                     <x-section-heading :eyebrow="__('site.nav.chambers')" :title="__('site.home.chambers_heading')"
                                        :subtitle="__('site.home.chambers_subheading')"/>
 
-                    <div x-data x-reveal.stagger class="grid gap-6 lg:grid-cols-3">
-                        @foreach ($chambers as $chamber)
-                            <x-chamber-card :chamber="$chamber" :next-date="$nextDates[$chamber->id] ?? null"/>
-                        @endforeach
-                    </div>
+                    <x-chamber-grid :chambers="$chambers" :next-dates="$nextDates ?? []"/>
                 </div>
             </section>
         @endif
@@ -415,11 +364,11 @@
                         </x-slot:action>
                     </x-section-heading>
 
-                    <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <x-card-grid x-data x-reveal.stagger two-up="md" :count="$stories->count()">
                         @foreach ($stories as $story)
                             <x-story-card :story="$story"/>
                         @endforeach
-                    </div>
+                    </x-card-grid>
                 </div>
             </section>
         @endif
@@ -432,11 +381,12 @@
                 <div class="container-page">
                     <x-section-heading :title="__('site.home.testimonials_heading')"/>
 
-                    <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                        @foreach ($testimonials->take(3) as $testimonial)
+                    @php $featured = $testimonials->take(3); @endphp
+                    <x-card-grid x-data x-reveal.stagger two-up="md" :count="$featured->count()">
+                        @foreach ($featured as $testimonial)
                             <x-testimonial-card :testimonial="$testimonial"/>
                         @endforeach
-                    </div>
+                    </x-card-grid>
                 </div>
             </section>
         @endif
@@ -462,11 +412,11 @@
                             </x-slot:action>
                         </x-section-heading>
 
-                        <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <x-card-grid x-data x-reveal.stagger two-up="md" :count="$news->count()">
                             @foreach ($news as $post)
                                 <x-post-card :post="$post"/>
                             @endforeach
-                        </div>
+                        </x-card-grid>
                     </div>
                 @endif
 
@@ -481,11 +431,11 @@
                             </x-slot:action>
                         </x-section-heading>
 
-                        <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                        <x-card-grid x-data x-reveal.stagger two-up="md" :count="$articles->count()">
                             @foreach ($articles as $post)
                                 <x-post-card :post="$post"/>
                             @endforeach
-                        </div>
+                        </x-card-grid>
                     </div>
                 @endif
             </div>

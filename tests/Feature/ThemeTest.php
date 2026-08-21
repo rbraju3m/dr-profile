@@ -143,6 +143,7 @@ class ThemeTest extends TestCase
             ->put('/admin/visibility', [
                 'features' => collect(Features::keys())->mapWithKeys(fn ($k) => [$k => '1'])->all(),
                 'theme_default' => 'dark',
+                'home_layout' => 'classic',
             ])
             ->assertRedirect('/admin/visibility');
 

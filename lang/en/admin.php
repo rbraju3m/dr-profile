@@ -176,6 +176,16 @@ return [
     ],
 
     'visibility' => [
+        'layout' => [
+            'title' => 'Homepage design',
+            'intro' => 'How the homepage is arranged. All three show the same sections and obey the switches below — only the shape of the page changes.',
+            'classic' => 'Classic',
+            'classic_hint' => 'Full-width bands, one after another. The design the site shipped with.',
+            'spotlight' => 'Spotlight',
+            'spotlight_hint' => 'Compact and card-led, with the photograph running off the edge of the hero.',
+            'editorial' => 'Editorial',
+            'editorial_hint' => 'A magazine spread: hairline rules, large type and a numbered contents list.',
+        ],
         'appearance' => [
             'title' => 'Appearance',
             'intro' => 'The theme the site is served in. Readers can override it for themselves while the dark mode switch is on.',

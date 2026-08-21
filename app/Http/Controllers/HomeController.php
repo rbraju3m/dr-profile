@@ -12,6 +12,7 @@ use App\Models\SuccessStory;
 use App\Models\Testimonial;
 use App\Services\SlotService;
 use App\Support\Features;
+use App\Support\HomeLayout;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
@@ -28,7 +29,7 @@ class HomeController extends Controller
     {
         $chambers = $this->when('home_chambers', fn () => Chamber::with('activeSchedules')->active()->ordered()->get());
 
-        return view('public.home', [
+        return view(HomeLayout::view(), [
             'sliders' => $this->when('home_hero', fn () => Slider::active()->ordered()->get()),
             'stats' => $this->when('home_stats', fn () => Stat::active()->ordered()->get()),
             'services' => $this->when('home_services', fn () => Service::active()->where('is_featured', true)->ordered()->take(6)->get()),
@@ -41,7 +42,47 @@ class HomeController extends Controller
             'news' => $this->when('home_news', fn () => Post::published()->whereIn('type', $this->postTypes())->latestFirst()->take(3)->get()),
             'articles' => $this->when('home_blog', fn () => Post::published()->blog()->latestFirst()->take(3)->get()),
             'faqs' => $this->when('home_faq', fn () => Faq::active()->ordered()->take(6)->get()),
+            'trust' => $this->trustFacts(),
         ]);
+    }
+
+    /**
+     * The handful of things a patient weighs before booking — how long he has
+     * practised, that he is registered, how to reach him, what he speaks.
+     *
+     * It lives here rather than in the hero because all three homepage layouts
+     * show it and each arranges it differently; built twice, the designs would
+     * drift apart on which facts they carried.
+     *
+     * @return list<array{icon: string, value: string, label: string, href?: string}>
+     */
+    private function trustFacts(): array
+    {
+        $doctor = doctor();
+
+        return array_values(array_filter([
+            $doctor->experience_years ? [
+                'icon' => 'award',
+                'value' => bn_digits($doctor->experience_years).'+',
+                'label' => __('site.home.trust_experience'),
+            ] : null,
+            $doctor->bmdc_reg_no ? [
+                'icon' => 'badge-check',
+                'value' => $doctor->bmdc_reg_no,
+                'label' => __('site.home.trust_registration'),
+            ] : null,
+            $doctor->hotline ? [
+                'icon' => 'phone',
+                'value' => bn_digits($doctor->hotline),
+                'label' => __('site.contact.hotline'),
+                'href' => 'tel:'.$doctor->hotline,
+            ] : null,
+            $doctor->tr('languages') ? [
+                'icon' => 'globe',
+                'value' => $doctor->tr('languages'),
+                'label' => __('site.about.languages'),
+            ] : null,
+        ]));
     }
 
     /** @return Collection<int, Model> */

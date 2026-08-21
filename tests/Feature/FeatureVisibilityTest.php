@@ -292,7 +292,7 @@ class FeatureVisibilityTest extends TestCase
         $posted['gallery'] = '0';
 
         $this->actingAs($admin)
-            ->put('/admin/visibility', ['features' => $posted, 'theme_default' => 'light'])
+            ->put('/admin/visibility', ['features' => $posted, 'theme_default' => 'light', 'home_layout' => 'classic'])
             ->assertRedirect('/admin/visibility');
 
         $this->assertFalse(Features::enabled('gallery'));
