@@ -92,24 +92,42 @@ class Post extends Model
         return $query->orderBy('sort_order')->orderByDesc('published_at')->orderByDesc('id');
     }
 
-    /** Events sort by when they happen, upcoming first. */
+    /**
+     * Events sort by when they happen, upcoming first.
+     *
+     * An event is over when it *ends*, not when it starts. Splitting the list
+     * on the start alone filed a three-day conference under "Past Events" on
+     * its opening morning, and closed its registration button with two days
+     * still to run. Where no end was given the start is the end.
+     */
     public function scopeUpcomingEvents(Builder $query): Builder
     {
         return $query->events()
-            ->where('event_start_at', '>=', Carbon::now())
+            ->whereRaw('COALESCE(event_end_at, event_start_at) >= ?', [Carbon::now()])
             ->orderBy('event_start_at');
     }
 
     public function scopePastEvents(Builder $query): Builder
     {
         return $query->events()
-            ->where('event_start_at', '<', Carbon::now())
+            ->whereRaw('COALESCE(event_end_at, event_start_at) < ?', [Carbon::now()])
             ->orderByDesc('event_start_at');
     }
 
+    /** True while the event is still to come *or* still running. */
     public function isUpcoming(): bool
     {
-        return $this->event_start_at !== null && $this->event_start_at->isFuture();
+        $ends = $this->event_end_at ?? $this->event_start_at;
+
+        return $ends !== null && $ends->isFuture();
+    }
+
+    /** True only once it has begun and not yet finished. */
+    public function isInProgress(): bool
+    {
+        return $this->event_start_at !== null
+            && ! $this->event_start_at->isFuture()
+            && $this->isUpcoming();
     }
 
     public function imageUrl(): ?string

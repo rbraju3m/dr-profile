@@ -14,7 +14,7 @@ class GalleryController extends Controller
                 ->active()
                 ->ordered()
                 ->withCount(['items' => fn ($q) => $q->where('is_active', true)])
-                ->with('items')
+                ->with('activeItems')
                 ->get(),
         ]);
     }

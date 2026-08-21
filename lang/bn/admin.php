@@ -90,6 +90,8 @@ return [
         'image' => 'ছবি',
         'upload_hint' => 'JPG, PNG বা WebP, সর্বোচ্চ :max।',
         'remove_image' => 'বর্তমান ছবি সরান',
+        'remove_file' => 'বর্তমান ফাইলটি সরান',
+        'view_file' => 'বর্তমান ফাইলটি দেখুন',
         'slug_hint' => 'ফাঁকা রাখলে শিরোনাম থেকে তৈরি হবে।',
         'name' => 'নাম',
         'email' => 'ইমেইল',

@@ -192,6 +192,10 @@ return [
         'empty' => 'Stories will be published here soon.',
     ],
 
+    'testimonials' => [
+        'visited' => 'Visited :date',
+    ],
+
     'posts' => [
         'news_heading' => 'News',
         'events_heading' => 'Events',

@@ -23,7 +23,11 @@ class SuccessStoryController extends Controller
 
         return view('public.stories.index', [
             'stories' => $stories,
-            'services' => Service::active()->ordered()->whereHas('successStories')->get(),
+            // Only services that actually have a published story to filter down to —
+            // an unpublished draft used to leave a chip that led nowhere.
+            'services' => Service::active()->ordered()
+                ->whereHas('successStories', fn ($q) => $q->published())
+                ->get(),
             'activeService' => $service,
         ]);
     }

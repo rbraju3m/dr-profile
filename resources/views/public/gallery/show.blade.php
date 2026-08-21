@@ -27,9 +27,11 @@
                     @foreach ($items as $i => $item)
                         <button type="button" @click="index = {{ $i }}; open = true"
                                 class="group relative overflow-hidden rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
+                            {{-- Square tiles over mixed material: a poster cropped to a square
+                                 loses more than it keeps, so it is letterboxed instead. --}}
                             <x-media-frame :src="$item->thumbnailUrl()" :alt="$item->tr('title')"
                                            :icon="$item->type === 'video' ? 'play' : 'image'"
-                                           ratio="aspect-square" :seed="$item->id"/>
+                                           ratio="aspect-square" fit="contain" :seed="$item->id"/>
 
                             @if ($item->type === 'video')
                                 <span class="absolute inset-0 grid place-items-center bg-black/50">

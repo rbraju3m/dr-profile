@@ -54,10 +54,22 @@
                             <x-icon name="clock" class="mt-0.5 h-5 w-5 shrink-0 text-primary-600"/>
                             <div>
                                 <p class="text-xs font-semibold uppercase tracking-wider text-primary-700">{{ __('site.posts.event_when') }}</p>
+                                @php
+                                    // An end time on its own reads as the same day. When the event
+                                    // runs past midnight the closing date has to be said, or a
+                                    // three-day conference is advertised as one afternoon.
+                                    $day = fn ($at) => $at ? bn_digits($at->format('j')).' '.__('site.months.'.$at->month) : null;
+                                    $spansDays = $post->event_end_at
+                                        && $post->event_start_at
+                                        && ! $post->event_end_at->isSameDay($post->event_start_at);
+                                @endphp
                                 <p class="mt-1 text-sm font-medium text-primary-900">
-                                    {{ bn_digits($post->event_start_at?->format('j')) }} {{ __('site.months.'.$post->event_start_at?->month) }},
-                                    {{ App\Support\Week::time($post->event_start_at) }}
-                                    @if ($post->event_end_at) – {{ App\Support\Week::time($post->event_end_at) }} @endif
+                                    {{ $day($post->event_start_at) }}, {{ App\Support\Week::time($post->event_start_at) }}
+                                    @if ($spansDays)
+                                        – {{ $day($post->event_end_at) }}, {{ App\Support\Week::time($post->event_end_at) }}
+                                    @elseif ($post->event_end_at)
+                                        – {{ App\Support\Week::time($post->event_end_at) }}
+                                    @endif
                                 </p>
                             </div>
                         </div>

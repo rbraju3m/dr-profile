@@ -4,6 +4,7 @@ namespace Tests\Feature\Admin;
 
 use App\Models\GalleryAlbum;
 use App\Models\GalleryItem;
+use App\Models\Publication;
 use App\Models\Service;
 use App\Models\User;
 use App\Services\MediaService;
@@ -146,5 +147,36 @@ class MediaLifecycleTest extends TestCase
         $media->delete('/already/absolute.jpg');
 
         $this->assertTrue(true); // reaching here without an exception is the assertion
+    }
+
+    /**
+     * The publication form withheld the stored PDF from the upload component,
+     * which gates both the preview and the "remove" checkbox on it — so an
+     * attached paper was invisible on the edit screen and could never be taken
+     * off again.
+     */
+    public function test_an_attached_pdf_can_be_seen_and_removed_from_the_edit_form(): void
+    {
+        $this->actingAs($this->admin)->post('/admin/publications', [
+            'type' => 'journal', 'title_en' => 'Lumbar Fusion Outcomes', 'is_active' => 1,
+            'file' => UploadedFile::fake()->create('paper.pdf', 40, 'application/pdf'),
+        ]);
+
+        $publication = Publication::first();
+        $this->assertNotNull($publication->file);
+        Storage::disk('public')->assertExists($publication->file);
+
+        $this->actingAs($this->admin)->get("/admin/publications/{$publication->id}/edit")
+            ->assertOk()
+            ->assertSee($publication->mediaUrl('file'), false)
+            ->assertSee('name="remove_file"', false);
+
+        $this->actingAs($this->admin)->put("/admin/publications/{$publication->id}", [
+            'type' => 'journal', 'title_en' => 'Lumbar Fusion Outcomes', 'is_active' => 1,
+            'remove_file' => 1,
+        ]);
+
+        $this->assertNull($publication->fresh()->file);
+        Storage::disk('public')->assertMissing($publication->file);
     }
 }

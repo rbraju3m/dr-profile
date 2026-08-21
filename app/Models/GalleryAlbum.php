@@ -46,8 +46,28 @@ class GalleryAlbum extends Model
         return $this->hasMany(GalleryItem::class)->orderBy('sort_order');
     }
 
+    /** What a visitor is allowed to see — the listing must never reach past this. */
+    public function activeItems(): HasMany
+    {
+        return $this->items()->where('is_active', true);
+    }
+
+    /**
+     * The album's own cover, or the first picture inside it.
+     *
+     * "Inside it" means the first *active* one: falling back to `items` put a
+     * photograph the admin had switched off on the front of the album, in the
+     * one place they would never think to look for it. A video-only album
+     * borrows the platform's still rather than showing nothing.
+     */
     public function coverUrl(): ?string
     {
-        return $this->mediaUrl('cover_image') ?? $this->items->first()?->imageUrl();
+        if ($own = $this->mediaUrl('cover_image')) {
+            return $own;
+        }
+
+        return $this->activeItems
+            ->map(fn (GalleryItem $item) => $item->thumbnailUrl())
+            ->first(fn (?string $url) => filled($url));
     }
 }

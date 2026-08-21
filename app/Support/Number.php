@@ -22,7 +22,7 @@ class Number
         return str_replace(range(0, 9), self::BANGLA_DIGITS, $value);
     }
 
-    /** "৳ ১,২০০" / "BDT 1,200" */
+    /** "৳ 1,200" in English, "৳ ১,২০০" in Bangla — the symbol is the same in both. */
     public static function money(int|float|string|null $amount, ?string $locale = null): string
     {
         if ($amount === null || $amount === '') {

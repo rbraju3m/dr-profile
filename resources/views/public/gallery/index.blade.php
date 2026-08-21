@@ -9,7 +9,11 @@
                 <x-card-grid x-data x-reveal.stagger :count="$albums->count()">
                     @foreach ($albums as $album)
                         <a href="{{ route('gallery.show', $album) }}" class="card-hover group flex flex-col overflow-hidden">
-                            <x-media-frame :src="$album->coverUrl()" :alt="$album->tr('title')" ratio="aspect-[4/3]" :seed="$album->slug">
+                            {{-- `contain`, like the post and story cards: an album cover is usually one of
+                                 the practice's posters, and a centre crop takes the top off a Bangla
+                                 headline and the doctor's face off the edge. --}}
+                            <x-media-frame :src="$album->coverUrl()" :alt="$album->tr('title')" ratio="aspect-[4/3]"
+                                           fit="contain" :seed="$album->slug">
                                 <span class="absolute end-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-medium text-slate-700 shadow-sm dark:bg-slate-900/80">
                                     {{ __('site.gallery.items', ['count' => bn_digits($album->items_count)]) }}
                                 </span>

@@ -3,6 +3,11 @@
 @php
     $maxBytes = App\Support\Uploads::maxBytes();
     $maxLabel = App\Support\Uploads::maxLabel();
+
+    // This component also takes PDFs. A document has no thumbnail, so drawing
+    // one into an <img> gave a broken-image icon and the operator no way to
+    // tell whether a file was attached at all.
+    $isImage = str_starts_with($accept, 'image/');
 @endphp
 
 {{--
@@ -28,7 +33,7 @@
                 return
             }
 
-            this.preview = URL.createObjectURL(file)
+            this.preview = @js($isImage) ? URL.createObjectURL(file) : file.name
         },
 
         human(bytes) {
@@ -42,14 +47,28 @@
     <div class="flex items-start gap-4">
         <div class="h-24 w-24 shrink-0 overflow-hidden rounded-xl bg-slate-100 ring-1 ring-slate-200">
             <template x-if="preview">
-                <img :src="preview" alt="" class="h-full w-full object-cover">
+                @if ($isImage)
+                    <img :src="preview" alt="" class="h-full w-full object-cover">
+                @else
+                    <span class="grid h-full w-full place-content-center justify-items-center gap-1 p-2 text-center text-slate-500">
+                        <x-icon name="file-text" class="h-7 w-7"/>
+                        <span class="w-full truncate text-[10px]" x-text="preview"></span>
+                    </span>
+                @endif
             </template>
-            <div x-show="!preview">
-                @if ($current)
+            <div x-show="!preview" class="h-full w-full">
+                @if ($current && $isImage)
                     <img src="{{ $current }}" alt="" class="h-full w-full object-cover">
+                @elseif ($current)
+                    <a href="{{ $current }}" target="_blank" rel="noopener noreferrer"
+                       title="{{ __('admin.common.view_file') }}"
+                       class="grid h-full w-full place-content-center justify-items-center gap-1 text-slate-500 hover:text-primary-600">
+                        <x-icon name="file-text" class="h-7 w-7"/>
+                        <span class="text-[10px] font-medium">{{ __('admin.common.view_file') }}</span>
+                    </a>
                 @else
                     <span class="grid h-full w-full place-items-center text-slate-300">
-                        <x-icon name="image" class="h-7 w-7"/>
+                        <x-icon name="{{ $isImage ? 'image' : 'file-text' }}" class="h-7 w-7"/>
                     </span>
                 @endif
             </div>
@@ -74,7 +93,7 @@
                 <label class="mt-2 inline-flex items-center gap-2 text-xs text-slate-500">
                     <input type="checkbox" name="remove_{{ $name }}" value="1"
                            class="h-3.5 w-3.5 rounded border-slate-300 text-rose-600 focus:ring-rose-500">
-                    {{ __('admin.common.remove_image') }}
+                    {{ $isImage ? __('admin.common.remove_image') : __('admin.common.remove_file') }}
                 </label>
             @endif
         </div>

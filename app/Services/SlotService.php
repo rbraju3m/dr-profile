@@ -135,21 +135,6 @@ class SlotService
         return null;
     }
 
-    /**
-     * Re-check a slot at submit time. Returns the schedule id when the slot is
-     * genuinely free, or null when it is not — call inside the booking transaction.
-     */
-    public function resolveBookableSlot(Chamber $chamber, Carbon $date, string $time): ?int
-    {
-        $normalised = $this->normaliseTime($time);
-
-        if ($normalised === null || ! $this->isWithinWindow($date)) {
-            return null;
-        }
-
-        return $this->availability($chamber, $date)->scheduleIdFor($normalised);
-    }
-
     public function normaliseTime(?string $time): ?string
     {
         if (blank($time) || ! preg_match('/^\d{1,2}:\d{2}(:\d{2})?$/', $time)) {

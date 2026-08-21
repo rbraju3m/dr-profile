@@ -69,9 +69,12 @@ abstract class ResourceController extends Controller
 
         $records = $this->indexQuery()
             ->when($search && $this->searchable, function (Builder $query) use ($search) {
-                $query->where(function (Builder $inner) use ($search) {
+                // % and _ are wildcards in LIKE; an operator typing them means them.
+                $term = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
+
+                $query->where(function (Builder $inner) use ($term) {
                     foreach ($this->searchable as $column) {
-                        $inner->orWhere($column, 'like', "%{$search}%");
+                        $inner->orWhere($column, 'like', "%{$term}%");
                     }
                 });
             })

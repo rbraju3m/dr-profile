@@ -81,9 +81,30 @@ class Appointment extends Model
         return Week::time($this->slot_time);
     }
 
+    /**
+     * The moment the appointment actually begins.
+     *
+     * `appointment_date` is date-cast, so on its own it is midnight — which is
+     * already past for every one of today's appointments. The time of day is in
+     * `slot_time`, and the two only mean anything together.
+     */
+    public function startsAt(): Carbon
+    {
+        return Carbon::parse($this->appointment_date->toDateString().' '.($this->slot_time ?: '23:59:59'));
+    }
+
+    /**
+     * A patient may call it off until it starts.
+     *
+     * Comparing the bare date meant a six o'clock slot stopped being cancellable
+     * at midnight the night before: the patient could not release it and the
+     * chamber held a seat nobody was coming to. Nothing is risked by allowing it
+     * late — a released slot inside the booking lead time is not offered again
+     * today anyway.
+     */
     public function isCancellable(): bool
     {
         return in_array($this->status, ['pending', 'confirmed'], true)
-            && $this->appointment_date->isFuture();
+            && $this->startsAt()->isFuture();
     }
 }

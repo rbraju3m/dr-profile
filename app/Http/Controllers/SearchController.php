@@ -99,7 +99,7 @@ class SearchController extends Controller
         if (Features::enabled('publications')) {
             $groups[__('site.nav.publications')] = Publication::query()
                 ->active()
-                ->where($this->matching($term, ['title_en', 'title_bn', 'authors', 'venue_en']))
+                ->where($this->matching($term, ['title_en', 'title_bn', 'authors', 'venue_en', 'venue_bn', 'abstract_en', 'abstract_bn']))
                 ->take(self::PER_TYPE)->get()
                 ->map(fn (Publication $p) => $this->hit($p->tr('title'), $p->authors, route('publications.index'), 'graduation-cap'));
         }

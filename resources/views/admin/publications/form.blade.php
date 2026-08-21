@@ -24,7 +24,7 @@
                     <x-admin.input name="doi" :label="__('admin.fields.doi')" :value="$record?->doi"/>
                     <x-admin.input name="url" :label="__('admin.fields.link')" :value="$record?->url"/>
                     <x-admin.image-upload name="file" :label="__('admin.fields.pdf')" accept="application/pdf"
-                                          :current="null" :hint="__('admin.hints.pdf_limit')"/>
+                                          :current="$record?->mediaUrl('file')" :hint="__('admin.hints.pdf_limit')"/>
                     <x-admin.input name="sort_order" type="number" :label="__('admin.common.order')" :value="$record?->sort_order ?? 0"/>
                 </div>
             </x-admin.card>

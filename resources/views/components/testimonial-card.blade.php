@@ -20,6 +20,15 @@
             @if ($testimonial->tr('patient_title'))
                 <span class="block truncate text-xs text-slate-500">{{ $testimonial->tr('patient_title') }}</span>
             @endif
+            {{-- The visit date was collected on every testimonial and printed on none;
+                 it is what tells a reader the quote is recent. --}}
+            @if ($testimonial->visited_on)
+                <span class="block truncate text-xs text-slate-400">
+                    {{ __('site.testimonials.visited', [
+                        'date' => __('site.months.'.$testimonial->visited_on->month).' '.bn_digits($testimonial->visited_on->year),
+                    ]) }}
+                </span>
+            @endif
         </span>
     </figcaption>
 </figure>

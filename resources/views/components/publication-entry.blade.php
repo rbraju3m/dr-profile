@@ -1,4 +1,12 @@
-@props(['publication'])
+{{--
+    One line of a bibliography.
+
+    `abstract` is off by default: the About page shows five of these in a narrow
+    sidebar, where a paragraph each would bury the list. The publications page
+    turns it on, which is the only place the abstract the admin typed has ever
+    had to land.
+--}}
+@props(['publication', 'abstract' => false])
 
 <div class="flex gap-4">
     <span class="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-slate-100 text-slate-500">
@@ -23,6 +31,10 @@
             <p class="mt-0.5 text-sm italic text-slate-500">
                 {{ $publication->tr('venue') }}@if ($publication->volume), {{ $publication->volume }}@endif @if ($publication->pages), {{ bn_digits($publication->pages) }}@endif
             </p>
+        @endif
+
+        @if ($abstract && $publication->tr('abstract'))
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">{{ $publication->tr('abstract') }}</p>
         @endif
 
         @if ($publication->url || $publication->doi || $publication->file)

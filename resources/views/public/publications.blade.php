@@ -19,7 +19,7 @@
                             <ul class="space-y-3">
                                 @foreach ($items as $publication)
                                     <li class="card card-hover p-5">
-                                        <x-publication-entry :publication="$publication"/>
+                                        <x-publication-entry :publication="$publication" abstract/>
                                     </li>
                                 @endforeach
                             </ul>

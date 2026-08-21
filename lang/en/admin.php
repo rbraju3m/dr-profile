@@ -90,6 +90,8 @@ return [
         'image' => 'Image',
         'upload_hint' => 'JPG, PNG or WebP, up to :max.',
         'remove_image' => 'Remove current image',
+        'remove_file' => 'Remove current file',
+        'view_file' => 'View current file',
         'slug_hint' => 'Leave blank to generate from the title.',
         'name' => 'Name',
         'email' => 'Email',

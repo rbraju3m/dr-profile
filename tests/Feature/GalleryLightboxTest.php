@@ -51,4 +51,23 @@ class GalleryLightboxTest extends TestCase
         $this->assertStringContainsString('index = (index + 1) % items.length', $html);
         $this->assertStringContainsString('index = (index - 1 + items.length) % items.length', $html);
     }
+
+    /**
+     * Gallery material is the practice's own posters — a Bangla headline across
+     * the top and the doctor down one side. Post and story cards letterbox for
+     * exactly this reason; the gallery cropped, and took the headline off both
+     * the album cover and every tile inside it.
+     */
+    public function test_gallery_pictures_are_letterboxed_rather_than_cropped(): void
+    {
+        $album = $this->album();
+
+        foreach ([
+            route('gallery.index', ['locale' => 'en']),
+            route('gallery.show', ['locale' => 'en', 'album' => $album]),
+        ] as $url) {
+            $this->assertStringContainsString('object-contain', $this->get($url)->assertOk()->getContent(),
+                "A poster centre-cropped into a tile loses the headline that is the point of it: {$url}");
+        }
+    }
 }

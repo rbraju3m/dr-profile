@@ -115,6 +115,56 @@ class CancellationAndSearchTest extends TestCase
         $this->assertSame('confirmed', $appointment->fresh()->status);
     }
 
+    /**
+     * `appointment_date` is date-cast, so comparing it alone made every one of
+     * today's appointments unmutable from midnight: a patient with a six
+     * o'clock slot could not release it, the cancel button was not offered, and
+     * the chamber kept a seat for someone who had already said they were not
+     * coming. Cancelling closes when the appointment starts, not when its day does.
+     */
+    public function test_an_appointment_later_today_can_still_be_cancelled(): void
+    {
+        $slot = Carbon::now()->addHours(4);
+
+        $appointment = $this->booking([
+            'appointment_date' => Carbon::today()->toDateString(),
+            'slot_time' => $slot->format('H:i:s'),
+        ]);
+
+        $this->assertTrue($appointment->isCancellable());
+
+        $this->get('/en/appointment/'.$appointment->appointment_no)
+            ->assertOk()
+            ->assertSee('Cancel this appointment');
+
+        $this->post('/en/appointment/'.$appointment->appointment_no.'/cancel', [
+            'phone' => '01712345678',
+        ])->assertSessionHasNoErrors();
+
+        $this->assertSame('cancelled', $appointment->fresh()->status);
+    }
+
+    /** Once the slot has come and gone it is the chamber's business, not a form's. */
+    public function test_a_slot_that_has_already_passed_today_cannot_be_cancelled(): void
+    {
+        $appointment = $this->booking([
+            'appointment_date' => Carbon::today()->toDateString(),
+            'slot_time' => Carbon::now()->subHours(2)->format('H:i:s'),
+        ]);
+
+        $this->assertFalse($appointment->isCancellable());
+
+        $this->get('/en/appointment/'.$appointment->appointment_no)
+            ->assertOk()
+            ->assertDontSee('Cancel this appointment');
+
+        $this->post('/en/appointment/'.$appointment->appointment_no.'/cancel', [
+            'phone' => '01712345678',
+        ])->assertSessionHasErrors('phone');
+
+        $this->assertSame('confirmed', $appointment->fresh()->status);
+    }
+
     public function test_an_already_cancelled_appointment_cannot_be_cancelled_again(): void
     {
         $appointment = $this->booking(['status' => 'cancelled']);

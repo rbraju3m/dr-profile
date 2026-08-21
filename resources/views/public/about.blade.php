@@ -121,8 +121,13 @@
                                         @endif
                                     </div>
 
-                                    @if ($item->tr('organization'))
-                                        <p class="mt-0.5 text-sm text-primary-700">{{ $item->tr('organization') }}</p>
+                                    {{-- Where it was, as well as who it was with: the admin has
+                                         asked for a location on every credential since this table
+                                         existed, and the timeline never printed one. --}}
+                                    @if ($item->tr('organization') || $item->tr('location'))
+                                        <p class="mt-0.5 text-sm text-primary-700">
+                                            {{ $item->tr('organization') }}@if ($item->tr('location'))@if ($item->tr('organization'))<span class="text-slate-400"> · </span>@endif<span class="text-slate-500">{{ $item->tr('location') }}</span>@endif
+                                        </p>
                                     @endif
                                     @if ($item->tr('description'))
                                         <p class="mt-1.5 text-sm leading-relaxed text-slate-500">{{ $item->tr('description') }}</p>

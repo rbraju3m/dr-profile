@@ -192,6 +192,10 @@ return [
         'empty' => 'শীঘ্রই গল্প প্রকাশ করা হবে।',
     ],
 
+    'testimonials' => [
+        'visited' => ':date-এ এসেছিলেন',
+    ],
+
     'posts' => [
         'news_heading' => 'সংবাদ',
         'events_heading' => 'ইভেন্ট',

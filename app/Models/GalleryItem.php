@@ -58,7 +58,5 @@ class GalleryItem extends Model
         }
 
         return VideoEmbed::thumbnail($this->video_url);
-
-        return null;
     }
 }
