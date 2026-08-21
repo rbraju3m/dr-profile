@@ -108,11 +108,11 @@
         <section class="section bg-slate-50">
             <div class="container-page">
                 <x-section-heading :title="__('site.stories.related')"/>
-                <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <x-card-grid two-up="md" :count="$related->count()">
                     @foreach ($related as $item)
                         <x-story-card :story="$item"/>
                     @endforeach
-                </div>
+                </x-card-grid>
             </div>
         </section>
     @endif

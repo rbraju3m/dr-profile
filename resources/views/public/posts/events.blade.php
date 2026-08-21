@@ -9,11 +9,11 @@
                 @if ($upcoming->isEmpty())
                     <x-empty-state icon="calendar" :title="__('site.posts.empty')"/>
                 @else
-                    <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <x-card-grid x-data x-reveal.stagger two-up="md" :count="$upcoming->count()">
                         @foreach ($upcoming as $post)
                             <x-post-card :post="$post"/>
                         @endforeach
-                    </div>
+                    </x-card-grid>
                 @endif
             </div>
 
@@ -21,11 +21,11 @@
                 <div>
                     <x-section-heading align="start" :title="__('site.posts.past_events')"/>
 
-                    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                    <x-card-grid two-up="md" :count="$past->count()">
                         @foreach ($past as $post)
                             <x-post-card :post="$post"/>
                         @endforeach
-                    </div>
+                    </x-card-grid>
 
                     {{ $past->links() }}
                 </div>

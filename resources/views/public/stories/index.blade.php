@@ -27,11 +27,11 @@
             @if ($stories->isEmpty())
                 <x-empty-state icon="heart" :title="__('site.stories.empty')"/>
             @else
-                <div x-data x-reveal.stagger class="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                <x-card-grid x-data x-reveal.stagger two-up="md" :count="$stories->count()">
                     @foreach ($stories as $story)
                         <x-story-card :story="$story"/>
                     @endforeach
-                </div>
+                </x-card-grid>
 
                 {{ $stories->links() }}
             @endif

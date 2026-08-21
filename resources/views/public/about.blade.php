@@ -164,11 +164,11 @@
         <section class="section bg-slate-50">
             <div class="container-page">
                 <x-section-heading :title="__('site.home.expertise_heading')" :subtitle="__('site.home.expertise_subheading')"/>
-                <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+                <x-card-grid x-data x-reveal.stagger :count="$services->count()">
                     @foreach ($services as $service)
                         <x-service-card :service="$service"/>
                     @endforeach
-                </div>
+                </x-card-grid>
             </div>
         </section>
     @endif

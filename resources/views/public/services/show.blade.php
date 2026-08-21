@@ -17,22 +17,22 @@
                 @if ($stories->isNotEmpty() && feature('stories'))
                     <section class="mt-12">
                         <h2 x-data x-reveal class="text-xl font-bold tracking-tight">{{ __('site.stories.heading') }}</h2>
-                        <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                        <x-card-grid cols="2" class="mt-6" :count="$stories->count()">
                             @foreach ($stories as $story)
                                 <x-story-card :story="$story"/>
                             @endforeach
-                        </div>
+                        </x-card-grid>
                     </section>
                 @endif
 
                 @if ($testimonials->isNotEmpty())
                     <section class="mt-12">
                         <h2 x-data x-reveal class="text-xl font-bold tracking-tight">{{ __('site.home.testimonials_heading') }}</h2>
-                        <div class="mt-6 grid gap-6 sm:grid-cols-2">
+                        <x-card-grid cols="2" class="mt-6" :count="$testimonials->count()">
                             @foreach ($testimonials as $testimonial)
                                 <x-testimonial-card :testimonial="$testimonial"/>
                             @endforeach
-                        </div>
+                        </x-card-grid>
                     </section>
                 @endif
             </div>

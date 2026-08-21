@@ -12,11 +12,11 @@
                 @if ($posts->isEmpty())
                     <x-empty-state icon="file-text" :title="__('site.posts.empty')"/>
                 @else
-                    <div x-data x-reveal.stagger class="grid gap-6 sm:grid-cols-2">
+                    <x-card-grid x-data x-reveal.stagger cols="2" :count="$posts->count()">
                         @foreach ($posts as $post)
                             <x-post-card :post="$post"/>
                         @endforeach
-                    </div>
+                    </x-card-grid>
 
                     {{ $posts->links() }}
                 @endif

@@ -7,11 +7,7 @@
             @if ($chambers->isEmpty())
                 <x-empty-state icon="building" :title="__('site.chamber.no_chambers')"/>
             @else
-                <div x-data x-reveal.stagger class="grid gap-6 lg:grid-cols-3">
-                    @foreach ($chambers as $chamber)
-                        <x-chamber-card :chamber="$chamber" :next-date="$nextDates[$chamber->id] ?? null"/>
-                    @endforeach
-                </div>
+                <x-chamber-grid :chambers="$chambers" :next-dates="$nextDates ?? []"/>
             @endif
         </div>
     </section>

@@ -9,7 +9,21 @@
             @if ($items->isEmpty())
                 <x-empty-state icon="image" :title="__('site.gallery.empty')"/>
             @else
-                <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+                @php
+                    // Same thought as <x-card-grid>, but a mosaic of square tiles is
+                    // its own shape: two up on a phone, four on a desktop, and happy
+                    // with a ragged last row. Only the short albums — and the last page
+                    // of a long one — need narrowing, or one photo sits in a quarter of
+                    // the page with the rest of the row empty.
+                    $tiles = match ($items->count()) {
+                        1 => 'mx-auto max-w-sm',
+                        2 => 'mx-auto max-w-2xl grid-cols-2',
+                        3 => 'mx-auto max-w-3xl grid-cols-2 sm:grid-cols-3',
+                        default => 'grid-cols-2 sm:grid-cols-3 lg:grid-cols-4',
+                    };
+                @endphp
+
+                <div class="grid gap-4 {{ $tiles }}">
                     @foreach ($items as $i => $item)
                         <button type="button" @click="index = {{ $i }}; open = true"
                                 class="group relative overflow-hidden rounded-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-primary-600">
