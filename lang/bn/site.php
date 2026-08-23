@@ -20,6 +20,18 @@ return [
         'kb' => 'কেবি',
     ],
 
+    // Bangla names the part of the day and puts it before the hour: সন্ধ্যা ৭টা.
+    // টা attaches to the numeral with no space, the way the classifier টি does.
+    'day_parts' => [
+        'dawn' => 'ভোর',
+        'morning' => 'সকাল',
+        'noon' => 'দুপুর',
+        'afternoon' => 'বিকেল',
+        'evening' => 'সন্ধ্যা',
+        'night' => 'রাত',
+    ],
+    'oclock' => 'টা',
+
     'duration' => 'আনুমানিক সময়কাল',
     'present' => 'বর্তমান',
     'skip_to_content' => 'মূল অংশে যান',

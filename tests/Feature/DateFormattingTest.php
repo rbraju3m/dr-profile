@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\Chamber;
+use App\Models\ChamberSchedule;
 use App\Models\Post;
 use App\Support\Week;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -65,7 +67,7 @@ class DateFormattingTest extends TestCase
         $this->assertSame('সোমবার, ৯ মার্চ ২০২৬', Week::date($moment, withWeekday: true));
         $this->assertSame('৯ মার্চ', Week::dayMonth($moment));
         $this->assertSame('মার্চ ২০২৬', Week::monthYear($moment));
-        $this->assertSame('৯ মার্চ ২০২৬, ৫:০৫ PM', Week::dateTime($moment));
+        $this->assertSame('৯ মার্চ ২০২৬, বিকেল ৫:০৫', Week::dateTime($moment));
     }
 
     /** Nothing to write is written as nothing, not as a broken date. */
@@ -78,6 +80,32 @@ class DateFormattingTest extends TestCase
             $this->assertSame('', Week::dateTime($empty));
             $this->assertSame('', Week::time($empty));
         }
+    }
+
+    /**
+     * Bangla has no AM and PM. It names the part of the day and puts it first,
+     * and the hour takes টা when nothing follows it. The digits used to
+     * localise while the meridiem stayed English, so every generated time read
+     * "৭:০০ PM" next to an FAQ that said সন্ধ্যা ৭টা in its own words.
+     */
+    public function test_bangla_writes_the_part_of_the_day_instead_of_a_meridiem(): void
+    {
+        $this->app->setLocale('bn');
+
+        $this->assertSame('রাত ১২টা', Week::time('00:00'));      // midnight
+        $this->assertSame('ভোর ৪:৩০', Week::time('04:30'));
+        $this->assertSame('সকাল ৯টা', Week::time('09:00'));
+        $this->assertSame('দুপুর ১২টা', Week::time('12:00'));     // noon
+        $this->assertSame('দুপুর ১:৪৫', Week::time('13:45'));
+        $this->assertSame('বিকেল ৫টা', Week::time('17:00'));
+        $this->assertSame('রাত ১১:৫৯', Week::time('23:59'));
+
+        // The two the site's own FAQ writes by hand, for the Mogbazar sitting.
+        $this->assertSame('সন্ধ্যা ৭টা', Week::time('19:00'));
+        $this->assertSame('রাত ১০টা', Week::time('22:00'));
+
+        $this->app->setLocale('en');
+        $this->assertSame('7:00 PM', Week::time('19:00'));
     }
 
     /** And the other half: that it reaches the page. */
@@ -95,5 +123,34 @@ class DateFormattingTest extends TestCase
         $this->get('/bn/news/a-notice')->assertOk()
             ->assertSee('৯ মার্চ ২০২৬', escape: false)
             ->assertDontSee('9 March 2026', escape: false);
+    }
+
+    /** No Bangla page should print a Latin meridiem anywhere a reader can see. */
+    public function test_no_bangla_page_shows_am_or_pm(): void
+    {
+        $chamber = Chamber::create([
+            'slug' => 'mogbazar', 'name_en' => 'Mogbazar', 'name_bn' => 'মগবাজার',
+            'is_active' => true, 'accepts_online_booking' => true,
+        ]);
+
+        ChamberSchedule::create([
+            'chamber_id' => $chamber->id,
+            'day_of_week' => Carbon::today()->addDay()->dayOfWeek,
+            'start_time' => '19:00', 'end_time' => '22:00',
+            'slot_minutes' => 15, 'is_active' => true,
+        ]);
+
+        foreach (['/bn/chambers', '/bn/chambers/mogbazar', '/bn/appointment'] as $url) {
+            $body = $this->get($url)->assertOk()->getContent();
+            $visible = preg_replace('/<(script|style)\b.*?<\/\1>/si', ' ', $body);
+
+            $this->assertDoesNotMatchRegularExpression(
+                '/\d\s*(AM|PM)\b/',
+                strip_tags($visible),
+                "{$url} prints a Latin meridiem"
+            );
+        }
+
+        $this->get('/bn/chambers/mogbazar')->assertOk()->assertSee('সন্ধ্যা ৭টা', escape: false);
     }
 }

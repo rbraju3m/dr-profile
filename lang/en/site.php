@@ -20,6 +20,19 @@ return [
         'kb' => 'KB',
     ],
 
+    // English writes a clock time as "5:05 PM" and never reaches these. They are
+    // here because the two locales must stay key-for-key identical, and because
+    // they are the honest translations of the words Bangla uses instead.
+    'day_parts' => [
+        'dawn' => 'Dawn',
+        'morning' => 'Morning',
+        'noon' => 'Midday',
+        'afternoon' => 'Afternoon',
+        'evening' => 'Evening',
+        'night' => 'Night',
+    ],
+    'oclock' => " o'clock",
+
     'duration' => 'Typical Duration',
     'present' => 'Present',
     'skip_to_content' => 'Skip to main content',

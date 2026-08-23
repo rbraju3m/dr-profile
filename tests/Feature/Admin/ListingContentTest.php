@@ -91,10 +91,11 @@ class ListingContentTest extends TestCase
         $appointment = $this->appointment($chamber);
         $this->admin('bn');
 
-        // 10:30 AM — the digits, not the meridiem, are what localises.
+        // 10:30 AM, which Bangla writes as সকাল ১০:৩০ — no meridiem at all.
         $this->get('/admin/appointments')->assertOk()
-            ->assertSee('১০:৩০', escape: false)
-            ->assertDontSee('10:30', escape: false);
+            ->assertSee('সকাল ১০:৩০', escape: false)
+            ->assertDontSee('10:30', escape: false)
+            ->assertDontSee('AM', escape: false);
 
         $this->get('/admin/appointments/'.$appointment->appointment_no)->assertOk()
             ->assertSee(__('site.months.'.$appointment->appointment_date->month, [], 'bn'), escape: false);
@@ -115,7 +116,7 @@ class ListingContentTest extends TestCase
 
         $this->get(route('admin.chambers.schedules.index', $chamber))->assertOk()
             ->assertSee('ইনসাফ বারাকাহ', escape: false)
-            ->assertSee('৫:০০', escape: false)              // 5:00 PM
+            ->assertSee('বিকেল ৫টা', escape: false)         // 5:00 PM, in Bangla
             ->assertSee('২০ মিনিট', escape: false)          // 20 minutes per patient
             ->assertSee('সর্বোচ্চ ১৫', escape: false)        // capped at 15
             ->assertDontSee('20 min', escape: false)
