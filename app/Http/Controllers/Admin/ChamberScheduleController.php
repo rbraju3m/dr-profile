@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Chamber;
 use App\Models\ChamberSchedule;
+use App\Support\Sittings;
 use App\Support\Week;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
@@ -19,6 +20,9 @@ class ChamberScheduleController extends Controller
             'chamber' => $chamber,
             'schedules' => $chamber->schedules()->get()->groupBy('day_of_week'),
             'days' => collect(Week::DAYS)->mapWithKeys(fn (int $d) => [$d => Week::name($d)]),
+            // Rows saved before the guard was widened, or while a chamber was
+            // switched off, are still in the table. Say so where they are edited.
+            'clashes' => Sittings::conflictsFor($chamber),
         ]);
     }
 
@@ -57,19 +61,24 @@ class ChamberScheduleController extends Controller
             ->with('success', __('admin.flash.deleted', ['item' => __('admin.nav.schedules')]));
     }
 
-    /** Two sittings on the same day must not overlap, or slots would be generated twice. */
+    /**
+     * Two sittings on the same day must not overlap — not at this chamber, where
+     * slots would be generated twice, and not at any other, where they would put
+     * the doctor in two places at once. This used to ask only about the chamber
+     * being edited, which is how three of them came to be open on a Sunday.
+     */
     private function guardAgainstOverlap(Chamber $chamber, array $data): void
     {
-        $clash = $chamber->schedules()
-            ->where('day_of_week', $data['day_of_week'])
-            ->where('start_time', '<', $data['end_time'])
-            ->where('end_time', '>', $data['start_time'])
-            ->exists();
+        $clash = Sittings::clash($chamber, $data['day_of_week'], $data['start_time'], $data['end_time']);
 
-        if ($clash) {
-            throw ValidationException::withMessages([
-                'start_time' => __('admin.schedules.overlap'),
-            ]);
+        if (! $clash) {
+            return;
         }
+
+        throw ValidationException::withMessages([
+            'start_time' => $clash->chamber_id === $chamber->getKey()
+                ? __('admin.schedules.overlap')
+                : __('admin.schedules.overlap_chamber', ['chamber' => $clash->chamber->name]),
+        ]);
     }
 }

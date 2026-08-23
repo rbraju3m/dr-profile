@@ -95,13 +95,18 @@ chambers:
       - { day: 4, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Thursday
       # Friday (day 5) is his day off
 
-  # Added through the admin panel after this file was written, so their Bangla
-  # was never filled in and /bn printed the English hospital names. The values
-  # below match the rows as they stood. Two things here still need a human: the
-  # phone numbers are obviously placeholders and a patient tapping "call now"
-  # dials them, and the Sunday sittings below overlap — correct both here
-  # rather than only in the panel, or the next import will undo it.
+  # Both of these were typed into the admin panel while trying it out, not
+  # taken from the practice: the phone numbers are keyboard runs, BRB sits on
+  # the Friday the Mogbazar entry calls his day off, and between them they had
+  # the doctor in two chambers at once on four days of the week.
+  #
+  # They are kept here rather than deleted, switched off, so the off state is
+  # enforced on every import instead of being one click from coming back. Their
+  # Bangla and their hours are intact — if either turns out to be a real
+  # chamber, set is_active back to true, replace the phone numbers, and give it
+  # hours that do not run into the Mogbazar sitting at 19:00.
   - slug: "uttara-crescent-hospital"
+    is_active: false
     name_en: "Uttara Crescent Hospital"
     name_bn: "উত্তরা ক্রিসেন্ট হাসপাতাল"
     address_en: "Uttara, Dhaka"
@@ -123,6 +128,7 @@ chambers:
       - { day: 3, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 10 }  # Wednesday
 
   - slug: "brb-hospital"
+    is_active: false
     name_en: "BRB Hospital"
     name_bn: "বিআরবি হাসপাতাল"
     address_en: "77 Panthapath, Dhaka 1215"
@@ -138,11 +144,8 @@ chambers:
     note_bn: ""
     accepts_online_booking: true
     schedules:
-      # Sunday 17:00-20:00 is also an Uttara Crescent sitting: he is in two
-      # chambers at once and the booking form will sell slots in both, since
-      # nothing checks for a clash across chambers.
       - { day: 0, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 15 }  # Sunday
-      - { day: 5, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 15 }  # Friday — which the Mogbazar entry above calls his day off
+      - { day: 5, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 15 }  # Friday
 
 # ----------------------------------------------------------------------------
 #  The six services listed on saadiul.com/services, Bangla quoted from the site.
@@ -249,12 +252,13 @@ faqs:
   - group: "appointment"
     question_en: "When does the chamber sit?"
     question_bn: "চেম্বার কখন বসে?"
-    # Deliberately points at the Chambers page rather than repeating the times:
-    # this answer was written when there was one chamber and went stale the day
-    # a second was added. The page and the booking form both read the schedule
-    # rows, so they cannot drift.
-    answer_en: "<p>He now sits at three chambers, and the days and times differ. Each chamber's weekly schedule is listed on the Chambers page, and the booking form shows only the times that are actually free.</p>"
-    answer_bn: "<p>তিনি এখন তিনটি চেম্বারে বসেন এবং প্রতিটির দিন ও সময় আলাদা। প্রতিটি চেম্বারের সাপ্তাহিক সময়সূচি “চেম্বার” পাতায় দেওয়া আছে, আর বুকিং ফর্মে কেবল প্রকৃত খালি সময়গুলোই দেখানো হয়।</p>"
+    # Answers concretely, then points at the page that is generated from the
+    # schedule rows. Deliberately counts no chambers: the first version of this
+    # answer named the only chamber there was and went stale when a second
+    # appeared, and its replacement said "three" and went stale the day two of
+    # those were switched off.
+    answer_en: "<p>Saturday to Thursday, 7:00 PM to 10:00 PM, at Insaf Barakah Kidney and General Hospital, Mogbazar. Friday is closed. The Chambers page always shows the current hours, and the booking form offers only the times that are genuinely free.</p>"
+    answer_bn: "<p>শনিবার থেকে বৃহস্পতিবার, সন্ধ্যা ৭টা থেকে রাত ১০টা, ইনসাফ বারাকাহ কিডনি অ্যান্ড জেনারেল হাসপাতাল, মগবাজার। শুক্রবার বন্ধ। বর্তমান সময়সূচি সবসময় “চেম্বার” পাতায় দেওয়া থাকে, আর বুকিং ফর্মে কেবল প্রকৃত খালি সময়গুলোই দেখানো হয়।</p>"
 
   - group: "appointment"
     question_en: "How far ahead can I book?"

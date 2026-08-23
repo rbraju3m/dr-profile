@@ -3,6 +3,28 @@
                          :subtitle="__('admin.schedules.intro')"
                          :back="route('admin.chambers.index')"/>
 
+    {{-- Rows written before the guard covered every chamber are still in the table,
+         and the person who can fix them is standing on this page. --}}
+    @if ($clashes->isNotEmpty())
+        <div class="mb-6 rounded-xl border border-amber-300 bg-amber-50 px-5 py-4 text-amber-900">
+            <p class="flex items-center gap-2 font-semibold">
+                <x-icon name="alert-triangle" class="h-4 w-4 shrink-0"/>{{ __('admin.schedules.clash_heading') }}
+            </p>
+            <p class="mt-1 text-sm leading-relaxed text-amber-800">{{ __('admin.schedules.clash_intro') }}</p>
+            <ul class="mt-3 space-y-1 text-sm">
+                @foreach ($clashes as $clash)
+                    <li class="tabular-nums">
+                        {{ __('admin.schedules.clash_row', [
+                            'day' => \App\Support\Week::name($clash['day']),
+                            'time' => \App\Support\Week::time($clash['from']).' – '.\App\Support\Week::time($clash['to']),
+                            'chamber' => $clash['other']->name,
+                        ]) }}
+                    </li>
+                @endforeach
+            </ul>
+        </div>
+    @endif
+
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="lg:col-span-2">
             <x-admin.card :title="__('admin.schedules.title')" flush>

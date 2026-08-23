@@ -11,6 +11,8 @@ use App\Models\Page;
 use App\Models\Service;
 use App\Models\Setting;
 use App\Models\Stat;
+use App\Support\Sittings;
+use App\Support\Week;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
@@ -130,7 +132,12 @@ class ImportDoctorDetails extends Command
 
             $clean['slug'] = Str::slug($clean['slug']);
             $clean['sort_order'] = $i;
-            $clean['is_active'] = true;
+
+            // A chamber is on unless the file says otherwise. This was hardcoded
+            // true, so a chamber switched off could not be described here at all:
+            // the next import turned it back on, and with it any overlap its
+            // sittings caused.
+            $clean['is_active'] = $clean['is_active'] ?? true;
 
             $chamber = Chamber::updateOrCreate(['slug' => $clean['slug']], $clean);
 
@@ -162,6 +169,20 @@ class ImportDoctorDetails extends Command
             }
 
             $this->line('  chamber      '.$chamber->slug.' ('.count($schedules).' sittings)');
+        }
+
+        // Checked once at the end rather than per chamber: an overlap is a fact
+        // about the whole file, and the chamber that completes one is usually
+        // not the chamber at fault. The same rule the admin form applies.
+        if ($clash = Sittings::conflicts()->first()) {
+            throw new \RuntimeException(sprintf(
+                'chambers “%s” and “%s” are both open on %s between %s and %s; the doctor cannot be in two chambers at once.',
+                $clash['a']->chamber->slug,
+                $clash['b']->chamber->slug,
+                Week::name($clash['day']),
+                $clash['from'],
+                $clash['to'],
+            ));
         }
     }
 

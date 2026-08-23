@@ -223,6 +223,76 @@ class AdminManagementTest extends TestCase
         );
     }
 
+    /**
+     * The overlap guard used to ask only about the chamber being edited, so the
+     * doctor could be booked into two of them for the same hour and the booking
+     * form would sell both. He is one man; the guard has to look at all of them.
+     */
+    public function test_a_sitting_cannot_overlap_one_at_another_chamber(): void
+    {
+        $other = Chamber::create([
+            'slug' => 'second-chamber',
+            'name_en' => 'Second Chamber',
+            'is_active' => true,
+            'accepts_online_booking' => true,
+        ]);
+
+        // The main chamber already sits 10:00–12:00 on this weekday.
+        $this->actingAs($this->admin)
+            ->post('/admin/chambers/second-chamber/schedules', [
+                'day_of_week' => $this->date->dayOfWeek,
+                'start_time' => '11:00',
+                'end_time' => '13:00',
+                'slot_minutes' => 30,
+            ])
+            ->assertSessionHasErrors('start_time');
+
+        $this->assertSame(0, $other->schedules()->count());
+
+        // Butting up against it is not an overlap, and must still be allowed.
+        $this->actingAs($this->admin)
+            ->post('/admin/chambers/second-chamber/schedules', [
+                'day_of_week' => $this->date->dayOfWeek,
+                'start_time' => '12:00',
+                'end_time' => '14:00',
+                'slot_minutes' => 30,
+            ])
+            ->assertSessionHasNoErrors();
+
+        $this->assertSame(1, $other->schedules()->count());
+    }
+
+    /** The clash is named where it is edited, not left for someone to notice. */
+    public function test_the_schedule_page_names_a_chamber_it_clashes_with(): void
+    {
+        $other = Chamber::create([
+            'slug' => 'second-chamber',
+            'name_en' => 'Second Chamber',
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get('/admin/chambers/main-chamber/schedules')
+            ->assertOk()
+            ->assertDontSee('Second Chamber');
+
+        // Written straight to the table, the way the rows already in this
+        // database were, before the guard covered every chamber.
+        ChamberSchedule::create([
+            'chamber_id' => $other->id,
+            'day_of_week' => $this->date->dayOfWeek,
+            'start_time' => '11:00',
+            'end_time' => '13:00',
+            'slot_minutes' => 30,
+            'is_active' => true,
+        ]);
+
+        $this->actingAs($this->admin)
+            ->get('/admin/chambers/main-chamber/schedules')
+            ->assertOk()
+            ->assertSee('Second Chamber');
+    }
+
     public function test_removing_a_sitting_closes_the_day(): void
     {
         $schedule = $this->chamber->schedules()->first();
