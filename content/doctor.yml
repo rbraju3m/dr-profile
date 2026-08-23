@@ -31,7 +31,7 @@ profile:
   degrees_bn: "এমবিবিএস (ঢামেক), এফসিপিএস (অর্থো), এমএস (অর্থো), এফএসিএস (ইউএসএ), বিসিএস (স্বাস্থ্য)"
 
   bmdc_reg_no: ""            # not published — get it from him and check the register
-  experience_years: 0        # not published
+  experience_years: 10       # set to 10 in the admin panel; kept in step so an import does not reset it
 
   gender: "male"
   languages_en: "Bangla, English"
@@ -95,6 +95,55 @@ chambers:
       - { day: 4, start: "19:00", end: "22:00", slot_minutes: 15, max_patients: null }  # Thursday
       # Friday (day 5) is his day off
 
+  # Added through the admin panel after this file was written, so their Bangla
+  # was never filled in and /bn printed the English hospital names. The values
+  # below match the rows as they stood. Two things here still need a human: the
+  # phone numbers are obviously placeholders and a patient tapping "call now"
+  # dials them, and the Sunday sittings below overlap — correct both here
+  # rather than only in the panel, or the next import will undo it.
+  - slug: "uttara-crescent-hospital"
+    name_en: "Uttara Crescent Hospital"
+    name_bn: "উত্তরা ক্রিসেন্ট হাসপাতাল"
+    address_en: "Uttara, Dhaka"
+    address_bn: "উত্তরা, ঢাকা"
+    city_en: "Dhaka"
+    city_bn: "ঢাকা"
+    room_no: "512"
+    phone: "345678"
+    appointment_phone: "9876543"
+    consultation_fee: 1000
+    followup_fee: 700
+    note_en: ""
+    note_bn: ""
+    accepts_online_booking: true
+    schedules:
+      - { day: 0, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 10 }  # Sunday
+      - { day: 1, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 10 }  # Monday
+      - { day: 2, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 10 }  # Tuesday
+      - { day: 3, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 10 }  # Wednesday
+
+  - slug: "brb-hospital"
+    name_en: "BRB Hospital"
+    name_bn: "বিআরবি হাসপাতাল"
+    address_en: "77 Panthapath, Dhaka 1215"
+    address_bn: "৭৭ পান্থপথ, ঢাকা ১২১৫"
+    city_en: "Dhaka"
+    city_bn: "ঢাকা"
+    room_no: "600"
+    phone: "87654345678"
+    appointment_phone: "654345678"
+    consultation_fee: 1000
+    followup_fee: 700
+    note_en: ""
+    note_bn: ""
+    accepts_online_booking: true
+    schedules:
+      # Sunday 17:00-20:00 is also an Uttara Crescent sitting: he is in two
+      # chambers at once and the booking form will sell slots in both, since
+      # nothing checks for a clash across chambers.
+      - { day: 0, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 15 }  # Sunday
+      - { day: 5, start: "17:00", end: "20:00", slot_minutes: 20, max_patients: 15 }  # Friday — which the Mogbazar entry above calls his day off
+
 # ----------------------------------------------------------------------------
 #  The six services listed on saadiul.com/services, Bangla quoted from the site.
 # ----------------------------------------------------------------------------
@@ -103,7 +152,7 @@ services:
     name_en: "Orthopaedic Surgery"
     name_bn: "অর্থোপেডিক সার্জারি"
     short_description_en: "Effective surgical solutions for complex problems of the bones, joints and muscles."
-    short_description_bn: "হাড়, জয়েন্ট ও পেশীর বিভিন্ন জটিল সমস্যায় আধুনিক সার্জারির মাধ্যমে কার্যকর সমাধান প্রদান"
+    short_description_bn: "হাড়, জয়েন্ট ও পেশীর জটিল সমস্যায় আধুনিক সার্জারির মাধ্যমে কার্যকর সমাধান।"
     icon: "bone"
     fee: null
     is_featured: true
@@ -112,7 +161,7 @@ services:
     name_en: "Spine Surgery"
     name_bn: "স্পাইন সার্জারি"
     short_description_en: "For disc problems, nerve pressure, and pain in the lower back or neck."
-    short_description_bn: "ডিস্ক প্রবলেম, নার্ভ প্রেসার, কোমর বা ঘাড়ের ব্যথা"
+    short_description_bn: "ডিস্ক প্রবলেম, নার্ভ প্রেসার, কোমর বা ঘাড়ের ব্যথা।"
     icon: "spine"
     fee: null
     is_featured: true
@@ -121,7 +170,7 @@ services:
     name_en: "Joint and Knee Pain Treatment"
     name_bn: "জয়েন্ট ও হাঁটু ব্যথার চিকিৎসা"
     short_description_en: "Care from medical therapy through to joint replacement."
-    short_description_bn: "মেডিক্যাল থেরাপি থেকে শুরু করে জয়েন্ট রিপ্লেসমেন্ট পর্যন্ত সমন্বিত চিকিৎসা"
+    short_description_bn: "মেডিক্যাল থেরাপি থেকে শুরু করে জয়েন্ট রিপ্লেসমেন্ট পর্যন্ত সমন্বিত চিকিৎসা।"
     icon: "accessibility"
     fee: null
     is_featured: true
@@ -130,7 +179,7 @@ services:
     name_en: "Bone Deformities and Congenital Problems"
     name_bn: "হাড়ের বিকৃতি ও জন্মগত সমস্যা"
     short_description_en: "Safe surgical correction of congenital and accident-related bone deformities."
-    short_description_bn: "জন্মগত বা দুর্ঘটনাজনিত হাড়ের বিকৃতি আধুনিক সার্জারির মাধ্যমে নিরাপদভাবে সংশোধন"
+    short_description_bn: "জন্মগত বা দুর্ঘটনাজনিত হাড়ের বিকৃতির নিরাপদ সার্জিক্যাল সংশোধন।"
     icon: "activity"
     fee: null
     is_featured: true
@@ -139,7 +188,7 @@ services:
     name_en: "Sports Injury Management"
     name_bn: "স্পোর্টস ইনজুরি ম্যানেজমেন্ট"
     short_description_en: "Specialised treatment for ligament tears and meniscus injuries."
-    short_description_bn: "লিগামেন্ট টিয়ার, মেনিস্কাস ইনজুরিতে বিশেষায়িত চিকিৎসা"
+    short_description_bn: "লিগামেন্ট টিয়ার ও মেনিস্কাস ইনজুরিতে বিশেষায়িত চিকিৎসা।"
     icon: "shield-check"
     fee: null
     is_featured: true
@@ -148,7 +197,7 @@ services:
     name_en: "Chronic Pain Management"
     name_bn: "ক্রনিক পেইন ম্যানেজমেন্ট"
     short_description_en: "An individually planned combination of medication, physiotherapy and surgery."
-    short_description_bn: "ওষুধ, ফিজিওথেরাপি ও সার্জারির সমন্বয়ে ব্যক্তিগতভাবে পরিকল্পিত চিকিৎসা"
+    short_description_bn: "ওষুধ, ফিজিওথেরাপি ও সার্জারির সমন্বয়ে ব্যক্তিগতভাবে পরিকল্পিত চিকিৎসা।"
     icon: "clipboard-check"
     fee: null
     is_featured: true
@@ -200,8 +249,12 @@ faqs:
   - group: "appointment"
     question_en: "When does the chamber sit?"
     question_bn: "চেম্বার কখন বসে?"
-    answer_en: "<p>Saturday to Thursday, 7:00 PM to 10:00 PM, at Insaf Barakah Kidney and General Hospital, Mogbazar. Friday is closed.</p>"
-    answer_bn: "<p>শনিবার থেকে বৃহস্পতিবার, সন্ধ্যা ৭টা থেকে রাত ১০টা, ইনসাফ বারাকাহ কিডনি অ্যান্ড জেনারেল হাসপাতাল, মগবাজার। শুক্রবার বন্ধ।</p>"
+    # Deliberately points at the Chambers page rather than repeating the times:
+    # this answer was written when there was one chamber and went stale the day
+    # a second was added. The page and the booking form both read the schedule
+    # rows, so they cannot drift.
+    answer_en: "<p>He now sits at three chambers, and the days and times differ. Each chamber's weekly schedule is listed on the Chambers page, and the booking form shows only the times that are actually free.</p>"
+    answer_bn: "<p>তিনি এখন তিনটি চেম্বারে বসেন এবং প্রতিটির দিন ও সময় আলাদা। প্রতিটি চেম্বারের সাপ্তাহিক সময়সূচি “চেম্বার” পাতায় দেওয়া আছে, আর বুকিং ফর্মে কেবল প্রকৃত খালি সময়গুলোই দেখানো হয়।</p>"
 
   - group: "appointment"
     question_en: "How far ahead can I book?"
@@ -225,7 +278,7 @@ faqs:
     question_en: "What should I bring with me?"
     question_bn: "সঙ্গে কী কী আনতে হবে?"
     answer_en: "<p>Any previous X-rays and MRI films, all earlier reports and prescriptions, and the actual strips of every medicine you are taking now.</p>"
-    answer_bn: "<p>পূর্ববর্তী এক্স-রে ও এমআরআই ফিল্ম, আগের সব রিপোর্ট ও ব্যবস্থাপত্র এবং বর্তমানে যেসব ওষুধ খাচ্ছেন তার প্রকৃত পাতাগুলো।</p>"
+    answer_bn: "<p>পূর্ববর্তী এক্স-রে ও এমআরআই ফিল্ম, আগের সব রিপোর্ট ও ব্যবস্থাপত্র এবং বর্তমানে যেসব ওষুধ খাচ্ছেন সেগুলোর পাতা।</p>"
 
   - group: "fees"
     question_en: "Do I pay when I book online?"
