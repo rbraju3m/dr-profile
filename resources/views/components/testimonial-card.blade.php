@@ -25,7 +25,7 @@
             @if ($testimonial->visited_on)
                 <span class="block truncate text-xs text-slate-400">
                     {{ __('site.testimonials.visited', [
-                        'date' => __('site.months.'.$testimonial->visited_on->month).' '.bn_digits($testimonial->visited_on->year),
+                        'date' => \App\Support\Week::monthYear($testimonial->visited_on),
                     ]) }}
                 </span>
             @endif

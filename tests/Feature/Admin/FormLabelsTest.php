@@ -29,9 +29,20 @@ class FormLabelsTest extends TestCase
         $offenders = [];
 
         foreach (Finder::create()->files()->in(resource_path('views/admin'))->name('*.blade.php') as $file) {
-            preg_match_all('/(?<![:\w])(label|hint)="([A-Z][^"]*)"/', $file->getContents(), $matches, PREG_SET_ORDER);
+            $contents = $file->getContents();
 
-            foreach ($matches as [$whole, $attribute, $text]) {
+            // A plain attribute: title="Map".
+            preg_match_all('/(?<![:\w-])(label|hint|title|subtitle)="([A-Z][^"]*)"/', $contents, $plain, PREG_SET_ORDER);
+
+            /*
+             * And a bound one carrying its text in PHP, which the scan above
+             * cannot see through:
+             *   :hint="$record ? 'Leave blank…' : 'At least 8 characters.'"
+             * Two of those sat in the users form for as long as this test has.
+             */
+            preg_match_all('/:(label|hint|title|subtitle)="([^"]*\'[A-Z][^\']*\'[^"]*)"/', $contents, $bound, PREG_SET_ORDER);
+
+            foreach (array_merge($plain, $bound) as [$whole, $attribute, $text]) {
                 $offenders[] = $file->getRelativePathname().": {$attribute}=\"{$text}\"";
             }
         }

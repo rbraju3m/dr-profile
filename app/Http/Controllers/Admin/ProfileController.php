@@ -34,7 +34,7 @@ class ProfileController extends Controller
     {
         $profile = DoctorProfile::query()->firstOrNew([]);
 
-        $data = $request->validate([
+        $rules = [
             'name_en' => ['required', 'string', 'max:150'],
             'name_bn' => ['nullable', 'string', 'max:150'],
             'title_en' => ['nullable', 'string', 'max:60'],
@@ -47,10 +47,10 @@ class ProfileController extends Controller
             'degrees_bn' => ['nullable', 'string', 'max:400'],
             'short_bio_en' => ['nullable', 'string', 'max:800'],
             'short_bio_bn' => ['nullable', 'string', 'max:800'],
-            'bio_en' => ['nullable', 'string'],
-            'bio_bn' => ['nullable', 'string'],
-            'philosophy_en' => ['nullable', 'string'],
-            'philosophy_bn' => ['nullable', 'string'],
+            'bio_en' => self::LONG_TEXT,
+            'bio_bn' => self::LONG_TEXT,
+            'philosophy_en' => self::LONG_TEXT,
+            'philosophy_bn' => self::LONG_TEXT,
             'gender' => ['nullable', 'in:male,female,other'],
             'experience_years' => ['nullable', 'integer', 'min:0', 'max:80'],
             'bmdc_reg_no' => ['nullable', 'string', 'max:60'],
@@ -74,7 +74,9 @@ class ProfileController extends Controller
             'hero_image' => Uploads::imageRules(),
             'og_image' => Uploads::imageRules(),
             'cv_file' => Uploads::pdfRules(),
-        ]);
+        ];
+
+        $data = $request->validate($rules, [], $this->attributeNames($rules));
 
         foreach (self::MEDIA as $field => $folder) {
             $data[$field] = $media->replace(
@@ -82,6 +84,7 @@ class ProfileController extends Controller
                 $profile->{$field},
                 $folder,
                 $request->boolean("remove_{$field}"),
+                $field,
             );
         }
 

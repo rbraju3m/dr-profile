@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Models\Chamber;
 use App\Models\Service;
+use App\Support\Phone;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
@@ -53,16 +54,21 @@ class StoreAppointmentRequest extends FormRequest
         ];
     }
 
+    /**
+     * Store one shape of the number, so the record reads the same however the
+     * patient typed it. Anything Phone cannot recognise is left alone for the
+     * rule below to reject, rather than mangled into a different complaint.
+     */
     protected function prepareForValidation(): void
     {
         if ($this->filled('patient_phone')) {
-            $this->merge(['patient_phone' => preg_replace('/[\s-]/', '', $this->input('patient_phone'))]);
+            $this->merge(['patient_phone' => Phone::canonical($this->input('patient_phone'))]);
         }
     }
 
     public function chamber(): Chamber
     {
-        return Chamber::with('schedules')->findOrFail($this->integer('chamber_id'));
+        return Chamber::with('activeSchedules')->findOrFail($this->integer('chamber_id'));
     }
 
     public function service(): ?Service

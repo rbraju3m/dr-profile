@@ -12,6 +12,7 @@ use App\Models\SuccessStory;
 use App\Services\SlotService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Carbon;
+use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
 
 class CancellationAndSearchTest extends TestCase
@@ -54,10 +55,24 @@ class CancellationAndSearchTest extends TestCase
         ], $overrides));
     }
 
+    /**
+     * Open a confirmation the way a patient does — serial plus the number they
+     * booked with. The page does not answer to the serial alone.
+     */
+    private function open(Appointment $appointment): TestResponse
+    {
+        $this->post('/en/appointment/lookup', [
+            'serial' => $appointment->appointment_no,
+            'phone' => $appointment->patient_phone,
+        ]);
+
+        return $this->get('/en/appointment/'.$appointment->appointment_no);
+    }
+
     private function slotsOpen(): int
     {
         return app(SlotService::class)
-            ->availability($this->chamber->fresh('schedules'), $this->date)
+            ->availability($this->chamber->fresh('activeSchedules'), $this->date)
             ->openCount();
     }
 
@@ -133,7 +148,7 @@ class CancellationAndSearchTest extends TestCase
 
         $this->assertTrue($appointment->isCancellable());
 
-        $this->get('/en/appointment/'.$appointment->appointment_no)
+        $this->open($appointment)
             ->assertOk()
             ->assertSee('Cancel this appointment');
 
@@ -154,7 +169,7 @@ class CancellationAndSearchTest extends TestCase
 
         $this->assertFalse($appointment->isCancellable());
 
-        $this->get('/en/appointment/'.$appointment->appointment_no)
+        $this->open($appointment)
             ->assertOk()
             ->assertDontSee('Cancel this appointment');
 
@@ -177,12 +192,12 @@ class CancellationAndSearchTest extends TestCase
     public function test_the_cancel_form_only_shows_while_cancelling_is_possible(): void
     {
         $upcoming = $this->booking();
-        $this->get('/en/appointment/'.$upcoming->appointment_no)
+        $this->open($upcoming)
             ->assertOk()
             ->assertSee('Cancel this appointment');
 
         $done = $this->booking(['slot_time' => '11:00:00', 'status' => 'completed']);
-        $this->get('/en/appointment/'.$done->appointment_no)
+        $this->open($done)
             ->assertOk()
             ->assertDontSee('Cancel this appointment');
     }

@@ -15,6 +15,7 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SitemapController;
 use App\Http\Controllers\SuccessStoryController;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -23,7 +24,23 @@ use Illuminate\Support\Facades\Route;
 |--------------------------------------------------------------------------
 */
 
-Route::get('/', fn () => redirect('/'.(session('locale') ?: config('site.default_locale'))));
+/*
+ * The bare domain sends a reader to the language they last chose.
+ *
+ * Both signals are consulted, because neither covers the case on its own. The
+ * session is the fresher of the two but lasts hours; the cookie is written for
+ * a year, and is the only thing left when a reader comes back next month —
+ * reading the session alone sent them to /en however long they had been using
+ * the Bangla site. app()->getLocale() is no help here either: DetectLocale
+ * settles that before routing, which is before StartSession, so it has never
+ * seen a session. Here, after the web group, both are in hand.
+ */
+Route::get('/', function (Request $request) {
+    $locale = collect([$request->session()->get('locale'), $request->cookie('locale')])
+        ->first(fn ($candidate) => is_string($candidate) && array_key_exists($candidate, config('site.locales')));
+
+    return redirect('/'.($locale ?? config('site.default_locale')));
+});
 
 Route::get('sitemap.xml', [SitemapController::class, 'index'])->name('sitemap');
 
@@ -58,7 +75,14 @@ Route::prefix('{locale}')
                 ->middleware('throttle:10,1')
                 ->name('appointment.store');
             Route::get('appointment/lookup', [AppointmentController::class, 'lookup'])->name('appointment.lookup');
-            Route::get('appointment/{appointment}', [AppointmentController::class, 'show'])->name('appointment.show');
+            // The serial alone opens nothing; this is where the number is checked,
+            // so it is throttled as tightly as cancelling is.
+            Route::post('appointment/lookup', [AppointmentController::class, 'find'])
+                ->middleware('throttle:6,1')
+                ->name('appointment.lookup.find');
+            Route::get('appointment/{appointment}', [AppointmentController::class, 'show'])
+                ->middleware('throttle:60,1')
+                ->name('appointment.show');
             Route::post('appointment/{appointment}/cancel', [AppointmentController::class, 'cancel'])
                 ->middleware('throttle:6,1')
                 ->name('appointment.cancel');

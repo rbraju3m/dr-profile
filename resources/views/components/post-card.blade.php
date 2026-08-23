@@ -33,7 +33,7 @@
             <p class="mb-2 flex items-center gap-1.5 text-xs text-slate-400">
                 <x-icon name="calendar" class="h-3.5 w-3.5"/>
                 <time datetime="{{ $date->toDateString() }}">
-                    {{ bn_digits($date->format('j')) }} {{ __('site.months.'.$date->month) }} {{ bn_digits($date->format('Y')) }}
+                    {{ \App\Support\Week::date($date) }}
                 </time>
                 @if ($post->reading_minutes)
                     <span aria-hidden="true">·</span>

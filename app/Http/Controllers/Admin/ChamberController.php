@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\Chamber;
+use App\Support\MapEmbed;
 use App\Support\Uploads;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -62,7 +63,13 @@ class ChamberController extends ResourceController
             'phone' => ['nullable', 'string', 'max:40'],
             'appointment_phone' => ['nullable', 'string', 'max:40'],
             'image' => Uploads::imageRules(),
-            'map_embed' => ['nullable', 'string', 'max:2000'],
+            // Only the src survives to the page, so refuse a paste we would
+            // silently drop — and refuse anything that is not a map at all.
+            'map_embed' => ['nullable', 'string', 'max:2000', function (string $attribute, mixed $value, \Closure $fail) {
+                if (filled($value) && ! MapEmbed::isEmbeddable($value)) {
+                    $fail(__('validation_custom.map_embed'));
+                }
+            }],
             'map_url' => ['nullable', 'url', 'max:500'],
             'consultation_fee' => ['nullable', 'numeric', 'min:0', 'max:9999999'],
             'followup_fee' => ['nullable', 'numeric', 'min:0', 'max:9999999'],

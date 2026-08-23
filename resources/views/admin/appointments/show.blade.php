@@ -14,15 +14,15 @@
             <x-admin.card :title="__('admin.appointments.when')" flush>
                 <dl class="divide-y divide-slate-100">
                     @foreach ([
-                        [__('site.booking.step_date'), $appointment->appointment_date->format('l, d F Y')],
-                        [__('site.booking.step_slot'), \Illuminate\Support\Carbon::parse($appointment->slot_time)->format('g:i A')],
-                        [__('admin.appointments.chamber'), $appointment->chamber?->name_en],
-                        [__('site.chamber.address'), $appointment->chamber?->address_en],
+                        [__('site.booking.step_date'), \App\Support\Week::date($appointment->appointment_date, withWeekday: true)],
+                        [__('site.booking.step_slot'), $appointment->slotLabel()],
+                        [__('admin.appointments.chamber'), $appointment->chamber?->name],
+                        [__('site.chamber.address'), $appointment->chamber?->address],
                         [__('admin.appointments.visit_type'), $appointment->visit_type === 'followup' ? __('site.booking.visit_followup') : __('site.booking.visit_new')],
-                        [__('site.booking.service'), $appointment->service?->name_en],
+                        [__('site.booking.service'), $appointment->service?->name],
                         [__('admin.appointments.notes'), $appointment->notes],
                         [__('admin.appointments.admin_note'), $appointment->admin_note],
-                        [__('admin.common.created'), $appointment->created_at?->format('d M Y, g:i A')],
+                        [__('admin.common.created'), \App\Support\Week::dateTime($appointment->created_at)],
                     ] as [$dtLabel, $value])
                         @if ($value)
                             <div class="flex gap-4 px-5 py-3">

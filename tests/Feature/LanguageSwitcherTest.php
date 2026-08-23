@@ -131,6 +131,24 @@ class LanguageSwitcherTest extends TestCase
         $this->get('/')->assertRedirect('/bn');
     }
 
+    /**
+     * Sessions last hours; the locale cookie lasts a year, which is the whole
+     * reason it is written. A reader who chose Bangla last month and comes back
+     * to the bare domain belongs on the Bangla site, not the English one.
+     */
+    public function test_the_root_url_follows_the_cookie_once_the_session_has_gone(): void
+    {
+        $this->withUnencryptedCookie('locale', 'bn')
+            ->get('/')
+            ->assertRedirect('/bn');
+    }
+
+    /** With nothing to go on at all, the configured default still wins. */
+    public function test_the_root_url_falls_back_to_the_default_locale(): void
+    {
+        $this->get('/')->assertRedirect('/'.config('site.default_locale'));
+    }
+
     public function test_the_admin_switcher_changes_the_panel_language(): void
     {
         $admin = User::factory()->create([

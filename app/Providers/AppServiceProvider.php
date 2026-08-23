@@ -3,11 +3,11 @@
 namespace App\Providers;
 
 use App\Models\Appointment;
-use App\Models\Chamber;
 use App\Models\ContactMessage;
 use App\Models\DoctorProfile;
-use App\Models\Page;
 use App\Support\Features;
+use App\Support\Number;
+use App\Support\SiteNavigation;
 use App\Support\Uploads;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Pagination\Paginator;
@@ -26,6 +26,7 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->registerUploadMessages();
+        $this->registerNumberReplacements();
 
         // @feature('home_stats') … @endfeature — the switches in App\Support\Features.
         Blade::if('feature', fn (string $key) => Features::enabled($key));
@@ -37,10 +38,14 @@ class AppServiceProvider extends ServiceProvider
         // these. Slot content renders in the caller's scope, not the component's,
         // so 'public.*' has to be listed alongside the layout itself.
         View::composer(['components.layouts.public', 'partials.*', 'public.*'], function ($view) {
+            // Both lists are memoised on the request, so firing this once per
+            // view costs one set of queries per page — see App\Support\SiteNavigation.
+            $navigation = SiteNavigation::forRequest(request());
+
             $view->with([
                 'doctor' => DoctorProfile::current(),
-                'navChambers' => Chamber::active()->ordered()->get(),
-                'footerPages' => Page::published()->where('show_in_footer', true)->orderBy('sort_order')->orderBy('id')->get(),
+                'navChambers' => $navigation->chambers(),
+                'footerPages' => $navigation->footerPages(),
             ]);
         });
 
@@ -54,6 +59,36 @@ class AppServiceProvider extends ServiceProvider
     }
 
     /**
+     * The numbers inside a validation message.
+     *
+     * The validator substitutes :min and :max with the raw rule parameters, so
+     * a Bangla message arrived as "অন্তত 3 অক্ষরের হতে হবে" — Bangla wording
+     * wrapped around a Latin numeral, which is the one thing App\Support\Number
+     * exists to prevent. `max` is handled with the upload messages below, since
+     * it has a second job there.
+     */
+    private function registerNumberReplacements(): void
+    {
+        $rules = [
+            'min' => [':min'],
+            'size' => [':size'],
+            'digits' => [':digits'],
+            'between' => [':min', ':max'],
+            'digits_between' => [':min', ':max'],
+        ];
+
+        foreach ($rules as $rule => $placeholders) {
+            Validator::replacer($rule, function ($message, $attribute, $rule, $parameters) use ($placeholders) {
+                foreach ($placeholders as $index => $placeholder) {
+                    $message = str_replace($placeholder, Number::localizeDigits($parameters[$index] ?? ''), $message);
+                }
+
+                return $message;
+            });
+        }
+    }
+
+    /**
      * Laravel's stock upload wording ("The photo failed to upload.") does not
      * say why or what the limit is. These replace it everywhere a file is
      * accepted, with the server's real limit filled in.
@@ -63,8 +98,15 @@ class AppServiceProvider extends ServiceProvider
         Validator::replacer('max', function ($message, $attribute, $rule, $parameters, $validator) {
             $value = $validator->getData()[$attribute] ?? null;
 
+            /*
+             * A replacer stands in for the framework's own, so anything it
+             * declines to handle still has to have its placeholders filled.
+             * Handing the message back untouched printed a literal ":max" on
+             * every non-file limit in the application — "must not be greater
+             * than :max characters" — in both languages.
+             */
             if (! $value instanceof UploadedFile) {
-                return $message;
+                return str_replace(':max', Number::localizeDigits($parameters[0] ?? ''), $message);
             }
 
             return __('validation_custom.upload.too_large', [

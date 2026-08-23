@@ -139,6 +139,40 @@ class BookingTest extends TestCase
         $this->assertSame(3, Appointment::count());
     }
 
+    /**
+     * The allowance belongs to the person, not to the spelling. Writing the
+     * same number three ways used to buy three allowances.
+     */
+    public function test_the_open_limit_is_not_escaped_by_rewriting_the_number(): void
+    {
+        $slots = app(SlotService::class);
+        $available = array_column($slots->availability($this->chamber, $this->date)->openSlots(), 'time');
+
+        foreach (['01712345678', '+8801712345678', '8801712345678'] as $i => $phone) {
+            $this->post('/en/appointment', $this->payload([
+                'slot_time' => $available[$i],
+                'patient_phone' => $phone,
+            ]));
+        }
+
+        $this->assertSame(3, Appointment::count());
+
+        $this->post('/en/appointment', $this->payload([
+            'slot_time' => $available[3],
+            'patient_phone' => '+88 01712345678',
+        ]))->assertSessionHasErrors('slot_time');
+
+        $this->assertSame(3, Appointment::count());
+    }
+
+    /** However it was typed, the record shows one shape of it. */
+    public function test_the_number_is_stored_in_one_shape(): void
+    {
+        $this->post('/en/appointment', $this->payload(['patient_phone' => '+880 1712-345678']));
+
+        $this->assertSame('01712345678', Appointment::first()->patient_phone);
+    }
+
     public function test_a_chamber_with_online_booking_disabled_is_rejected(): void
     {
         $this->chamber->update(['accepts_online_booking' => false]);
@@ -147,17 +181,81 @@ class BookingTest extends TestCase
         $this->assertSame(0, Appointment::count());
     }
 
-    public function test_the_serial_lookup_finds_an_appointment(): void
+    public function test_the_lookup_opens_an_appointment_for_the_number_that_booked_it(): void
     {
         $this->post('/en/appointment', $this->payload());
         $appointment = Appointment::first();
 
-        $this->get('/en/appointment/lookup?serial='.$appointment->appointment_no)
-            ->assertRedirect('/en/appointment/'.$appointment->appointment_no);
+        $this->post('/en/appointment/lookup', [
+            'serial' => $appointment->appointment_no,
+            'phone' => '01712345678',
+        ])->assertRedirect('/en/appointment/'.$appointment->appointment_no);
 
-        $this->get('/en/appointment/lookup?serial=APT-NOPE-0000')
+        $this->get('/en/appointment/'.$appointment->appointment_no)
             ->assertOk()
-            ->assertSee('No appointment matches');
+            ->assertSee('Rahim Uddin');
+    }
+
+    /**
+     * The serial is printed on a slip, read out over the phone and mailed. It
+     * says which appointment; it does not say that the appointment is yours.
+     */
+    public function test_the_serial_alone_does_not_open_the_confirmation(): void
+    {
+        $this->post('/en/appointment', $this->payload());
+        $appointment = Appointment::first();
+
+        $this->flushSession();
+
+        $this->get('/en/appointment/'.$appointment->appointment_no)
+            ->assertRedirect('/en/appointment/lookup?serial='.$appointment->appointment_no)
+            ->assertDontSee('Rahim Uddin');
+    }
+
+    public function test_the_lookup_refuses_a_serial_with_the_wrong_number(): void
+    {
+        $this->post('/en/appointment', $this->payload());
+        $appointment = Appointment::first();
+
+        $this->post('/en/appointment/lookup', [
+            'serial' => $appointment->appointment_no,
+            'phone' => '01999999999',
+        ])->assertSessionHasErrors('serial');
+
+        $this->flushSession();
+
+        $this->get('/en/appointment/'.$appointment->appointment_no)
+            ->assertRedirect('/en/appointment/lookup?serial='.$appointment->appointment_no);
+    }
+
+    /**
+     * A serial that exists and a serial that does not must be indistinguishable
+     * from outside, or the page becomes a way of harvesting live serials.
+     */
+    public function test_a_real_serial_and_an_invented_one_answer_the_same_way(): void
+    {
+        $this->post('/en/appointment', $this->payload());
+        $real = Appointment::first()->appointment_no;
+        $this->flushSession();
+
+        $this->get('/en/appointment/'.$real)->assertRedirect('/en/appointment/lookup?serial='.$real);
+        $this->get('/en/appointment/APT-NOPE-000000')->assertRedirect('/en/appointment/lookup?serial=APT-NOPE-000000');
+
+        $this->post('/en/appointment/lookup', ['serial' => $real, 'phone' => '01999999999'])
+            ->assertSessionHasErrors('serial');
+        $this->post('/en/appointment/lookup', ['serial' => 'APT-NOPE-000000', 'phone' => '01999999999'])
+            ->assertSessionHasErrors('serial');
+    }
+
+    /** Guessing at the door is throttled, whatever the serial. */
+    public function test_the_lookup_is_rate_limited(): void
+    {
+        for ($i = 0; $i < 6; $i++) {
+            $this->post('/en/appointment/lookup', ['serial' => 'APT-NOPE-00000'.$i, 'phone' => '01712345678']);
+        }
+
+        $this->post('/en/appointment/lookup', ['serial' => 'APT-NOPE-999999', 'phone' => '01712345678'])
+            ->assertStatus(429);
     }
 
     private function payload(array $overrides = []): array

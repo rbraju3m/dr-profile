@@ -23,8 +23,11 @@ class VideoEmbed
             return null;
         }
 
-        // Already an embed address — leave it alone.
-        if (Str::contains($url, ['/embed/', 'player.vimeo.com', 'plugins/video.php'])) {
+        // Already an embed address — leave it alone, but only once it is
+        // established that it points at a video host over https. Matching the
+        // shape of the path alone let anything containing "/embed/" through,
+        // and the result goes straight into an iframe src.
+        if (self::isEmbedAddress($url)) {
             return $url;
         }
 
@@ -78,6 +81,29 @@ class VideoEmbed
         }
 
         return null;
+    }
+
+    /** Hosts whose own embed addresses may be framed as they were given. */
+    private const EMBED_HOSTS = [
+        'www.youtube.com', 'youtube.com',
+        'www.youtube-nocookie.com', 'youtube-nocookie.com',
+        'player.vimeo.com',
+        'www.facebook.com', 'facebook.com',
+    ];
+
+    private static function isEmbedAddress(string $url): bool
+    {
+        $parts = parse_url($url);
+
+        if (($parts['scheme'] ?? '') !== 'https' || ! isset($parts['host'])) {
+            return false;
+        }
+
+        if (! in_array(strtolower($parts['host']), self::EMBED_HOSTS, true)) {
+            return false;
+        }
+
+        return Str::contains($parts['path'] ?? '', ['/embed/', '/video/', '/plugins/video.php']);
     }
 
     /**

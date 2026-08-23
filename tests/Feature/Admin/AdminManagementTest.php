@@ -77,7 +77,7 @@ class AdminManagementTest extends TestCase
     private function slotsOpen(): int
     {
         return app(SlotService::class)
-            ->availability($this->chamber->fresh('schedules'), $this->date)
+            ->availability($this->chamber->fresh('activeSchedules'), $this->date)
             ->openCount();
     }
 
@@ -219,7 +219,7 @@ class AdminManagementTest extends TestCase
 
         $this->assertSame(
             2,
-            app(SlotService::class)->availability($this->chamber->fresh('schedules'), $emptyDay)->openCount()
+            app(SlotService::class)->availability($this->chamber->fresh('activeSchedules'), $emptyDay)->openCount()
         );
     }
 

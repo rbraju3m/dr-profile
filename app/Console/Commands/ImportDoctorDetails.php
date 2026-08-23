@@ -138,11 +138,23 @@ class ImportDoctorDetails extends Command
             $chamber->schedules()->delete();
 
             foreach ($schedules as $sitting) {
+                $start = $sitting['start'] ?? '17:00';
+                $end = $sitting['end'] ?? '20:00';
+
+                // The admin form refuses a sitting that ends before it starts;
+                // the file has to be held to the same rule, or it writes a row
+                // that offers no slots and says nothing about why.
+                if (strtotime($end) <= strtotime($start)) {
+                    throw new \RuntimeException(
+                        "chamber “{$clean['slug']}” has a sitting from {$start} to {$end}; a sitting must end after it starts."
+                    );
+                }
+
                 ChamberSchedule::create([
                     'chamber_id' => $chamber->id,
                     'day_of_week' => (int) ($sitting['day'] ?? 0),
-                    'start_time' => $sitting['start'] ?? '17:00',
-                    'end_time' => $sitting['end'] ?? '20:00',
+                    'start_time' => $start,
+                    'end_time' => $end,
                     'slot_minutes' => (int) ($sitting['slot_minutes'] ?? 20),
                     'max_patients' => $sitting['max_patients'] ?? null,
                     'is_active' => true,

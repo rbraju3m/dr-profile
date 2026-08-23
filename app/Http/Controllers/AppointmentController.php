@@ -9,6 +9,8 @@ use App\Models\Chamber;
 use App\Models\Service;
 use App\Services\BookingService;
 use App\Services\SlotService;
+use App\Support\PatientAccess;
+use App\Support\Phone;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -50,7 +52,7 @@ class AppointmentController extends Controller
             'date' => ['required', 'date_format:Y-m-d'],
         ]);
 
-        $chamber = Chamber::with('schedules')->findOrFail($validated['chamber_id']);
+        $chamber = Chamber::with('activeSchedules')->findOrFail($validated['chamber_id']);
 
         abort_unless($chamber->is_active && $chamber->accepts_online_booking, 404);
 
@@ -81,15 +83,32 @@ class AppointmentController extends Controller
                 ->withErrors(['slot_time' => $e->getMessage()]);
         }
 
+        PatientAccess::grant($request, $appointment);
+
         return redirect()
             ->route('appointment.show', $appointment)
             ->with('booked', true);
     }
 
-    public function show(Appointment $appointment): View
+    /**
+     * The confirmation page.
+     *
+     * The record is bound by hand rather than by the router so that a serial
+     * that does not exist and one that does but belongs to somebody else end at
+     * the same place. A 404 for the first and a redirect for the second would
+     * make this page a way of discovering which serials are real, which is the
+     * work the mobile number is here to prevent.
+     */
+    public function show(Request $request, string $appointment): View|RedirectResponse
     {
+        $record = Appointment::where('appointment_no', $appointment)->first();
+
+        if (! $record || ! PatientAccess::granted($request, $record)) {
+            return redirect()->route('appointment.lookup', ['serial' => $appointment]);
+        }
+
         return view('public.appointment.show', [
-            'appointment' => $appointment->load('chamber', 'service'),
+            'appointment' => $record->load('chamber', 'service'),
             'justBooked' => (bool) session('booked'),
         ]);
     }
@@ -112,11 +131,8 @@ class AppointmentController extends Controller
             'reason' => ['nullable', 'string', 'max:200'],
         ]);
 
-        $given = preg_replace('/\\D/', '', $validated['phone']);
-        $onFile = preg_replace('/\\D/', '', $appointment->patient_phone);
-
         // Compare the last nine digits so +8801… and 01… both match.
-        if (substr($given, -9) !== substr($onFile, -9) || strlen($given) < 9) {
+        if (! Phone::matches($validated['phone'], $appointment->patient_phone)) {
             return back()->withErrors(['phone' => __('site.booking.phone_mismatch')]);
         }
 
@@ -127,24 +143,45 @@ class AppointmentController extends Controller
             ->with('cancelled', true);
     }
 
-    /** Serial-number lookup so a patient can re-open their confirmation. */
-    public function lookup(Request $request): View|RedirectResponse
+    /**
+     * The form a patient re-opens their confirmation with.
+     *
+     * It reads nothing: the serial only arrives here to be typed back into the
+     * field, either because the patient followed a link or because show() sent
+     * them here to prove the appointment is theirs.
+     */
+    public function lookup(Request $request): View
     {
-        $serial = $request->string('serial')->trim()->upper()->toString();
+        return view('public.appointment.lookup', [
+            'serial' => $request->string('serial')->trim()->upper()->toString(),
+        ]);
+    }
 
-        if ($serial !== '') {
-            $appointment = Appointment::where('appointment_no', $serial)->first();
+    /**
+     * Serial *and* the number it was booked with, then the record opens.
+     *
+     * One message covers a serial that does not exist and a serial that does
+     * but was booked on another number, for the same reason show() redirects
+     * both: a form that tells them apart is a way of harvesting live serials.
+     */
+    public function find(Request $request): RedirectResponse
+    {
+        $data = $request->validate([
+            'serial' => ['required', 'string', 'max:40'],
+            'phone' => ['required', 'string', 'max:40'],
+        ]);
 
-            if ($appointment) {
-                return redirect()->route('appointment.show', $appointment);
-            }
+        $serial = strtoupper(trim($data['serial']));
+        $appointment = Appointment::where('appointment_no', $serial)->first();
 
-            return view('public.appointment.lookup', [
-                'serial' => $serial,
-                'error' => __('site.booking.not_found'),
-            ]);
+        if (! $appointment || ! Phone::matches($data['phone'], $appointment->patient_phone)) {
+            return back()
+                ->withInput(['serial' => $serial])
+                ->withErrors(['serial' => __('site.booking.not_found')]);
         }
 
-        return view('public.appointment.lookup', ['serial' => '', 'error' => null]);
+        PatientAccess::grant($request, $appointment);
+
+        return redirect()->route('appointment.show', $appointment);
     }
 }

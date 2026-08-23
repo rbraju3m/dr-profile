@@ -29,7 +29,7 @@
 
         @if ($publication->tr('venue'))
             <p class="mt-0.5 text-sm italic text-slate-500">
-                {{ $publication->tr('venue') }}@if ($publication->volume), {{ $publication->volume }}@endif @if ($publication->pages), {{ bn_digits($publication->pages) }}@endif
+                {{ $publication->tr('venue') }}@if ($publication->volume), {{ bn_digits($publication->volume) }}@endif @if ($publication->pages), {{ bn_digits($publication->pages) }}@endif
             </p>
         @endif
 

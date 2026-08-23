@@ -18,7 +18,7 @@
                     </span>
                     <x-icon name="arrow-up-right" class="h-4 w-4 text-slate-300 transition group-hover:text-primary-500"/>
                 </div>
-                <p class="mt-4 text-2xl font-bold tabular-nums text-slate-900">{{ number_format($value) }}</p>
+                <p class="mt-4 text-2xl font-bold tabular-nums text-slate-900">{{ bn_digits(number_format($value)) }}</p>
                 <p class="mt-0.5 text-sm text-slate-500">{{ $label }}</p>
             </a>
         @endforeach
@@ -34,14 +34,14 @@
                     @foreach ($todayAppointments as $appointment)
                         <li class="flex items-center gap-4 px-5 py-3.5">
                             <span class="w-20 shrink-0 text-sm font-semibold tabular-nums text-primary-700">
-                                {{ \Illuminate\Support\Carbon::parse($appointment->slot_time)->format('g:i A') }}
+                                {{ $appointment->slotLabel() }}
                             </span>
                             <span class="min-w-0 flex-1">
                                 <a href="{{ route('admin.appointments.show', $appointment) }}" class="block truncate text-sm font-medium text-slate-900 hover:text-primary-700">
                                     {{ $appointment->patient_name }}
                                 </a>
                                 <span class="block truncate text-xs text-slate-500">
-                                    {{ $appointment->chamber?->name_en }} · {{ $appointment->patient_phone }}
+                                    {{ $appointment->chamber?->name }} · {{ bn_digits($appointment->patient_phone) }}
                                 </span>
                             </span>
                             <x-admin.status-badge :status="$appointment->status"/>
@@ -63,7 +63,7 @@
                         <li>
                             <div class="mb-1 flex items-center justify-between text-sm">
                                 <span class="text-slate-600">{{ __('site.status.'.$status) }}</span>
-                                <span class="font-semibold tabular-nums text-slate-900">{{ number_format($value) }}</span>
+                                <span class="font-semibold tabular-nums text-slate-900">{{ bn_digits(number_format($value)) }}</span>
                             </div>
                             <div class="h-1.5 overflow-hidden rounded-full bg-slate-100">
                                 <div @class([
@@ -84,7 +84,7 @@
                     @foreach ($content as $label => $value)
                         <div class="rounded-xl bg-slate-50 p-3">
                             <dt class="truncate text-xs text-slate-500">{{ $label }}</dt>
-                            <dd class="mt-0.5 text-lg font-bold tabular-nums text-slate-900">{{ number_format($value) }}</dd>
+                            <dd class="mt-0.5 text-lg font-bold tabular-nums text-slate-900">{{ bn_digits(number_format($value)) }}</dd>
                         </div>
                     @endforeach
                 </dl>
@@ -102,7 +102,7 @@
                                 {{ $appointment->patient_name }}
                             </a>
                             <span class="block text-xs text-slate-500">
-                                {{ $appointment->appointment_no }} · {{ $appointment->appointment_date->format('d M Y') }}
+                                {{ $appointment->appointment_no }} · {{ \App\Support\Week::date($appointment->appointment_date) }}
                             </span>
                         </span>
                         <x-admin.status-badge :status="$appointment->status"/>

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use App\Models\Chamber;
 use App\Services\BookingService;
+use App\Support\Like;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -25,7 +26,7 @@ class AppointmentController extends Controller
 
         return view('admin.appointments.index', [
             'appointments' => $appointments,
-            'chambers' => Chamber::ordered()->pluck('name_en', 'id'),
+            'chambers' => Chamber::ordered()->get()->mapWithKeys(fn (Chamber $c) => [$c->id => $c->name]),
             'filters' => $this->filters($request),
         ]);
     }
@@ -55,6 +56,15 @@ class AppointmentController extends Controller
             'patient_address' => ['nullable', 'string', 'max:255'],
             'notes' => ['nullable', 'string', 'max:1000'],
             'admin_note' => ['nullable', 'string', 'max:1000'],
+        ], [], [
+            'patient_name' => __('site.booking.patient_name'),
+            'patient_phone' => __('site.booking.patient_phone'),
+            'patient_email' => __('site.booking.patient_email'),
+            'patient_gender' => __('site.booking.patient_gender'),
+            'patient_age' => __('site.booking.patient_age'),
+            'patient_address' => __('site.booking.patient_address'),
+            'notes' => __('admin.appointments.notes'),
+            'admin_note' => __('admin.appointments.admin_note'),
         ]);
 
         $appointment->update($data);
@@ -69,6 +79,9 @@ class AppointmentController extends Controller
         $data = $request->validate([
             'status' => ['required', Rule::in(Appointment::STATUSES)],
             'cancelled_reason' => ['nullable', 'string', 'max:200'],
+        ], [], [
+            'status' => __('admin.appointments.status'),
+            'cancelled_reason' => __('site.booking.cancel_reason'),
         ]);
 
         $booking->changeStatus($appointment, $data['status'], $data['cancelled_reason'] ?? null);
@@ -97,6 +110,9 @@ class AppointmentController extends Controller
             $handle = fopen('php://output', 'w');
             fprintf($handle, chr(0xEF).chr(0xBB).chr(0xBF)); // BOM so Excel reads Bangla correctly
 
+            // The file is English throughout, headers and all: it is opened in a
+            // spreadsheet and passed around, not read inside the panel, so it
+            // does not follow whichever language the operator happens to be in.
             fputcsv($handle, [
                 'Serial', 'Date', 'Time', 'Status', 'Patient', 'Phone', 'Email',
                 'Gender', 'Age', 'Visit', 'Chamber', 'Notes',
@@ -104,7 +120,7 @@ class AppointmentController extends Controller
 
             $query->chunk(500, function ($rows) use ($handle) {
                 foreach ($rows as $a) {
-                    fputcsv($handle, [
+                    fputcsv($handle, array_map($this->inert(...), [
                         $a->appointment_no,
                         $a->appointment_date->toDateString(),
                         $a->slot_time,
@@ -117,12 +133,28 @@ class AppointmentController extends Controller
                         $a->visit_type,
                         $a->chamber?->name_en,
                         $a->notes,
-                    ]);
+                    ]));
                 }
             });
 
             fclose($handle);
         }, $filename, ['Content-Type' => 'text/csv; charset=UTF-8']);
+    }
+
+    /**
+     * Stop a spreadsheet treating a patient's own words as a formula.
+     *
+     * Excel and Sheets run a cell that opens with =, +, - or @, and every name,
+     * note and email in this file was typed by a member of the public. Somebody
+     * booking as =HYPERLINK("http://…","Click") would otherwise have it run on
+     * the machine of whoever opened the export. A leading apostrophe is the
+     * spreadsheet's own way of saying "this is text"; it is not shown in the cell.
+     */
+    private function inert(mixed $value): string
+    {
+        $value = (string) $value;
+
+        return preg_match('/^[=+\-@\t\r]/', $value) ? "'".$value : $value;
     }
 
     private function filtered(Request $request)
@@ -135,10 +167,12 @@ class AppointmentController extends Controller
             ->when($f['from'], fn ($q) => $q->whereDate('appointment_date', '>=', $f['from']))
             ->when($f['to'], fn ($q) => $q->whereDate('appointment_date', '<=', $f['to']))
             ->when($f['q'], function ($q) use ($f) {
-                $q->where(function ($inner) use ($f) {
-                    $inner->where('appointment_no', 'like', "%{$f['q']}%")
-                        ->orWhere('patient_name', 'like', "%{$f['q']}%")
-                        ->orWhere('patient_phone', 'like', "%{$f['q']}%");
+                $term = Like::contains($f['q']);
+
+                $q->where(function ($inner) use ($term) {
+                    $inner->where('appointment_no', 'like', $term)
+                        ->orWhere('patient_name', 'like', $term)
+                        ->orWhere('patient_phone', 'like', $term);
                 });
             });
     }

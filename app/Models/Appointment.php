@@ -64,13 +64,21 @@ class Appointment extends Model
         return $query->whereDate('appointment_date', $date);
     }
 
-    /** APT-20260820-A7K3 — readable on the phone, unguessable enough for a lookup URL. */
+    /**
+     * APT-20260820-A7K3M2 — short enough to read down the phone, long enough
+     * that the day's serials cannot be walked.
+     *
+     * Four characters folded to upper case is about 20 bits, or a million
+     * guesses for a known date: reachable. Six is about 31. The mobile number
+     * on the lookup form is what actually guards the record; this only means
+     * that guessing at the door is not worth starting.
+     */
     public static function generateNumber(Carbon|string|null $date = null): string
     {
         $date = $date ? Carbon::parse($date) : Carbon::today();
 
         do {
-            $number = 'APT-'.$date->format('Ymd').'-'.Str::upper(Str::random(4));
+            $number = 'APT-'.$date->format('Ymd').'-'.Str::upper(Str::random(6));
         } while (static::where('appointment_no', $number)->exists());
 
         return $number;

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Concerns\HasMedia;
 use App\Concerns\HasTranslations;
 use App\Concerns\Sortable;
+use App\Support\MapEmbed;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
@@ -54,5 +55,15 @@ class Chamber extends Model
     public function imageUrl(): ?string
     {
         return $this->mediaUrl('image');
+    }
+
+    /**
+     * The map as an address the view can frame — null when what was pasted is
+     * not a map. What the operator typed is never printed as markup; see
+     * App\Support\MapEmbed for why.
+     */
+    public function mapEmbedUrl(): ?string
+    {
+        return MapEmbed::url($this->map_embed);
     }
 }

@@ -1,6 +1,6 @@
 <x-layouts.admin :title="$message->subject ?: $message->name">
     <x-admin.page-header :title="$message->subject ?: __('site.contact.message')"
-                         :subtitle="$message->created_at->format('d M Y, g:i A')"
+                         :subtitle="\App\Support\Week::dateTime($message->created_at)"
                          :back="route('admin.messages.index')"/>
 
     <div class="grid gap-6 lg:grid-cols-3">

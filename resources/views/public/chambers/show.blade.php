@@ -69,9 +69,12 @@
                 </div>
                 @endfeature
 
-                @if ($chamber->map_embed)
+                {{-- The frame is written here; only the address comes from the admin. --}}
+                @if ($map = $chamber->mapEmbedUrl())
                     <div class="mt-10 overflow-hidden rounded-2xl border border-slate-200">
-                        {!! $chamber->map_embed !!}
+                        <iframe src="{{ $map }}" title="{{ $chamber->tr('name') }}"
+                                class="block h-[380px] w-full border-0" loading="lazy"
+                                referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
                     </div>
                 @endif
             </div>
@@ -130,7 +133,7 @@
                                 </a>
                                 @if ($nextDate)
                                     <p class="text-center text-xs text-slate-500">
-                                        {{ bn_digits($nextDate->format('j')) }} {{ __('site.months.'.$nextDate->month) }} — {{ App\Support\Week::name($nextDate->dayOfWeek) }}
+                                        {{ \App\Support\Week::dayMonth($nextDate) }} — {{ \App\Support\Week::name($nextDate->dayOfWeek) }}
                                     </p>
                                 @endif
                             @else

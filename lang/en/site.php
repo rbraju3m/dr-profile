@@ -23,7 +23,6 @@ return [
         'to_dark' => 'Switch to dark',
         'to_light' => 'Switch to light',
         'to_system' => 'Match my device',
-        'label' => 'Appearance',
     ],
 
     'nav' => [
@@ -55,6 +54,7 @@ return [
         'back' => 'Back',
         'next' => 'Next',
         'previous' => 'Previous',
+        'pagination' => 'Pagination',
         'send_message' => 'Send Message',
         'call_now' => 'Call Now',
         'get_directions' => 'Get Directions',
@@ -66,7 +66,6 @@ return [
     'home' => [
         'trust_experience' => 'Years in practice',
         'trust_registration' => 'BMDC registered',
-        'explore' => 'Explore the practice',
         'hero_greeting' => 'Welcome',
         'hero_cta_secondary' => 'Learn More',
         'about_heading' => 'About the Doctor',
@@ -164,8 +163,9 @@ return [
         'phone_mismatch' => 'That mobile number does not match the one used to book.',
         'cannot_cancel' => 'This appointment can no longer be cancelled online. Please call the chamber.',
         'lookup_heading' => 'Find My Appointment',
-        'lookup_hint' => 'Enter the serial number from your confirmation.',
-        'not_found' => 'No appointment matches that serial number.',
+        'lookup_hint' => 'Enter the serial number from your confirmation and the mobile number you booked with.',
+        'lookup_protected' => 'Your appointment details are private. Confirm the mobile number you booked with to open them.',
+        'not_found' => 'No appointment matches that serial number and mobile number.',
         'slot_taken' => 'Sorry, that slot was just taken. Please pick another one.',
         'too_many_open' => 'This number already has :count open appointments. Please call the chamber instead.',
         'past_date' => 'Please choose a date in the future.',
@@ -197,9 +197,7 @@ return [
     ],
 
     'posts' => [
-        'news_heading' => 'News',
         'events_heading' => 'Events',
-        'blog_heading' => 'Health Tips',
         'upcoming_events' => 'Upcoming Events',
         'past_events' => 'Past Events',
         'event_when' => 'When',

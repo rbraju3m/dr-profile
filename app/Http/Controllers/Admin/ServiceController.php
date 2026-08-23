@@ -53,8 +53,8 @@ class ServiceController extends ResourceController
             'slug' => ['nullable', 'string', 'max:180', Rule::unique('services', 'slug')->ignore($record?->id)],
             'short_description_en' => ['nullable', 'string', 'max:500'],
             'short_description_bn' => ['nullable', 'string', 'max:500'],
-            'description_en' => ['nullable', 'string'],
-            'description_bn' => ['nullable', 'string'],
+            'description_en' => self::LONG_TEXT,
+            'description_bn' => self::LONG_TEXT,
             // Only a glyph the site can draw; anything else renders as a bare circle.
             'icon' => ['nullable', 'string', Rule::in(Icons::names())],
             'image' => Uploads::imageRules(),

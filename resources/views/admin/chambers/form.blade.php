@@ -10,7 +10,7 @@
                 </div>
             </x-admin.card>
 
-            <x-admin.card title="Map">
+            <x-admin.card :title="__('admin.common.map')">
                 <div class="space-y-4">
                     <x-admin.input name="map_url" :label="__('admin.fields.map_url')" :value="$record?->map_url" placeholder="https://maps.app.goo.gl/…"/>
                     <x-admin.textarea name="map_embed" :label="__('admin.fields.map_embed')" :value="$record?->map_embed" rows="4" rich

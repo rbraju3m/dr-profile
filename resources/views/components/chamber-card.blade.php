@@ -109,8 +109,8 @@
             @if ($nextDate)
                 <p class="mt-2.5 text-center text-xs text-slate-500">
                     <x-icon name="clock" class="me-1 inline h-3.5 w-3.5 align-[-2px]"/>
-                    {{ __('site.booking.select_date') }}:
-                    <span class="font-medium text-slate-700">{{ bn_digits($nextDate->format('j')) }} {{ __('site.months.'.$nextDate->month) }}</span>
+                    {{ __('site.chamber.next_sitting') }}:
+                    <span class="font-medium text-slate-700">{{ \App\Support\Week::dayMonth($nextDate) }}</span>
                 </p>
             @endif
         @else

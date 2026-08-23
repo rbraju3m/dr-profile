@@ -7,7 +7,7 @@
                     <x-admin.input name="email" type="email" :label="__('admin.auth.email')" :value="$record?->email" required/>
                     <x-admin.input name="password" type="password" :label="__('admin.auth.password')"
                                    :required="! $record" autocomplete="new-password"
-                                   :hint="$record ? 'Leave blank to keep the current password.' : 'At least 8 characters.'"/>
+                                   :hint="$record ? __('admin.hints.password_keep') : __('admin.hints.password_min')"/>
                     <x-admin.input name="password_confirmation" type="password" :label="__('admin.fields.password_confirmation')"
                                    :required="! $record" autocomplete="new-password"/>
                     <x-admin.input name="phone" :label="__('admin.fields.phone')" :value="$record?->phone"/>

@@ -44,7 +44,7 @@ class TestimonialController extends ResourceController
     protected function formData(?Model $record): array
     {
         return parent::formData($record) + [
-            'services' => Service::active()->ordered()->pluck('name_en', 'id'),
+            'services' => Service::active()->ordered()->get()->mapWithKeys(fn (Service $s) => [$s->id => $s->name]),
         ];
     }
 

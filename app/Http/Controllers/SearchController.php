@@ -8,6 +8,7 @@ use App\Models\Publication;
 use App\Models\Service;
 use App\Models\SuccessStory;
 use App\Support\Features;
+use App\Support\Like;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -112,15 +113,9 @@ class SearchController extends Controller
     {
         return function (Builder $query) use ($term, $columns) {
             foreach ($columns as $column) {
-                $query->orWhere($column, 'like', '%'.$this->escape($term).'%');
+                $query->orWhere($column, 'like', Like::contains($term));
             }
         };
-    }
-
-    /** % and _ are wildcards in LIKE; a patient typing them means them literally. */
-    private function escape(string $term): string
-    {
-        return str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $term);
     }
 
     private function hit(?string $title, ?string $excerpt, string $url, string $icon): array

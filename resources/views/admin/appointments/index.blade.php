@@ -62,16 +62,16 @@
                                     </a>
                                 </td>
                                 <td class="whitespace-nowrap px-5 py-3.5">
-                                    <span class="block font-medium text-slate-800">{{ $appointment->appointment_date->format('d M Y') }}</span>
+                                    <span class="block font-medium text-slate-800">{{ \App\Support\Week::date($appointment->appointment_date) }}</span>
                                     <span class="block text-xs tabular-nums text-slate-500">
-                                        {{ \Illuminate\Support\Carbon::parse($appointment->slot_time)->format('g:i A') }}
+                                        {{ $appointment->slotLabel() }}
                                     </span>
                                 </td>
                                 <td class="px-5 py-3.5">
                                     <span class="block font-medium text-slate-800">{{ $appointment->patient_name }}</span>
                                     <span class="block text-xs tabular-nums text-slate-500">{{ $appointment->patient_phone }}</span>
                                 </td>
-                                <td class="px-5 py-3.5 text-slate-600">{{ $appointment->chamber?->name_en }}</td>
+                                <td class="px-5 py-3.5 text-slate-600">{{ $appointment->chamber?->name }}</td>
                                 <td class="px-5 py-3.5"><x-admin.status-badge :status="$appointment->status"/></td>
                                 <td class="px-5 py-3.5">
                                     <div class="flex items-center justify-end gap-1">

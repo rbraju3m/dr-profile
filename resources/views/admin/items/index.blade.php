@@ -1,5 +1,5 @@
-<x-layouts.admin :title="$album->title_en">
-    <x-admin.page-header :title="$album->title_en" :back="route('admin.albums.index')"/>
+<x-layouts.admin :title="$album->title">
+    <x-admin.page-header :title="$album->title" :back="route('admin.albums.index')"/>
 
     <div class="grid gap-6 lg:grid-cols-3">
         <div class="lg:col-span-2">
@@ -9,10 +9,10 @@
                 <div class="grid grid-cols-2 gap-4 sm:grid-cols-3">
                     @foreach ($items as $item)
                         <div class="group relative overflow-hidden rounded-xl border border-slate-200 bg-white">
-                            <x-media-frame :src="$item->thumbnailUrl()" :alt="$item->title_en"
+                            <x-media-frame :src="$item->thumbnailUrl()" :alt="$item->title"
                                            :icon="$item->type === 'video' ? 'play' : 'image'" ratio="aspect-square"/>
                             <div class="p-2.5">
-                                <p class="truncate text-xs text-slate-600">{{ $item->title_en ?: '—' }}</p>
+                                <p class="truncate text-xs text-slate-600">{{ $item->title ?: '—' }}</p>
                             </div>
                             <div class="absolute end-2 top-2 rounded-lg bg-white/90 opacity-0 shadow-sm transition group-hover:opacity-100">
                                 <x-admin.delete-button :action="route('admin.items.destroy', $item)"/>

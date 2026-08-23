@@ -22,8 +22,14 @@ class FeatureController extends Controller
 {
     public function edit(): View
     {
+        $groups = Features::groups();
+
         return view('admin.visibility.edit', [
-            'groups' => Features::groups(),
+            'groups' => $groups,
+            // How much of the site is switched off, said once at the top: the
+            // form is long enough that a single flipped switch near the bottom
+            // is easy to lose track of.
+            'hidden' => collect($groups)->flatten(1)->where('enabled', '===', false)->count(),
             'theme' => Theme::default(),
             'layout' => HomeLayout::current(),
         ]);

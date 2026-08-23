@@ -6,6 +6,7 @@ use App\Exceptions\SlotUnavailableException;
 use App\Mail\AppointmentConfirmation;
 use App\Models\Appointment;
 use App\Models\Chamber;
+use App\Support\Phone;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -47,7 +48,9 @@ class BookingService
             // inside the same transaction so the check matches the insert.
             Chamber::query()->whereKey($chamber->id)->lockForUpdate()->first();
 
-            $chamber->load('schedules');
+            // Reload the relation SlotService actually reads, so a copy loaded
+            // before the lock cannot answer for the state inside it.
+            $chamber->load('activeSchedules');
             $availability = $this->slots->availability($chamber, $date);
 
             if (! $availability->offers($slotTime)) {
@@ -128,13 +131,27 @@ class BookingService
         return $appointment;
     }
 
-    /** Stops one phone number from hoarding slots. */
+    /**
+     * Stops one person from hoarding slots.
+     *
+     * Counting the raw string counted 01712345678 and +8801712345678 as two
+     * different people, so the allowance could be taken as many times as the
+     * patient had ways of writing their own number. Cancelling has always
+     * compared the last nine digits; this now agrees with it.
+     */
     private function guardOpenAppointmentLimit(string $phone): void
     {
+        $key = Phone::key($phone);
+
+        if ($key === '') {
+            return;
+        }
+
         $max = (int) config('site.booking.max_open_per_phone', 3);
 
         $open = Appointment::query()
-            ->where('patient_phone', $phone)
+            // $key is nine digits, so it carries no LIKE wildcards of its own.
+            ->where('patient_phone', 'like', '%'.$key)
             ->whereIn('status', ['pending', 'confirmed'])
             ->upcoming()
             ->count();

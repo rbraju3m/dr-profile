@@ -38,7 +38,7 @@ class SuccessStoryController extends ResourceController
             ['label' => __('admin.common.image'), 'type' => 'image', 'value' => fn (SuccessStory $s) => $s->imageUrl(), 'class' => 'w-20'],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'title_en'],
             ['label' => __('site.stories.patient'), 'type' => 'muted', 'key' => 'patient_name'],
-            ['label' => __('admin.nav.services'), 'value' => fn (SuccessStory $s) => $s->service?->name_en ?? '—'],
+            ['label' => __('admin.nav.services'), 'value' => fn (SuccessStory $s) => $s->service?->name ?? '—'],
             ['label' => __('admin.common.featured'), 'type' => 'bool', 'key' => 'is_featured'],
             ['label' => __('admin.common.published'), 'type' => 'bool', 'key' => 'is_published'],
         ];
@@ -47,7 +47,7 @@ class SuccessStoryController extends ResourceController
     protected function formData(?Model $record): array
     {
         return parent::formData($record) + [
-            'services' => Service::active()->ordered()->pluck('name_en', 'id'),
+            'services' => Service::active()->ordered()->get()->mapWithKeys(fn (Service $s) => [$s->id => $s->name]),
         ];
     }
 
@@ -66,8 +66,8 @@ class SuccessStoryController extends ResourceController
             'condition_bn' => ['nullable', 'string', 'max:1000'],
             'summary_en' => ['nullable', 'string', 'max:600'],
             'summary_bn' => ['nullable', 'string', 'max:600'],
-            'content_en' => ['nullable', 'string'],
-            'content_bn' => ['nullable', 'string'],
+            'content_en' => self::LONG_TEXT,
+            'content_bn' => self::LONG_TEXT,
             'image' => Uploads::imageRules(),
             'video_url' => ['nullable', 'url', 'max:500'],
             'treatment_date' => ['nullable', 'date'],

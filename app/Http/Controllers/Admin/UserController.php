@@ -69,6 +69,12 @@ class UserController extends ResourceController
         return parent::destroy($key);
     }
 
+    /** The password field is labelled from admin.auth, not admin.fields. */
+    protected function attributeNames(array $rules): array
+    {
+        return parent::attributeNames($rules) + ['password' => __('admin.auth.password')];
+    }
+
     protected function rules(?Model $record): array
     {
         return [

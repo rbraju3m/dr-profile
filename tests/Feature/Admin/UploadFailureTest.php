@@ -6,9 +6,11 @@ use App\Models\DoctorProfile;
 use App\Models\GalleryAlbum;
 use App\Models\User;
 use App\Support\Uploads;
+use Illuminate\Contracts\Filesystem\Filesystem;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Storage;
+use Mockery;
 use Tests\TestCase;
 
 /**
@@ -115,6 +117,40 @@ class UploadFailureTest extends TestCase
 
         $this->assertSame($original, DoctorProfile::query()->first()->photo, 'a failed upload destroyed the old photo');
         Storage::disk('public')->assertExists($original);
+    }
+
+    /**
+     * Validation is not the only way an upload fails. The disk can refuse it —
+     * no space, no permission — and storeAs() reports that by returning false,
+     * which used to be written into the column as though it were a path: the
+     * operator was told it had saved, and the photo being replaced was already
+     * gone. The error is raised against the control they used.
+     */
+    public function test_a_disk_that_refuses_the_write_says_so_and_keeps_the_old_file(): void
+    {
+        $this->actingAs($this->admin)->put('/admin/profile', [
+            'name_en' => 'Shaikh Saadiul Islam',
+            'photo' => UploadedFile::fake()->image('good.jpg'),
+        ]);
+
+        DoctorProfile::forgetCache();
+        $original = DoctorProfile::query()->first()->photo;
+        $this->assertNotNull($original);
+
+        // A disk that declines the write. putFileAs() returning false is how
+        // Laravel reports that, and returning it as a path is what this guards.
+        $refusing = Mockery::mock(Filesystem::class)->shouldIgnoreMissing();
+        $refusing->shouldReceive('putFileAs')->andReturnFalse();
+        Storage::set('public', $refusing);
+
+        $this->actingAs($this->admin)->put('/admin/profile', [
+            'name_en' => 'Shaikh Saadiul Islam',
+            'photo' => UploadedFile::fake()->image('replacement.jpg'),
+        ])->assertSessionHasErrors('photo');
+
+        DoctorProfile::forgetCache();
+
+        $this->assertSame($original, DoctorProfile::query()->first()->photo, 'a failed write replaced the stored path');
     }
 
     public function test_a_rejected_upload_does_not_save_the_rest_of_the_form(): void

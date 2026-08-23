@@ -49,7 +49,7 @@ class PostController extends ResourceController
                 default => __('site.nav.news'),
             }],
             ['label' => __('admin.common.english'), 'type' => 'strong', 'key' => 'title_en'],
-            ['label' => __('site.posts.category'), 'value' => fn (Post $p) => $p->category?->name_en ?? '—'],
+            ['label' => __('site.posts.category'), 'value' => fn (Post $p) => $p->category?->name ?? '—'],
             ['label' => __('admin.common.published_on'), 'value' => fn (Post $p) => $p->published_at?->format('d M Y') ?? '—'],
             ['label' => __('admin.common.published'), 'type' => 'bool', 'key' => 'is_published'],
         ];
@@ -58,7 +58,7 @@ class PostController extends ResourceController
     protected function formData(?Model $record): array
     {
         return parent::formData($record) + [
-            'categories' => PostCategory::active()->ordered()->pluck('name_en', 'id'),
+            'categories' => PostCategory::active()->ordered()->get()->mapWithKeys(fn (PostCategory $c) => [$c->id => $c->name]),
         ];
     }
 
@@ -99,8 +99,8 @@ class PostController extends ResourceController
             'post_category_id' => ['nullable', Rule::exists('post_categories', 'id')],
             'excerpt_en' => ['nullable', 'string', 'max:600'],
             'excerpt_bn' => ['nullable', 'string', 'max:600'],
-            'content_en' => ['nullable', 'string'],
-            'content_bn' => ['nullable', 'string'],
+            'content_en' => self::LONG_TEXT,
+            'content_bn' => self::LONG_TEXT,
             'image' => Uploads::imageRules(),
             'event_start_at' => ['nullable', 'date', 'required_if:type,event'],
             'event_end_at' => ['nullable', 'date', 'after_or_equal:event_start_at'],

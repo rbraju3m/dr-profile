@@ -32,6 +32,12 @@ class ChamberScheduleController extends Controller
             'max_patients' => ['nullable', 'integer', 'min:1', 'max:500'],
             'location_en' => ['nullable', 'string', 'max:120'],
             'location_bn' => ['nullable', 'string', 'max:120'],
+        ], [], [
+            'day_of_week' => __('admin.schedules.day'),
+            'start_time' => __('admin.schedules.start'),
+            'end_time' => __('admin.schedules.end'),
+            'slot_minutes' => __('admin.schedules.slot_minutes'),
+            'max_patients' => __('admin.schedules.max_patients'),
         ]);
 
         $this->guardAgainstOverlap($chamber, $data);

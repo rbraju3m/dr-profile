@@ -1,6 +1,12 @@
 <x-layouts.admin :title="__('admin.visibility.title')">
     <x-admin.page-header :title="__('admin.visibility.title')" :subtitle="__('admin.visibility.intro')"/>
 
+    <p class="mb-6 text-sm {{ $hidden ? 'text-amber-700' : 'text-slate-500' }}">
+        {{ $hidden === 0
+            ? __('admin.visibility.all_on')
+            : trans_choice('admin.visibility.hidden_count', $hidden, ['count' => bn_digits($hidden)]) }}
+    </p>
+
     <form method="POST" action="{{ route('admin.visibility.update') }}" class="space-y-6">
         @csrf
         @method('PUT')

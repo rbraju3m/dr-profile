@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Models\Chamber;
 use App\Models\ScheduleException;
+use App\Support\Week;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Validation\Rule;
@@ -26,8 +27,8 @@ class ScheduleExceptionController extends ResourceController
     protected function columns(): array
     {
         return [
-            ['label' => __('site.booking.step_date'), 'type' => 'strong', 'value' => fn (ScheduleException $e) => $e->date->format('D, d M Y')],
-            ['label' => __('admin.nav.chambers'), 'value' => fn (ScheduleException $e) => $e->chamber?->name_en ?? __('admin.exceptions.all_chambers')],
+            ['label' => __('site.booking.step_date'), 'type' => 'strong', 'value' => fn (ScheduleException $e) => Week::date($e->date, withWeekday: true)],
+            ['label' => __('admin.nav.chambers'), 'value' => fn (ScheduleException $e) => $e->chamber?->name ?? __('admin.exceptions.all_chambers')],
             ['label' => __('admin.common.kind'), 'value' => fn (ScheduleException $e) => $e->is_available ? __('admin.exceptions.extra') : __('admin.exceptions.closed')],
             ['label' => __('admin.exceptions.reason'), 'type' => 'muted', 'key' => 'reason_en'],
         ];
@@ -36,21 +37,39 @@ class ScheduleExceptionController extends ResourceController
     protected function formData(?Model $record): array
     {
         return parent::formData($record) + [
-            'chambers' => Chamber::ordered()->pluck('name_en', 'id'),
+            'chambers' => Chamber::ordered()->get()->mapWithKeys(fn (Chamber $c) => [$c->id => $c->name]),
         ];
+    }
+
+    /** "The date has already been taken" does not say what actually happened. */
+    protected function messages(): array
+    {
+        return ['date.unique' => __('validation_custom.exception_exists')];
     }
 
     protected function rules(?Model $record): array
     {
         return [
-            'chamber_id' => [
-                'nullable',
-                Rule::exists('chambers', 'id'),
-                Rule::unique('schedule_exceptions')->where(
-                    fn ($q) => $q->where('date', request('date'))
-                )->ignore($record?->id),
+            'chamber_id' => ['nullable', Rule::exists('chambers', 'id')],
+            'date' => [
+                'required',
+                'date',
+                /*
+                 * One row per chamber per date, and one site-wide row per date.
+                 *
+                 * This hangs off `date` rather than off `chamber_id`, where it
+                 * used to, because `nullable` stops the rest of a null field's
+                 * rules from running: a second "away from everywhere" row for
+                 * the same day was never checked. The unique index on the table
+                 * cannot catch it either — MySQL counts two NULLs as different
+                 * values — so nothing did.
+                 */
+                Rule::unique('schedule_exceptions', 'date')
+                    ->where(fn ($q) => request()->filled('chamber_id')
+                        ? $q->where('chamber_id', request()->integer('chamber_id'))
+                        : $q->whereNull('chamber_id'))
+                    ->ignore($record?->id),
             ],
-            'date' => ['required', 'date'],
             'is_available' => ['boolean'],
             'start_time' => ['nullable', 'date_format:H:i', 'required_if:is_available,1'],
             'end_time' => ['nullable', 'date_format:H:i', 'after:start_time', 'required_if:is_available,1'],

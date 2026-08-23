@@ -29,7 +29,7 @@
 
                     <dl class="divide-y divide-slate-100">
                         @foreach ([
-                            ['calendar', __('site.booking.step_date'), bn_digits($appointment->appointment_date->format('j')).' '.__('site.months.'.$appointment->appointment_date->month).' '.bn_digits($appointment->appointment_date->format('Y')).' — '.App\Support\Week::name($appointment->appointment_date->dayOfWeek)],
+                            ['calendar', __('site.booking.step_date'), \App\Support\Week::date($appointment->appointment_date).' — '.\App\Support\Week::name($appointment->appointment_date->dayOfWeek)],
                             ['clock', __('site.booking.step_slot'), $appointment->slotLabel()],
                             ['building', __('site.booking.step_chamber'), $appointment->chamber?->tr('name')],
                             ['map-pin', __('site.chamber.address'), $appointment->chamber?->tr('address')],

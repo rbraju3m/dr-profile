@@ -1,5 +1,5 @@
 <x-layouts.admin :title="__('admin.schedules.title')">
-    <x-admin.page-header :title="$chamber->name_en.' · '.__('admin.schedules.title')"
+    <x-admin.page-header :title="$chamber->name.' · '.__('admin.schedules.title')"
                          :subtitle="__('admin.schedules.intro')"
                          :back="route('admin.chambers.index')"/>
 
@@ -27,14 +27,13 @@
                                         <ul class="space-y-2">
                                             @foreach ($sittings as $sitting)
                                                 <li class="flex items-center justify-between gap-4">
-                                                    <span class="tabular-nums text-slate-700">
-                                                        {{ \Illuminate\Support\Carbon::parse($sitting->start_time)->format('g:i A') }}
-                                                        –
-                                                        {{ \Illuminate\Support\Carbon::parse($sitting->end_time)->format('g:i A') }}
-                                                    </span>
+                                                    {{-- The model already knows how to write its own hours, localised. --}}
+                                                    <span class="tabular-nums text-slate-700">{{ $sitting->timeRange() }}</span>
                                                     <span class="text-xs text-slate-500">
-                                                        {{ $sitting->slot_minutes }} min
-                                                        @if ($sitting->max_patients) · max {{ $sitting->max_patients }} @endif
+                                                        {{ __('admin.schedules.minutes_each', ['count' => bn_digits($sitting->slot_minutes)]) }}
+                                                        @if ($sitting->max_patients)
+                                                            · {{ __('admin.schedules.capacity', ['count' => bn_digits($sitting->max_patients)]) }}
+                                                        @endif
                                                     </span>
                                                     <x-admin.delete-button :action="route('admin.schedules.destroy', $sitting)"/>
                                                 </li>

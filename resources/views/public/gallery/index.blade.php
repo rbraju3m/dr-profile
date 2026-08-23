@@ -23,7 +23,7 @@
                                 <h2 class="text-[17px] font-semibold leading-snug text-slate-900 transition group-hover:text-primary-700">{{ $album->tr('title') }}</h2>
                                 @if ($album->event_date)
                                     <p class="mt-1 text-xs text-slate-400">
-                                        {{ bn_digits($album->event_date->format('j')) }} {{ __('site.months.'.$album->event_date->month) }} {{ bn_digits($album->event_date->format('Y')) }}
+                                        {{ \App\Support\Week::date($album->event_date) }}
                                     </p>
                                 @endif
                             </div>

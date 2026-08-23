@@ -79,7 +79,7 @@
                                 ['calendar', __('site.booking.patient_age'), $story->patient_age ? bn_digits($story->patient_age) : null],
                                 ['map-pin', __('site.chamber.address'), $story->tr('patient_location')],
                                 ['stethoscope', __('site.stories.treatment'), $story->service?->tr('name')],
-                                ['calendar-check', __('site.stories.treated_on'), $story->treatment_date ? bn_digits($story->treatment_date->format('j')).' '.__('site.months.'.$story->treatment_date->month).' '.bn_digits($story->treatment_date->format('Y')) : null],
+                                ['calendar-check', __('site.stories.treated_on'), \App\Support\Week::date($story->treatment_date)],
                             ] as [$icon, $label, $value])
                                 @if ($value)
                                     <div class="flex gap-3">

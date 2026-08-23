@@ -42,8 +42,8 @@ class FaqController extends ResourceController
             'group' => ['required', Rule::in(Faq::GROUPS)],
             'question_en' => ['required', 'string', 'max:250'],
             'question_bn' => ['nullable', 'string', 'max:250'],
-            'answer_en' => ['required', 'string'],
-            'answer_bn' => ['nullable', 'string'],
+            'answer_en' => self::LONG_TEXT_REQUIRED,
+            'answer_bn' => self::LONG_TEXT,
             'sort_order' => ['nullable', 'integer', 'min:0'],
             'is_active' => ['boolean'],
         ];

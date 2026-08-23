@@ -1,5 +1,5 @@
 @if ($paginator->hasPages())
-    <nav role="navigation" aria-label="{{ __('Pagination Navigation') }}" class="mt-10 flex items-center justify-center gap-1.5">
+    <nav role="navigation" aria-label="{{ __('site.actions.pagination') }}" class="mt-10 flex items-center justify-center gap-1.5">
         {{-- Previous --}}
         @if ($paginator->onFirstPage())
             <span class="grid h-10 w-10 place-items-center rounded-xl text-slate-300" aria-disabled="true">

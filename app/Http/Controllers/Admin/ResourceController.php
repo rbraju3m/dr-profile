@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Services\MediaService;
+use App\Support\Like;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
@@ -69,12 +70,11 @@ abstract class ResourceController extends Controller
 
         $records = $this->indexQuery()
             ->when($search && $this->searchable, function (Builder $query) use ($search) {
-                // % and _ are wildcards in LIKE; an operator typing them means them.
-                $term = str_replace(['\\', '%', '_'], ['\\\\', '\%', '\_'], $search);
+                $term = Like::contains($search);
 
                 $query->where(function (Builder $inner) use ($term) {
                     foreach ($this->searchable as $column) {
-                        $inner->orWhere($column, 'like', "%{$term}%");
+                        $inner->orWhere($column, 'like', $term);
                     }
                 });
             })
@@ -228,9 +228,21 @@ abstract class ResourceController extends Controller
         ];
     }
 
+    /**
+     * Rule-specific wording, where the framework's own will not do. Children
+     * override this rather than validated(), so every resource keeps the
+     * field naming below.
+     */
+    protected function messages(): array
+    {
+        return [];
+    }
+
     protected function validated(Request $request, ?Model $record): array
     {
-        return $request->validate($this->rules($record));
+        $rules = $this->rules($record);
+
+        return $request->validate($rules, $this->messages(), $this->attributeNames($rules));
     }
 
     /** Runs after the model is saved — override for relations or pivots. */
@@ -253,6 +265,7 @@ abstract class ResourceController extends Controller
                 $record->{$field},
                 $folder,
                 $request->boolean("remove_{$field}"),
+                $field,
             );
         }
 

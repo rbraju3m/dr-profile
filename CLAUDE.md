@@ -85,6 +85,11 @@ reader sees it. Every guard below exists because that check was skipped once:
 | `TranslationParityTest` | a key in one language and not the other |
 | `IconPickerTest` | an icon offered that the site cannot draw, and a layout that drops what a component pushes |
 | `HomeLayoutTest` | a homepage design that ignores a visibility switch, or drops a band the other two carry |
+| `ListingContentTest` | an admin *row* in the wrong language — the labels' guards never looked at the data |
+| `TranslationUsageTest` | a string translated into both languages that nothing ever reads |
+| `DateFormattingTest` | a view spelling a date out for itself instead of asking `App\Support\Week` |
+| `ValidationMessagesTest` | a validation message left in English, or showing a `:placeholder` it meant to fill |
+| `SharedNavigationTest` | the header and footer lists fetched once per view instead of once per request |
 
 ## Bilingual architecture
 
@@ -106,7 +111,17 @@ Two mechanisms; do not mix them.
 
 Numbers are locale-sensitive — Bangla renders its own digits. Every user-facing number, time, date
 part and money value goes through `App\Support\Number` or the `bn_digits()` helper. `App\Support\Week`
-formats day names and clock times.
+is the one place that writes a day name, a date or a clock time — `date()`, `dayMonth()`,
+`monthYear()`, `dateTime()`, `name()`, `time()`. Carbon's own `format()` emits Latin digits and
+English month names whatever the locale, so a view that reaches for it is the bug; nine of them
+spelled the date out by hand before `DateFormattingTest` was written to stop it.
+
+Laravel's own validation wording is translated too, in `lang/*/validation.php`. Nothing in this
+repository names those keys — the validator resolves them by rule name — which is why
+`TranslationUsageTest` excludes the file. Where a rule needs different wording, put it in
+`validation_custom.php` and name it explicitly. Note that a `Validator::replacer` stands in for the
+framework's own substitution: whatever it declines to handle, it still has to fill the placeholders
+for, or the reader gets a literal `:max`.
 
 ### The `{locale}` prefix has two sharp edges
 
@@ -134,8 +149,17 @@ The most intricate logic. Two classes:
   while holding `lockForUpdate()` on the chamber row. There is deliberately **no unique index** on
   `(chamber_id, appointment_date, slot_time)` — that would permanently block a cancelled slot.
 
-Patients cancel with their serial **and** the phone number used to book, compared on the last nine
-digits so `+8801…` and `01…` both match. Rules live in `config/site.php`.
+A serial is printed on a slip, mailed and read out over the phone, so it says *which* appointment
+and not that the appointment is yours. Reading one costs the same proof as cancelling it: the mobile
+number it was booked with, through the lookup form, which grants access for the session
+(`App\Support\PatientAccess`). `appointment.show` resolves its record by hand rather than by the
+router so that an unknown serial and someone else's serial end at the same form — a 404 for one and a
+redirect for the other would make the page a way of finding live serials.
+
+Every comparison of two numbers goes through `App\Support\Phone`, which matches on the last nine
+digits so `+8801…` and `01…` are one person. Cancelling always did this; the open-appointment limit
+compared the raw string, so one patient could take the allowance three times by spelling their own
+number three ways. Rules live in `config/site.php`.
 
 ## Admin panel
 
@@ -252,8 +276,12 @@ switch being off, and the admin panel.
 
 ## Media
 
-- Uploads go through `App\Services\MediaService` on the `public` disk with randomised filenames.
-  Declare them in a controller's `$mediaFields` so replace-and-delete is handled.
+- Uploads go through `App\Services\MediaService` on the `public` disk with randomised filenames, the
+  extension read from the file's own contents rather than the name the browser sent. Declare them in
+  a controller's `$mediaFields` so replace-and-delete is handled. `storeAs()` returns `false` when the
+  disk refuses a write, and `store()` throws a `ValidationException` on that field rather than passing
+  it on: returning it wrote `false` into the column, told the operator it had saved, and — in
+  `replace()` — had already deleted the file being replaced.
 - **Stored-media URLs are root-relative** (`config/filesystems.php` sets `'url' => '/storage'`).
   Building them from `APP_URL` broke every image the moment the app was reached on a different host
   or port. `og:image` and structured data still wrap them in `url()` because other servers read those.
@@ -321,5 +349,13 @@ If a section looks empty, that is usually a decision, not an oversight.
 - **Never cache Eloquent models or Collections.** Laravel 13's cache stores unserialize against an
   allowed-classes allowlist, so anything else returns `__PHP_Incomplete_Class`. Cache plain arrays and
   re-wrap (`Setting::map()`), or memoise on a static property (`DoctorProfile::current()`).
+- **A static memo outlives a test.** `Setting::map()` and `DoctorProfile::current()` both hold one —
+  without it every `feature()` call was its own `SELECT` against the cache table, ninety-five to draw
+  a homepage — and `RefreshDatabase` empties the table underneath it. `tests/TestCase::setUp()` drops
+  both, or one test's settings decide the next test's feature switches.
+- Anything a view needs on every public page but only once per request — the header chambers, the
+  footer pages — belongs in `App\Support\SiteNavigation`, memoised on the **request**. A static
+  property or a `scoped` binding both survive into the next request inside a test, and would serve a
+  menu that no longer matches the database.
 - Unauthenticated visitors to `/admin` are sent to `admin.login` via `redirectGuestsTo` — there is no
   public `login` route.

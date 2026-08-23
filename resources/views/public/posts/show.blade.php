@@ -29,7 +29,7 @@
                         <span class="flex items-center gap-1.5">
                             <x-icon name="calendar" class="h-4 w-4"/>
                             <time datetime="{{ $date->toDateString() }}">
-                                {{ bn_digits($date->format('j')) }} {{ __('site.months.'.$date->month) }} {{ bn_digits($date->format('Y')) }}
+                                {{ \App\Support\Week::date($date) }}
                             </time>
                         </span>
                     @endif
@@ -58,15 +58,14 @@
                                     // An end time on its own reads as the same day. When the event
                                     // runs past midnight the closing date has to be said, or a
                                     // three-day conference is advertised as one afternoon.
-                                    $day = fn ($at) => $at ? bn_digits($at->format('j')).' '.__('site.months.'.$at->month) : null;
                                     $spansDays = $post->event_end_at
                                         && $post->event_start_at
                                         && ! $post->event_end_at->isSameDay($post->event_start_at);
                                 @endphp
                                 <p class="mt-1 text-sm font-medium text-primary-900">
-                                    {{ $day($post->event_start_at) }}, {{ App\Support\Week::time($post->event_start_at) }}
+                                    {{ \App\Support\Week::dayMonth($post->event_start_at) }}, {{ \App\Support\Week::time($post->event_start_at) }}
                                     @if ($spansDays)
-                                        – {{ $day($post->event_end_at) }}, {{ App\Support\Week::time($post->event_end_at) }}
+                                        – {{ \App\Support\Week::dayMonth($post->event_end_at) }}, {{ \App\Support\Week::time($post->event_end_at) }}
                                     @elseif ($post->event_end_at)
                                         – {{ App\Support\Week::time($post->event_end_at) }}
                                     @endif

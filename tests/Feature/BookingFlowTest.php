@@ -53,13 +53,13 @@ class BookingFlowTest extends TestCase
             'is_active' => true,
         ]);
 
-        return $chamber->load('schedules');
+        return $chamber->load('activeSchedules');
     }
 
     private function slots(Chamber $chamber, Carbon $date): array
     {
         return array_column(
-            app(SlotService::class)->availability($chamber->fresh('schedules'), $date)->openSlots(),
+            app(SlotService::class)->availability($chamber->fresh('activeSchedules'), $date)->openSlots(),
             'time'
         );
     }
@@ -333,7 +333,7 @@ class BookingFlowTest extends TestCase
         $this->assertCount(3, $serials->unique(), 'serial numbers collided');
 
         foreach ($serials as $serial) {
-            $this->assertMatchesRegularExpression('/^APT-'.$date->format('Ymd').'-[A-Z0-9]{4}$/', $serial);
+            $this->assertMatchesRegularExpression('/^APT-'.$date->format('Ymd').'-[A-Z0-9]{6}$/', $serial);
         }
     }
 
