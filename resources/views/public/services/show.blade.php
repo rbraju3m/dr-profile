@@ -12,7 +12,12 @@
                     </div>
                 @endif
 
-                <div class="prose-content">{!! $service->tr('description') !!}</div>
+                {{-- An expertise page can stand on its hero and its sidebar alone: the
+                     six of them shared one description for a while, and clearing it left
+                     an empty prose block pushing the rest of the page down. --}}
+                @if (filled($service->tr('description')))
+                    <div class="prose-content">{!! $service->tr('description') !!}</div>
+                @endif
 
                 @if ($stories->isNotEmpty() && feature('stories'))
                     <section class="mt-12">

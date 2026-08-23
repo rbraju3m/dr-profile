@@ -90,6 +90,25 @@ class PublicPagesTest extends TestCase
         $this->get('/en/expertise/'.$service->slug)->assertNotFound();
     }
 
+    /**
+     * A service without a long description still has a hero, a picture, a
+     * booking button and its siblings. The six of them shared one description
+     * — the doctor's biography — and clearing it left an empty prose block
+     * holding the page open.
+     */
+    public function test_a_service_with_no_description_renders_without_an_empty_prose_block(): void
+    {
+        $service = Service::first();
+        $service->update(['description_en' => null, 'description_bn' => null]);
+
+        foreach (['en' => $service->name_en, 'bn' => $service->name_bn] as $locale => $name) {
+            $this->get("/{$locale}/expertise/".$service->slug)
+                ->assertOk()
+                ->assertSee($name)
+                ->assertDontSee('prose-content', escape: false);
+        }
+    }
+
     public function test_the_home_page_shows_the_doctor_and_a_booking_call_to_action(): void
     {
         $this->get('/en')
