@@ -1,0 +1,210 @@
+# =============================================================================
+#  DRAFT — not published, and not read by any command.
+#
+#  Six descriptions for the expertise pages, which have had no body text since
+#  the biography was cleared out of them. They are written to be corrected: the
+#  wording is deliberately general clinical information about each area, with no
+#  claim about this doctor, no statistic, and no promise about an outcome, so
+#  that what he has to check is phrasing rather than fact.
+#
+#  `doctor:import` reads content/doctor.yml only, so nothing here can reach the
+#  site by accident. To publish, after he has corrected them: move each pair
+#  into the matching service in doctor.yml as description_en / description_bn,
+#  then run `php artisan doctor:import --dry-run` and import.
+#
+#  Rendered with {!! !!} into .prose-content, so the h2/p/ul markup below is
+#  what the page draws. Keep it to those three tags — the admin editor for this
+#  field is Quill, and anything fancier will not survive an edit there.
+# =============================================================================
+
+- slug: "orthopaedic-surgery"
+  description_en: |-
+    <h2>What orthopaedic surgery covers</h2>
+    <p>Orthopaedics deals with the bones, joints, muscles, ligaments and tendons — the parts of the body that carry weight and produce movement. Problems here range from a fracture after a fall to a joint that has worn down over years.</p>
+    <h2>Conditions seen at the chamber</h2>
+    <ul>
+      <li>Fractures and dislocations, including injuries from road accidents</li>
+      <li>Fractures that have healed badly, or not at all</li>
+      <li>Worn or painful joints, including arthritis</li>
+      <li>Bone infection and bone tumours</li>
+      <li>Pain, swelling or stiffness in a limb that has not settled</li>
+    </ul>
+    <h2>How treatment is decided</h2>
+    <p>The consultation begins with an examination and a look at whatever imaging you already have — an X-ray, a CT or an MRI. Further tests are arranged only where they would change the plan.</p>
+    <p>Not every orthopaedic problem needs an operation. Medication, a cast or splint, an injection and physiotherapy are used where they will do the job. Surgery is discussed when the structure itself has to be repaired or replaced, and what the operation involves, how long recovery takes and what the alternatives are will be explained before anything is decided.</p>
+  description_bn: |-
+    <h2>অর্থোপেডিক সার্জারি কী নিয়ে কাজ করে</h2>
+    <p>অর্থোপেডিক্স কাজ করে হাড়, জয়েন্ট, পেশি, লিগামেন্ট ও টেন্ডন নিয়ে — শরীরের যে অংশগুলো ভার বহন করে এবং নড়াচড়া তৈরি করে। পড়ে গিয়ে হাড় ভাঙা থেকে শুরু করে বছরের পর বছর ক্ষয়ে যাওয়া জয়েন্ট পর্যন্ত নানা সমস্যা এর আওতায় পড়ে।</p>
+    <h2>চেম্বারে যেসব সমস্যা দেখা হয়</h2>
+    <ul>
+      <li>হাড় ভাঙা ও জয়েন্ট সরে যাওয়া, দুর্ঘটনাজনিত আঘাতসহ</li>
+      <li>ভাঙা হাড় বাঁকা হয়ে জোড়া লাগা বা একেবারেই না লাগা</li>
+      <li>ক্ষয়ে যাওয়া বা ব্যথাযুক্ত জয়েন্ট, বাতসহ</li>
+      <li>হাড়ের সংক্রমণ ও হাড়ের টিউমার</li>
+      <li>হাত বা পায়ের যে ব্যথা, ফোলা বা জড়তা সেরে যাচ্ছে না</li>
+    </ul>
+    <h2>চিকিৎসা যেভাবে ঠিক করা হয়</h2>
+    <p>পরামর্শ শুরু হয় সরাসরি পরীক্ষা দিয়ে এবং আপনার কাছে থাকা এক্স-রে, সিটি বা এমআরআই দেখে। নতুন পরীক্ষা তখনই দেওয়া হয়, যখন তাতে চিকিৎসার পরিকল্পনা বদলাতে পারে।</p>
+    <p>সব অর্থোপেডিক সমস্যায় অপারেশন লাগে না। ওষুধ, প্লাস্টার বা স্প্লিন্ট, ইনজেকশন ও ফিজিওথেরাপিতে কাজ হলে সেভাবেই চিকিৎসা করা হয়। যেখানে গঠন নিজেই মেরামত বা প্রতিস্থাপন করতে হয়, সেখানে সার্জারির কথা আলোচনা করা হয় — এবং সিদ্ধান্ত নেওয়ার আগে অপারেশনে কী হয়, সেরে উঠতে কত সময় লাগে ও বিকল্প কী কী আছে তা বুঝিয়ে দেওয়া হয়।</p>
+
+- slug: "spine-surgery"
+  description_en: |-
+    <h2>What spine treatment covers</h2>
+    <p>The spine carries the body's weight and protects the nerves running from the brain to the limbs. When a disc, a joint or a narrowed canal presses on one of those nerves, the pain is often felt not in the back at all, but down an arm or a leg.</p>
+    <h2>Conditions seen at the chamber</h2>
+    <ul>
+      <li>Lower back and neck pain that has not settled with rest</li>
+      <li>Disc prolapse pressing on a nerve root</li>
+      <li>Sciatica — pain travelling from the lower back into the leg</li>
+      <li>Narrowing of the spinal canal, which usually makes walking any distance harder</li>
+      <li>A slipped vertebra, spinal deformity and curvature</li>
+      <li>Fractures of the spine, including those in weakened bone</li>
+      <li>Numbness, weakness, or loss of bladder control — which need to be seen urgently</li>
+    </ul>
+    <h2>How treatment is decided</h2>
+    <p>Most back and neck pain settles without surgery. The first step is to work out which structure is causing it, by examination and, where it is needed, an MRI. Treatment usually begins with medication, advice on activity, and a physiotherapy programme.</p>
+    <p>Surgery is considered when pressure on a nerve is not relieving, when weakness is getting worse, or when the spine has become unstable. The aim is to take pressure off the nerve and keep the spine stable; what that involves depends on the level and the cause, and is explained before any decision is made.</p>
+  description_bn: |-
+    <h2>স্পাইন চিকিৎসা কী নিয়ে কাজ করে</h2>
+    <p>মেরুদণ্ড শরীরের ভার বহন করে এবং মস্তিষ্ক থেকে হাত-পায়ে যাওয়া স্নায়ুগুলোকে রক্ষা করে। ডিস্ক, জয়েন্ট বা সরু হয়ে আসা নালি যখন কোনো স্নায়ুতে চাপ দেয়, তখন ব্যথা প্রায়ই কোমরে নয় — হাত বা পায়ে অনুভূত হয়।</p>
+    <h2>চেম্বারে যেসব সমস্যা দেখা হয়</h2>
+    <ul>
+      <li>বিশ্রামেও না কমা কোমর ও ঘাড়ের ব্যথা</li>
+      <li>ডিস্ক প্রলাপ্স, যা স্নায়ুর গোড়ায় চাপ দেয়</li>
+      <li>সায়াটিকা — কোমর থেকে পায়ে ছড়িয়ে পড়া ব্যথা</li>
+      <li>মেরুদণ্ডের নালি সরু হয়ে আসা, যাতে সাধারণত কিছুদূর হাঁটতেই কষ্ট হয়</li>
+      <li>কশেরুকা সরে যাওয়া, মেরুদণ্ডের বিকৃতি ও বেঁকে যাওয়া</li>
+      <li>মেরুদণ্ডের হাড় ভাঙা, দুর্বল হাড়ে ভাঙাসহ</li>
+      <li>অসাড়তা, দুর্বলতা বা প্রস্রাব ধরে রাখতে না পারা — এগুলো দ্রুত দেখানো প্রয়োজন</li>
+    </ul>
+    <h2>চিকিৎসা যেভাবে ঠিক করা হয়</h2>
+    <p>বেশিরভাগ কোমর ও ঘাড়ের ব্যথা অপারেশন ছাড়াই সেরে যায়। প্রথম কাজ হলো কোন অংশ থেকে ব্যথা আসছে তা নির্ণয় করা — সরাসরি পরীক্ষা এবং প্রয়োজনে এমআরআইয়ের মাধ্যমে। চিকিৎসা সাধারণত ওষুধ, চলাফেরার পরামর্শ ও ফিজিওথেরাপি দিয়ে শুরু হয়।</p>
+    <p>স্নায়ুর ওপর চাপ না কমলে, দুর্বলতা বাড়তে থাকলে বা মেরুদণ্ড অস্থিতিশীল হয়ে পড়লে সার্জারির কথা বিবেচনা করা হয়। উদ্দেশ্য থাকে স্নায়ুর ওপর থেকে চাপ সরানো এবং মেরুদণ্ডকে স্থিতিশীল রাখা; কীভাবে তা করা হবে নির্ভর করে সমস্যা কোন স্তরে ও কী কারণে, আর সিদ্ধান্তের আগে তা বুঝিয়ে দেওয়া হয়।</p>
+
+- slug: "joint-and-knee-pain"
+  description_en: |-
+    <h2>What this covers</h2>
+    <p>A joint hurts when the smooth surface inside it wears away, when it becomes inflamed, or when something inside it tears. The knee carries more load than any other joint in the body, so it is usually the first to complain.</p>
+    <h2>Conditions seen at the chamber</h2>
+    <ul>
+      <li>Osteoarthritis of the knee and hip — pain and stiffness, worse after rest</li>
+      <li>Rheumatoid and other inflammatory arthritis</li>
+      <li>Cartilage and meniscus tears</li>
+      <li>A knee that gives way, locks, or will not straighten</li>
+      <li>Swelling or fluid collecting in a joint</li>
+      <li>Shoulder pain, including frozen shoulder</li>
+    </ul>
+    <h2>How treatment is decided</h2>
+    <p>Treatment is staged. It usually begins with advice on weight and activity, medication, and an exercise programme to build the muscle that supports the joint — for the knee, that last one is the single most useful thing most patients can do. An injection into the joint is used in selected cases.</p>
+    <p>Where the joint surface has worn through and the pain is limiting ordinary walking, sleep or work, joint replacement is discussed. That conversation covers what the operation replaces, how long rehabilitation takes, and what the joint will and will not do afterwards.</p>
+  description_bn: |-
+    <h2>এই চিকিৎসা কী নিয়ে কাজ করে</h2>
+    <p>জয়েন্টের ভেতরের মসৃণ আবরণ ক্ষয়ে গেলে, প্রদাহ হলে বা ভেতরে কিছু ছিঁড়ে গেলে ব্যথা হয়। শরীরের সব জয়েন্টের মধ্যে হাঁটুর ওপর ভার পড়ে সবচেয়ে বেশি, তাই সমস্যা সাধারণত সেখানেই আগে ধরা পড়ে।</p>
+    <h2>চেম্বারে যেসব সমস্যা দেখা হয়</h2>
+    <ul>
+      <li>হাঁটু ও ঊরুসন্ধির অস্টিওআর্থ্রাইটিস — বিশ্রামের পর যে ব্যথা ও জড়তা বাড়ে</li>
+      <li>রিউমাটয়েড ও অন্যান্য প্রদাহজনিত বাত</li>
+      <li>কার্টিলেজ ও মেনিস্কাস ছিঁড়ে যাওয়া</li>
+      <li>হাঁটু হঠাৎ বসে যাওয়া, আটকে যাওয়া বা সোজা না হওয়া</li>
+      <li>জয়েন্টে ফোলা বা পানি জমা</li>
+      <li>কাঁধের ব্যথা, ফ্রোজেন শোল্ডারসহ</li>
+    </ul>
+    <h2>চিকিৎসা যেভাবে ঠিক করা হয়</h2>
+    <p>চিকিৎসা ধাপে ধাপে এগোয়। সাধারণত শুরু হয় ওজন ও চলাফেরার পরামর্শ, ওষুধ এবং জয়েন্ট ধরে রাখা পেশি শক্ত করার ব্যায়াম দিয়ে — হাঁটুর ক্ষেত্রে বেশিরভাগ রোগীর জন্য এই ব্যায়ামই সবচেয়ে কার্যকর। কিছু ক্ষেত্রে জয়েন্টে ইনজেকশন দেওয়া হয়।</p>
+    <p>জয়েন্টের আবরণ পুরোপুরি ক্ষয়ে গেলে এবং ব্যথায় স্বাভাবিক হাঁটাচলা, ঘুম বা কাজ ব্যাহত হলে জয়েন্ট রিপ্লেসমেন্ট নিয়ে আলোচনা করা হয়। সেই আলোচনায় থাকে অপারেশনে কী প্রতিস্থাপন করা হয়, পুনর্বাসনে কত সময় লাগে এবং নতুন জয়েন্ট দিয়ে কী করা যাবে আর কী যাবে না।</p>
+
+- slug: "bone-deformities"
+  description_en: |-
+    <h2>What this covers</h2>
+    <p>A bone can be misshapen from birth, or become misshapen later — after a fracture that healed at an angle, after an infection, or because of a condition affecting how bone grows. In a growing child, the shape of a limb can often be corrected while the bone is still growing, which is why these problems are worth showing early.</p>
+    <h2>Conditions seen at the chamber</h2>
+    <ul>
+      <li>Clubfoot and other deformities present at birth</li>
+      <li>Bow legs and knock knees</li>
+      <li>One limb shorter than the other</li>
+      <li>Bones that healed crooked after a fracture</li>
+      <li>Deformity following bone infection, or injury to a growth plate</li>
+      <li>Deformity caused by rickets and other conditions affecting bone</li>
+    </ul>
+    <h2>How treatment is decided</h2>
+    <p>Assessment starts by measuring the deformity — how much, in which direction, and at what level — using examination and full-length X-rays. In children, growth itself is part of the plan, and some deformities are watched rather than treated, because they correct on their own.</p>
+    <p>Treatment ranges from bracing and casting to surgery that cuts and realigns the bone, or that guides growth so the limb straightens as the child grows. Lengthening is possible where a limb is short. All of these take time and regular follow-up, and the timetable is explained at the outset.</p>
+  description_bn: |-
+    <h2>এই চিকিৎসা কী নিয়ে কাজ করে</h2>
+    <p>হাড় জন্ম থেকেই বেঁকে থাকতে পারে, আবার পরেও বেঁকে যেতে পারে — ভাঙা হাড় বাঁকা হয়ে জোড়া লাগলে, সংক্রমণের পর, কিংবা হাড় বেড়ে ওঠায় প্রভাব ফেলে এমন কোনো রোগে। শিশু বেড়ে ওঠার সময় হাত বা পায়ের গঠন অনেক ক্ষেত্রেই সংশোধন করা যায়, তাই এসব সমস্যা দ্রুত দেখানো ভালো।</p>
+    <h2>চেম্বারে যেসব সমস্যা দেখা হয়</h2>
+    <ul>
+      <li>মুগুর পা (ক্লাবফুট) ও জন্মগত অন্যান্য বিকৃতি</li>
+      <li>পা ধনুকের মতো বাঁকা হওয়া বা দুই হাঁটু ভেতরের দিকে ঢুকে যাওয়া</li>
+      <li>এক পা বা হাত অন্যটির চেয়ে ছোট হওয়া</li>
+      <li>হাড় ভাঙার পর বাঁকা হয়ে জোড়া লাগা</li>
+      <li>হাড়ের সংক্রমণ বা গ্রোথ প্লেটে আঘাতের পর সৃষ্ট বিকৃতি</li>
+      <li>রিকেটস ও হাড়ের অন্যান্য রোগজনিত বিকৃতি</li>
+    </ul>
+    <h2>চিকিৎসা যেভাবে ঠিক করা হয়</h2>
+    <p>প্রথমে বিকৃতিটি মাপা হয় — কতটা, কোন দিকে এবং কোন জায়গায় — সরাসরি পরীক্ষা ও পুরো হাড়ের এক্স-রে দিয়ে। শিশুদের ক্ষেত্রে বেড়ে ওঠাটাই পরিকল্পনার অংশ, আর কিছু বিকৃতি নিজে থেকেই ঠিক হয়ে যায় বলে সেগুলো চিকিৎসা না করে পর্যবেক্ষণে রাখা হয়।</p>
+    <p>চিকিৎসা হতে পারে ব্রেস বা প্লাস্টার থেকে শুরু করে হাড় কেটে সোজা করার সার্জারি, কিংবা এমন পদ্ধতি যাতে শিশু বেড়ে ওঠার সঙ্গে সঙ্গে হাড় সোজা হয়ে আসে। হাত বা পা ছোট হলে লম্বা করাও সম্ভব। প্রতিটিতেই সময় ও নিয়মিত ফলো-আপ লাগে, এবং শুরুতেই সেই সময়সূচি বুঝিয়ে দেওয়া হয়।</p>
+
+- slug: "sports-injury-management"
+  description_en: |-
+    <h2>What this covers</h2>
+    <p>Sports injuries happen to the soft tissue that holds a joint together and moves it — ligaments, tendons, cartilage and muscle. They also happen to people who play no sport at all: the same knee ligament tears getting down off a bus as it does on a football field.</p>
+    <h2>Conditions seen at the chamber</h2>
+    <ul>
+      <li>Anterior cruciate ligament (ACL) and other knee ligament tears</li>
+      <li>Meniscus tears</li>
+      <li>Ankle sprains, and an ankle that keeps giving way</li>
+      <li>Shoulder dislocation and rotator cuff injury</li>
+      <li>Tendon injuries, including the Achilles tendon</li>
+      <li>Muscle tears, and injuries that keep coming back</li>
+    </ul>
+    <h2>How treatment is decided</h2>
+    <p>The first job is to find out exactly what has torn and how badly, because a partial tear and a complete one are treated differently. That means examining the joint and, where it will change the plan, an MRI.</p>
+    <p>Many of these injuries are treated without surgery, through a structured rehabilitation programme that restores strength and control before you go back to activity. Surgery — usually keyhole — is discussed where a joint stays unstable, where a tear will not heal on its own, or where the demands on the joint make repair the better option. Rehabilitation matters as much as the operation, and the plan covers both.</p>
+  description_bn: |-
+    <h2>এই চিকিৎসা কী নিয়ে কাজ করে</h2>
+    <p>খেলাধুলার আঘাত লাগে সেই নরম কলাগুলোতে, যেগুলো জয়েন্ট ধরে রাখে ও নড়াচড়া করায় — লিগামেন্ট, টেন্ডন, কার্টিলেজ ও পেশি। যাঁরা খেলাধুলা করেন না তাঁদেরও এসব হয়: বাস থেকে নামতে গিয়ে হাঁটুর যে লিগামেন্ট ছেঁড়ে, ফুটবল মাঠেও সেটিই ছেঁড়ে।</p>
+    <h2>চেম্বারে যেসব সমস্যা দেখা হয়</h2>
+    <ul>
+      <li>এসিএল ও হাঁটুর অন্যান্য লিগামেন্ট ছিঁড়ে যাওয়া</li>
+      <li>মেনিস্কাস ছিঁড়ে যাওয়া</li>
+      <li>গোড়ালি মচকানো ও বারবার গোড়ালি বেঁকে যাওয়া</li>
+      <li>কাঁধ সরে যাওয়া ও রোটেটর কাফের আঘাত</li>
+      <li>টেন্ডনের আঘাত, অ্যাকিলিস টেন্ডনসহ</li>
+      <li>পেশি ছিঁড়ে যাওয়া ও বারবার ফিরে আসা আঘাত</li>
+    </ul>
+    <h2>চিকিৎসা যেভাবে ঠিক করা হয়</h2>
+    <p>প্রথম কাজ হলো ঠিক কী ছিঁড়েছে এবং কতটা ছিঁড়েছে তা বের করা, কারণ আংশিক ও পূর্ণ ছেঁড়ার চিকিৎসা আলাদা। এর জন্য জয়েন্ট সরাসরি পরীক্ষা করা হয়, আর যেখানে তাতে পরিকল্পনা বদলাতে পারে সেখানে এমআরআই করা হয়।</p>
+    <p>এসব আঘাতের অনেকগুলোই অপারেশন ছাড়াই সারানো যায় — একটি সাজানো পুনর্বাসন কর্মসূচির মাধ্যমে, যা আবার খেলায় বা কাজে ফেরার আগে শক্তি ও নিয়ন্ত্রণ ফিরিয়ে আনে। জয়েন্ট অস্থিতিশীল থেকে গেলে, ছেঁড়া অংশ নিজে থেকে জোড়া না লাগলে, কিংবা জয়েন্টের ওপর চাপ বেশি হলে সার্জারি — সাধারণত কি-হোল পদ্ধতিতে — নিয়ে আলোচনা করা হয়। অপারেশনের মতোই পুনর্বাসনও জরুরি, তাই পরিকল্পনায় দুটোই থাকে।</p>
+
+- slug: "chronic-pain-management"
+  description_en: |-
+    <h2>What this covers</h2>
+    <p>Pain is called chronic when it lasts beyond the time the original injury needed to heal — usually taken as three months. By then the pain has become a problem in its own right, and treating it means treating more than the place that hurts.</p>
+    <h2>Conditions seen at the chamber</h2>
+    <ul>
+      <li>Long-standing back and neck pain</li>
+      <li>Nerve pain, including pain that persists after a disc problem</li>
+      <li>Joint pain from arthritis that has become constant</li>
+      <li>Pain remaining after a fracture or an operation</li>
+      <li>Widespread muscle pain and stiffness</li>
+      <li>Pain that is disturbing sleep, work or mood</li>
+    </ul>
+    <h2>How treatment is decided</h2>
+    <p>The first step is to be sure nothing treatable has been missed, and to understand how the pain is affecting sleep, movement and daily life — because that is what the plan has to change.</p>
+    <p>Treatment is usually a combination rather than one thing: medication chosen for the type of pain, a graded exercise and physiotherapy programme, an injection where one specific structure is the source, and advice on pacing and sleep. Progress is measured by what you can do rather than by a number, and the plan is adjusted at each follow-up.</p>
+  description_bn: |-
+    <h2>এই চিকিৎসা কী নিয়ে কাজ করে</h2>
+    <p>আঘাত সেরে ওঠার স্বাভাবিক সময় পেরিয়ে যাওয়ার পরেও ব্যথা থেকে গেলে তাকে দীর্ঘমেয়াদি ব্যথা বলা হয় — সাধারণত তিন মাস ধরা হয়। ততদিনে ব্যথা নিজেই একটি সমস্যা হয়ে দাঁড়ায়, আর তার চিকিৎসা মানে কেবল যেখানে ব্যথা সেখানকার চিকিৎসা নয়।</p>
+    <h2>চেম্বারে যেসব সমস্যা দেখা হয়</h2>
+    <ul>
+      <li>দীর্ঘদিনের কোমর ও ঘাড়ের ব্যথা</li>
+      <li>স্নায়ুর ব্যথা, ডিস্কের সমস্যার পরেও থেকে যাওয়া ব্যথাসহ</li>
+      <li>বাতজনিত জয়েন্টের ব্যথা, যা স্থায়ী হয়ে গেছে</li>
+      <li>হাড় ভাঙা বা অপারেশনের পরেও থেকে যাওয়া ব্যথা</li>
+      <li>সারা শরীরে ছড়ানো পেশির ব্যথা ও জড়তা</li>
+      <li>যে ব্যথায় ঘুম, কাজ বা মন ভালো থাকা ব্যাহত হচ্ছে</li>
+    </ul>
+    <h2>চিকিৎসা যেভাবে ঠিক করা হয়</h2>
+    <p>প্রথম ধাপ হলো চিকিৎসাযোগ্য কোনো কারণ বাদ পড়েছে কি না তা নিশ্চিত হওয়া, এবং ব্যথা আপনার ঘুম, চলাফেরা ও দৈনন্দিন জীবনে কীভাবে প্রভাব ফেলছে তা বোঝা — কারণ পরিকল্পনাটি এই জায়গাতেই পরিবর্তন আনতে চায়।</p>
+    <p>চিকিৎসা সাধারণত একটিমাত্র পদ্ধতি নয়, বরং কয়েকটির সমন্বয়: ব্যথার ধরন অনুযায়ী বেছে নেওয়া ওষুধ, ধাপে ধাপে বাড়ানো ব্যায়াম ও ফিজিওথেরাপি, নির্দিষ্ট কোনো জায়গা থেকে ব্যথা এলে সেখানে ইনজেকশন, এবং কাজ ভাগ করে নেওয়া ও ঘুমের পরামর্শ। উন্নতি মাপা হয় আপনি কী কী করতে পারছেন তা দিয়ে, কোনো সংখ্যা দিয়ে নয়, আর প্রতিটি ফলো-আপে পরিকল্পনা বদলে নেওয়া হয়।</p>
