@@ -29,22 +29,28 @@ class Uploads
         return (int) floor(self::maxBytes() / 1024);
     }
 
+    /** The unit a size is written in, which Bangla writes as এমবি / কেবি. */
+    private static function unit(string $key): string
+    {
+        return ' '.__('site.units.'.$key);
+    }
+
     /** "2 MB" — for telling a human before they pick a file. */
     public static function maxLabel(): string
     {
         $bytes = self::maxBytes();
 
         return $bytes >= 1048576
-            ? Number::localizeDigits(round($bytes / 1048576, 1)).' MB'
-            : Number::localizeDigits((int) round($bytes / 1024)).' KB';
+            ? Number::localizeDigits(round($bytes / 1048576, 1)).self::unit('mb')
+            : Number::localizeDigits((int) round($bytes / 1024)).self::unit('kb');
     }
 
     /** "2.4 MB" — the size of a file the operator just tried to send. */
     public static function formatBytes(int $bytes): string
     {
         return $bytes >= 1048576
-            ? Number::localizeDigits(round($bytes / 1048576, 1)).' MB'
-            : Number::localizeDigits((int) ceil($bytes / 1024)).' KB';
+            ? Number::localizeDigits(round($bytes / 1048576, 1)).self::unit('mb')
+            : Number::localizeDigits((int) ceil($bytes / 1024)).self::unit('kb');
     }
 
     /** Whole-request ceiling, which a bulk upload can exceed on its own. */
@@ -55,7 +61,7 @@ class Uploads
 
     public static function maxPostLabel(): string
     {
-        return Number::localizeDigits(round(self::maxPostBytes() / 1048576, 1)).' MB';
+        return Number::localizeDigits(round(self::maxPostBytes() / 1048576, 1)).self::unit('mb');
     }
 
     /** Validation rules for a single optional image. */

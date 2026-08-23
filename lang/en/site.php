@@ -15,6 +15,11 @@ return [
         9 => 'September', 10 => 'October', 11 => 'November', 12 => 'December',
     ],
 
+    'units' => [
+        'mb' => 'MB',
+        'kb' => 'KB',
+    ],
+
     'duration' => 'Typical Duration',
     'present' => 'Present',
     'skip_to_content' => 'Skip to main content',

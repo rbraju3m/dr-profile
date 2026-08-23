@@ -52,8 +52,14 @@ class UploadFailureTest extends TestCase
 
     public function test_the_limit_is_stated_in_words_a_person_can_read(): void
     {
-        $this->assertMatchesRegularExpression('/^[\d০-৯.,]+ (MB|KB)$/', Uploads::maxLabel());
-        $this->assertMatchesRegularExpression('/^[\d০-৯.,]+ MB$/', Uploads::maxPostLabel());
+        $this->assertMatchesRegularExpression('/^[\d.,]+ (MB|KB)$/', Uploads::maxLabel());
+        $this->assertMatchesRegularExpression('/^[\d.,]+ MB$/', Uploads::maxPostLabel());
+
+        // Both halves localise: a Bangla sentence gets Bangla digits *and* a
+        // Bangla unit, not "২ MB".
+        $this->app->setLocale('bn');
+        $this->assertMatchesRegularExpression('/^[০-৯.,]+ (এমবি|কেবি)$/u', Uploads::maxLabel());
+        $this->assertMatchesRegularExpression('/^[০-৯.,]+ এমবি$/u', Uploads::maxPostLabel());
     }
 
     /** Every upload rule in the admin derives from the server, not a constant. */

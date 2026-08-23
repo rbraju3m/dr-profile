@@ -329,7 +329,7 @@ return [
         'no_cap' => 'Leave blank for no cap.',
         'ongoing' => 'Shows “Present” instead of an end year.',
         'online_booking_off' => 'Turn off for chambers where serials are issued at the counter.',
-        'pdf_limit' => 'PDF, max 10 MB',
+        'pdf_limit' => 'PDF, max :max.',
         'title_example' => 'Prof. Dr.',
         'password_keep' => 'Leave blank to keep the current password.',
         'password_min' => 'At least 8 characters.',
