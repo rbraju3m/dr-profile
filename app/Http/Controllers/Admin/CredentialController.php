@@ -44,6 +44,25 @@ class CredentialController extends ResourceController
         ];
     }
 
+    /** The form calls these From and To, not "start year" and "end year". */
+    protected function attributeNames(array $rules): array
+    {
+        return parent::attributeNames($rules) + [
+            'start_year' => __('admin.fields.from'),
+            'end_year' => __('admin.fields.to'),
+        ];
+    }
+
+    /**
+     * "To must be From or more" is a true sentence and a poor message. It also
+     * carries the other field's *value* rather than its name, which arrives as
+     * a Latin numeral in a Bangla sentence.
+     */
+    protected function messages(): array
+    {
+        return ['end_year.gte' => __('validation_custom.year_order')];
+    }
+
     protected function rules(?Model $record): array
     {
         return [

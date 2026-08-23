@@ -8,6 +8,8 @@ return [
 
     'exception_exists' => 'There is already an entry for that chamber on that date. Edit the existing one instead.',
 
+    'year_order' => 'The ending year cannot be earlier than the starting year.',
+
     'upload' => [
         'too_large' => 'That file is :size. This server accepts files up to :max — please resize it and try again.',
         'failed' => 'The file did not upload. It is most likely larger than :max, which is the limit on this server.',
