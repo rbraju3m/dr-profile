@@ -92,6 +92,7 @@ reader sees it. Every guard below exists because that check was skipped once:
 | `DateFormattingTest` | a view spelling a date out for itself instead of asking `App\Support\Week` |
 | `ValidationMessagesTest` | a validation message left in English, or showing a `:placeholder` it meant to fill |
 | `SharedNavigationTest` | the header and footer lists fetched once per view instead of once per request |
+| `MediaCleanupTest` | a file left on the disk by a row that has gone, and an upload no model owns |
 
 ## Bilingual architecture
 
@@ -292,9 +293,13 @@ switch being off, and the admin panel.
 - `<x-media-frame>` takes `fit`: `cover` crops (photographs), `contain` letterboxes inside the tile
   (posters carrying text — a centre crop through a Bangla headline destroys the image), `natural`
   drops the fixed ratio for detail pages.
-- Gallery albums cascade to items in the database. Because a DB cascade never loads the rows, item
-  files were orphaned; `GalleryItem` now deletes its own file on `deleting`, and `GalleryAlbum`
-  deletes items through Eloquent so those events fire.
+- **A file and the row pointing at it go together, and the model owns that.** Every model with a
+  file column declares `protected array $mediaColumns` and `HasMedia` deletes them on `deleting`, so
+  a row leaving through tinker, a seeder, a command or a database cascade takes its files too — it
+  was the admin controller's job alone, and every other route out orphaned the file for good.
+  Gallery albums are why: a DB cascade never loads the rows, so `GalleryAlbum` deletes its items
+  through Eloquent to make the events fire. `MediaCleanupTest` checks the registry from both ends —
+  a declared column the table does not have, and an admin upload no model declares.
 - `App\Support\VideoEmbed` converts what people paste — YouTube watch/short/shorts/live, Vimeo,
   Facebook videos, **reels**, share links and `fb.watch` — into something framable. Facebook embeds
   fail silently on non-public videos, so every FB embed also renders a "Watch on Facebook" link.

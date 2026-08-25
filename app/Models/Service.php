@@ -14,6 +14,9 @@ class Service extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['image'];
+
     protected array $translatable = [
         'name', 'short_description', 'description', 'duration',
         'meta_title', 'meta_description',

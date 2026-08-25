@@ -13,6 +13,9 @@ class Page extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['banner_image'];
+
     protected array $translatable = ['title', 'content', 'meta_title', 'meta_description'];
 
     protected function casts(): array

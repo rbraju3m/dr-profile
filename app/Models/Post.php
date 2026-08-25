@@ -19,6 +19,9 @@ class Post extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['image'];
+
     public const TYPES = ['news', 'event', 'blog'];
 
     protected array $translatable = [

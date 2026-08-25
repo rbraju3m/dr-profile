@@ -16,6 +16,9 @@ class SuccessStory extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['image'];
+
     protected array $translatable = [
         'title', 'patient_name', 'patient_location', 'condition', 'summary', 'content',
         'meta_title', 'meta_description',

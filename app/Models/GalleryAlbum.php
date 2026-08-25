@@ -14,6 +14,9 @@ class GalleryAlbum extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['cover_image'];
+
     protected array $translatable = ['title', 'description'];
 
     protected function casts(): array

@@ -13,6 +13,9 @@ class Slider extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['image', 'mobile_image'];
+
     protected array $translatable = ['title', 'subtitle', 'cta_label'];
 
     protected function casts(): array

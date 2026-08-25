@@ -14,6 +14,9 @@ class Testimonial extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['photo'];
+
     protected array $translatable = ['patient_name', 'patient_title', 'content'];
 
     protected function casts(): array

@@ -15,6 +15,9 @@ class Chamber extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['image'];
+
     protected array $translatable = ['name', 'address', 'city', 'note'];
 
     protected function casts(): array

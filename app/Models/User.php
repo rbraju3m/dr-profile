@@ -21,6 +21,9 @@ class User extends Authenticatable
     /** @use HasFactory<UserFactory> */
     use HasFactory, HasMedia, Notifiable;
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['avatar'];
+
     public const ROLES = ['admin', 'editor'];
 
     protected function casts(): array

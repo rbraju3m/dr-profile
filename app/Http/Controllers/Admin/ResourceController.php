@@ -132,10 +132,8 @@ abstract class ResourceController extends Controller
     {
         $record = $this->resolveRecord($key);
 
-        foreach ($this->mediaFields as $field => $folder) {
-            app(MediaService::class)->delete($record->{$field});
-        }
-
+        // The files go with it: every model with a file column declares those
+        // columns and deletes them on `deleting`, so this does not have to know.
         $record->delete();
 
         return redirect()

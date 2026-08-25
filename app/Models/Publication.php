@@ -14,6 +14,9 @@ class Publication extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['file'];
+
     public const TYPES = ['journal', 'conference', 'book', 'chapter', 'thesis', 'other'];
 
     protected array $translatable = ['title', 'venue', 'abstract'];

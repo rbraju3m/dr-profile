@@ -18,6 +18,9 @@ class DoctorProfile extends Model
 
     protected $guarded = [];
 
+    /** @var array<int, string> */
+    protected array $mediaColumns = ['photo', 'hero_image', 'og_image', 'cv_file'];
+
     protected array $translatable = [
         'name', 'title', 'designation', 'tagline', 'degrees',
         'short_bio', 'bio', 'philosophy', 'languages',
