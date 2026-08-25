@@ -92,10 +92,19 @@ class ListingContentTest extends TestCase
         $this->admin('bn');
 
         // 10:30 AM, which Bangla writes as সকাল ১০:৩০ — no meridiem at all.
-        $this->get('/admin/appointments')->assertOk()
+        $listing = $this->get('/admin/appointments')->assertOk()
             ->assertSee('সকাল ১০:৩০', escape: false)
-            ->assertDontSee('10:30', escape: false)
-            ->assertDontSee('AM', escape: false);
+            ->assertDontSee('10:30', escape: false);
+
+        // Anchored to a digit, as `DateFormattingTest` anchors its own sweep.
+        // A bare assertDontSee('AM') also matched those two letters landing
+        // inside the CSRF token, which a 40-character random string does about
+        // once in a hundred runs — and this test duly failed about that often.
+        $this->assertDoesNotMatchRegularExpression(
+            '/\d\s*(AM|PM)\b/',
+            $listing->getContent(),
+            'The appointments listing prints a Latin meridiem.'
+        );
 
         $this->get('/admin/appointments/'.$appointment->appointment_no)->assertOk()
             ->assertSee(__('site.months.'.$appointment->appointment_date->month, [], 'bn'), escape: false);

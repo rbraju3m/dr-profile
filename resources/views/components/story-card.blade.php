@@ -19,17 +19,6 @@
             {{ Str::limit($story->tr('summary'), 120) }}
         </p>
 
-        <div class="mt-4 flex items-center gap-2 border-t border-slate-100 pt-4 text-xs text-slate-500">
-            <x-icon name="user" class="h-3.5 w-3.5"/>
-            <span>{{ $story->patient_name }}</span>
-            @if ($story->patient_age)
-                <span aria-hidden="true">·</span>
-                <span class="tabular-nums">{{ bn_digits($story->patient_age) }}</span>
-            @endif
-            @if ($story->tr('patient_location'))
-                <span aria-hidden="true">·</span>
-                <span class="truncate">{{ $story->tr('patient_location') }}</span>
-            @endif
-        </div>
+        <x-story-meta :story="$story" class="mt-4 border-t border-slate-100 pt-4"/>
     </div>
 </a>

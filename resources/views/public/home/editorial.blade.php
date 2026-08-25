@@ -429,18 +429,7 @@
                                 {{ Str::limit($lead->tr('summary'), 260) }}
                             </p>
 
-                            <p class="mt-6 flex flex-wrap items-center gap-2 border-t border-slate-200 pt-4 text-xs text-slate-500">
-                                <x-icon name="user" class="h-3.5 w-3.5"/>
-                                <span>{{ $lead->patient_name }}</span>
-                                @if ($lead->patient_age)
-                                    <span aria-hidden="true">·</span>
-                                    <span class="tabular-nums">{{ bn_digits($lead->patient_age) }}</span>
-                                @endif
-                                @if ($lead->tr('patient_location'))
-                                    <span aria-hidden="true">·</span>
-                                    <span>{{ $lead->tr('patient_location') }}</span>
-                                @endif
-                            </p>
+                            <x-story-meta :story="$lead" class="mt-6 flex-wrap border-t border-slate-200 pt-4"/>
 
                             <span class="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-primary-600">
                                 {{ __('site.actions.read_more') }}
@@ -459,9 +448,11 @@
                                     <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-500">
                                         {{ Str::limit($story->tr('summary'), 150) }}
                                     </p>
-                                    <span class="mt-4 flex items-center gap-2 text-xs text-slate-500">
-                                        <x-icon name="user" class="h-3.5 w-3.5"/>{{ $story->patient_name }}
-                                    </span>
+                                    @if ($story->patient_name)
+                                        <span class="mt-4 flex items-center gap-2 text-xs text-slate-500">
+                                            <x-icon name="user" class="h-3.5 w-3.5"/>{{ $story->patient_name }}
+                                        </span>
+                                    @endif
                                 </a>
                             @endforeach
                         </div>
