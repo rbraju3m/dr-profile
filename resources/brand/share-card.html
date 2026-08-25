@@ -1,0 +1,60 @@
+<!--
+    The source the share card (share-card.png) was rendered from.
+
+    It is not read at runtime and it is not a source of truth: `php artisan
+    profile:share-card` installs the PNG beside it, and nothing regenerates the
+    PNG on its own. If his name or specialty changes, edit the two lines below,
+    re-render, and run the command again.
+
+        composer serve &
+        cp resources/brand/share-card.html public/share-card.html
+        google-chrome --headless --disable-gpu --no-sandbox --hide-scrollbars \
+            --window-size=1200,630 --force-device-scale-factor=2 \
+            --screenshot=resources/brand/share-card.png \
+            http://127.0.0.1:8000/share-card.html
+        rm public/share-card.html
+
+    The card carries only the name and the specialty, both of which are current.
+    It carries no post and no qualifications on purpose: the artwork that came
+    with the site states a designation he does not hold, and a share card is the
+    one image that goes everywhere.
+-->
+<!doctype html>
+<meta charset="utf-8">
+<link rel="stylesheet" href="/build/assets/fonts-Bzn-3EnM.css">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box }
+  body { width:1200px; height:630px; overflow:hidden;
+         font-family:"Inter",system-ui,sans-serif; background:#1b4353; color:#fff }
+  .card { position:relative; width:1200px; height:630px; overflow:hidden }
+  .orb { position:absolute; border-radius:9999px; filter:blur(64px) }
+  .orb-a { width:420px; height:420px; right:-120px; top:-160px; background:rgba(37,145,172,.30) }
+  .orb-b { width:420px; height:420px; left:25%; bottom:-200px; background:rgba(16,185,129,.20) }
+  .grid { position:absolute; inset:0; opacity:.07;
+          background-image:linear-gradient(to right,#fff 1px,transparent 1px),
+                           linear-gradient(to bottom,#fff 1px,transparent 1px);
+          background-size:64px 64px;
+          -webkit-mask-image:linear-gradient(to bottom,#000,transparent 80%) }
+  .body { position:relative; height:100%; display:flex; flex-direction:column;
+          justify-content:center; padding:0 88px }
+  .name { font-size:68px; font-weight:600; letter-spacing:-.025em; line-height:1.05 }
+  .rule { width:56px; height:3px; border-radius:9999px; background:#10b981; margin:28px 0 26px }
+  .role { font-size:29px; font-weight:500; color:#d8f0f5; line-height:1.3 }
+  .bn   { font-family:"Noto Sans Bengali","Inter",sans-serif; font-size:26px;
+          color:#b4e2ec; line-height:1.7; margin-top:10px }
+  .foot { position:absolute; left:88px; bottom:56px; display:flex; align-items:center; gap:14px;
+          font-size:20px; color:#81cbdd; letter-spacing:.06em; text-transform:uppercase }
+  .dot  { width:6px; height:6px; border-radius:9999px; background:#10b981 }
+</style>
+<div class="card">
+  <div class="orb orb-a"></div>
+  <div class="orb orb-b"></div>
+  <div class="grid"></div>
+  <div class="body">
+    <div class="name">Dr. Shaikh Saadiul Islam</div>
+    <div class="rule"></div>
+    <div class="role">Orthopaedics, Trauma &amp; Spine Specialist</div>
+    <div class="bn">ডা. শেখ সাদিউল ইসলাম — অর্থোপেডিক্স, ট্রমা ও স্পাইন বিশেষজ্ঞ</div>
+  </div>
+  <div class="foot"><span class="dot"></span>Dhaka, Bangladesh</div>
+</div>

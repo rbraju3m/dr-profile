@@ -30,6 +30,7 @@ php artisan doctor:import --dry-run   # load content/doctor.yml, showing changes
 php artisan doctor:import
 php artisan demo:purge --all          # remove every seeded record, keeping staff accounts
 php artisan posts:signature --dry-run # restate the signature at the foot of every signed post
+php artisan profile:share-card        # install resources/brand/share-card.png as the og:image
 ```
 
 Screenshots, when you need to see a change rather than assert it: Chrome is on this machine.
