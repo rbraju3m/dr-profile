@@ -3,7 +3,7 @@
         <div class="space-y-6 lg:col-span-2">
             <x-admin.card>
                 <div class="space-y-4">
-                    <x-admin.input name="patient_name" :label="__('site.booking.patient_name')" :value="$record?->patient_name" required/>
+                    <x-admin.bilingual name="patient_name" :label="__('site.booking.patient_name')" :record="$record" required/>
                     <x-admin.bilingual name="patient_title" :label="__('admin.fields.occupation')" :record="$record"/>
                     <x-admin.bilingual name="content" :label="__('admin.fields.testimonial')" :record="$record" type="textarea" rows="6" required/>
                 </div>

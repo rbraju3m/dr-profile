@@ -5,6 +5,7 @@ namespace Tests\Feature\Admin;
 use App\Models\Chamber;
 use App\Models\Post;
 use App\Models\Service;
+use App\Models\Testimonial;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
@@ -177,6 +178,32 @@ class AdminCrudTest extends TestCase
         ])->assertSessionHasErrors('start_time');
 
         $this->assertSame(1, $chamber->schedules()->count());
+    }
+
+    /**
+     * The name a patient is credited by is content like any other: the form has
+     * to offer both halves, and the edit page has to give them back. It offered
+     * one box, so a Bengali speaker's name was filed as the English one.
+     */
+    public function test_a_patient_name_is_kept_in_both_languages(): void
+    {
+        $this->actingAs($this->admin)->post('/admin/testimonials', [
+            'patient_name_en' => 'Nasima Khatun',
+            'patient_name_bn' => 'নাসিমা খাতুন',
+            'content_en' => 'He told me which test could wait and which could not.',
+            'rating' => 5,
+            'is_published' => 1,
+        ])->assertRedirect('/admin/testimonials');
+
+        $testimonial = Testimonial::first();
+
+        $this->assertSame('নাসিমা খাতুন', $testimonial->patient_name_bn);
+
+        $this->actingAs($this->admin)->get('/admin/testimonials/'.$testimonial->id.'/edit')
+            ->assertOk()
+            ->assertSee('name="patient_name_en"', false)
+            ->assertSee('name="patient_name_bn"', false)
+            ->assertSee('নাসিমা খাতুন', escape: false);
     }
 
     public function test_the_last_admin_cannot_be_deleted(): void

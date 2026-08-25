@@ -109,7 +109,7 @@ class ContentSeeder extends Seeder
                     'service_id' => $s['service']?->id,
                     'title_en' => $s['title_en'],
                     'title_bn' => $s['title_bn'],
-                    'patient_name' => $s['patient'],
+                    'patient_name_en' => $s['patient'],
                     'patient_age' => $s['age'],
                     'patient_location_en' => $s['loc_en'],
                     'patient_location_bn' => $s['loc_bn'],
@@ -258,7 +258,7 @@ class ContentSeeder extends Seeder
 
         foreach ($rows as $i => [$name, $titleEn, $titleBn, $enText, $bnText, $rating]) {
             Testimonial::updateOrCreate(
-                ['patient_name' => $name],
+                ['patient_name_en' => $name],
                 [
                     'patient_title_en' => $titleEn,
                     'patient_title_bn' => $titleBn,

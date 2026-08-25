@@ -3,8 +3,12 @@
 namespace Tests\Feature;
 
 use App\Models\Service;
+use App\Models\SuccessStory;
+use App\Models\Testimonial;
 use App\Support\Number;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Schema;
 use Tests\TestCase;
 
 class LocalizationTest extends TestCase
@@ -89,5 +93,77 @@ class LocalizationTest extends TestCase
 
         $this->get('/en/expertise/holter')->assertOk()->assertSee('Holter Monitoring');
         $this->get('/bn/expertise/holter')->assertOk();
+    }
+
+    /**
+     * A patient's name was the one piece of content on these two tables kept in
+     * a single column, so a story credited to মুগ্ধ was credited to মুগ্ধ on the
+     * English page too — and it is the field on those forms a Bengali speaker
+     * is likeliest to type in Bengali.
+     */
+    public function test_a_patients_name_follows_the_locale(): void
+    {
+        SuccessStory::create([
+            'slug' => 'walked-again',
+            'title_en' => 'Walked Again', 'title_bn' => 'আবার হাঁটলেন',
+            'patient_name_en' => 'Mugdho', 'patient_name_bn' => 'মুগ্ধ',
+            'is_published' => true, 'published_at' => now()->subDay(),
+        ]);
+
+        Testimonial::create([
+            'patient_name_en' => 'Nasima Khatun', 'patient_name_bn' => 'নাসিমা খাতুন',
+            'content_en' => 'He told me which test could wait.',
+            'content_bn' => 'কোন পরীক্ষা এখন না করলেও চলবে তিনি বলে দিয়েছেন।',
+            'rating' => 5, 'is_published' => true,
+        ]);
+
+        $this->get('/en/success-stories/walked-again')->assertOk()
+            ->assertSee('Mugdho')->assertDontSee('মুগ্ধ', escape: false);
+        $this->get('/bn/success-stories/walked-again')->assertOk()
+            ->assertSee('মুগ্ধ', escape: false)->assertDontSee('Mugdho');
+
+        $this->get('/en')->assertOk()
+            ->assertSee('Nasima Khatun')->assertDontSee('নাসিমা খাতুন', escape: false);
+        $this->get('/bn')->assertOk()
+            ->assertSee('নাসিমা খাতুন', escape: false)->assertDontSee('Nasima Khatun');
+    }
+
+    /**
+     * The same wiring checked from both ends, as the feature registry is: a
+     * column pair the model never declares is never resolved for the reader's
+     * locale, and a declared field with no pair behind it resolves to nothing
+     * at all. `patient_name` was the first kind for as long as the two tables
+     * had existed, and looked finished from the admin form.
+     */
+    public function test_every_column_pair_is_declared_and_every_declaration_has_its_pair(): void
+    {
+        foreach (glob(app_path('Models/*.php')) as $file) {
+            $class = 'App\\Models\\'.basename($file, '.php');
+            $model = new $class;
+
+            if (! $model instanceof Model || ! Schema::hasTable($model->getTable())) {
+                continue;
+            }
+
+            $table = $model->getTable();
+            $declared = method_exists($model, 'translatableFields') ? $model->translatableFields() : [];
+
+            $paired = [];
+            foreach (Schema::getColumnListing($table) as $column) {
+                if (str_ends_with($column, '_en')) {
+                    $paired[] = substr($column, 0, -3);
+                }
+            }
+
+            $this->assertSame([], array_values(array_diff($paired, $declared)),
+                "{$class} has an English column whose base name is not in \$translatable, so it never follows the locale.");
+
+            foreach ($declared as $field) {
+                $this->assertTrue(Schema::hasColumn($table, $field.'_en'),
+                    "{$class} declares {$field} translatable but has no {$field}_en column.");
+                $this->assertTrue(Schema::hasColumn($table, $field.'_bn'),
+                    "{$class} declares {$field} translatable but has no {$field}_bn column.");
+            }
+        }
     }
 }

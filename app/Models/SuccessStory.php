@@ -17,7 +17,7 @@ class SuccessStory extends Model
     protected $guarded = [];
 
     protected array $translatable = [
-        'title', 'patient_location', 'condition', 'summary', 'content',
+        'title', 'patient_name', 'patient_location', 'condition', 'summary', 'content',
         'meta_title', 'meta_description',
     ];
 

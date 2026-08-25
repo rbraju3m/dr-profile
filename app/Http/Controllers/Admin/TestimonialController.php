@@ -21,7 +21,7 @@ class TestimonialController extends ResourceController
 
     protected bool $reorderable = true;
 
-    protected array $searchable = ['patient_name', 'content_en'];
+    protected array $searchable = ['patient_name_en', 'patient_name_bn', 'content_en'];
 
     protected array $mediaFields = ['photo' => 'testimonials'];
 
@@ -51,7 +51,8 @@ class TestimonialController extends ResourceController
     protected function rules(?Model $record): array
     {
         return [
-            'patient_name' => ['required', 'string', 'max:120'],
+            'patient_name_en' => ['required', 'string', 'max:120'],
+            'patient_name_bn' => ['nullable', 'string', 'max:120'],
             'patient_title_en' => ['nullable', 'string', 'max:120'],
             'patient_title_bn' => ['nullable', 'string', 'max:120'],
             'service_id' => ['nullable', Rule::exists('services', 'id')],

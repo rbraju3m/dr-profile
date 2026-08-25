@@ -68,7 +68,7 @@ class EditableFieldsAreShownTest extends TestCase
     public function test_a_testimonials_visit_date_is_shown_with_the_quote(): void
     {
         Testimonial::create([
-            'patient_name' => 'A. Karim', 'content_en' => 'Walked out the same week.',
+            'patient_name_en' => 'A. Karim', 'content_en' => 'Walked out the same week.',
             'visited_on' => '2025-03-14', 'rating' => 5, 'is_published' => true,
         ]);
 

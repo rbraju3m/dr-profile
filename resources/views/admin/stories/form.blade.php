@@ -12,7 +12,9 @@
 
             <x-admin.card :title="__('site.stories.patient')">
                 <div class="grid gap-4 sm:grid-cols-2">
-                    <x-admin.input name="patient_name" :label="__('site.booking.patient_name')" :value="$record?->patient_name"/>
+                    <div class="sm:col-span-2">
+                        <x-admin.bilingual name="patient_name" :label="__('site.booking.patient_name')" :record="$record"/>
+                    </div>
                     <x-admin.input name="patient_age" type="number" :label="__('site.booking.patient_age')" :value="$record?->patient_age"/>
                     <div class="sm:col-span-2">
                         <x-admin.bilingual name="patient_location" :label="__('admin.fields.location')" :record="$record"/>

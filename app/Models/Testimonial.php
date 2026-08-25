@@ -14,7 +14,7 @@ class Testimonial extends Model
 
     protected $guarded = [];
 
-    protected array $translatable = ['patient_title', 'content'];
+    protected array $translatable = ['patient_name', 'patient_title', 'content'];
 
     protected function casts(): array
     {

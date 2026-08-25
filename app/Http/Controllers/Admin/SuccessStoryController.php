@@ -21,7 +21,7 @@ class SuccessStoryController extends ResourceController
 
     protected bool $reorderable = true;
 
-    protected array $searchable = ['title_en', 'title_bn', 'patient_name'];
+    protected array $searchable = ['title_en', 'title_bn', 'patient_name_en', 'patient_name_bn'];
 
     protected array $mediaFields = ['image' => 'stories'];
 
@@ -58,7 +58,8 @@ class SuccessStoryController extends ResourceController
             'title_bn' => ['nullable', 'string', 'max:200'],
             'slug' => ['nullable', 'string', 'max:220', Rule::unique('success_stories', 'slug')->ignore($record?->id)],
             'service_id' => ['nullable', Rule::exists('services', 'id')],
-            'patient_name' => ['nullable', 'string', 'max:120'],
+            'patient_name_en' => ['nullable', 'string', 'max:120'],
+            'patient_name_bn' => ['nullable', 'string', 'max:120'],
             'patient_age' => ['nullable', 'integer', 'min:0', 'max:130'],
             'patient_location_en' => ['nullable', 'string', 'max:120'],
             'patient_location_bn' => ['nullable', 'string', 'max:120'],
