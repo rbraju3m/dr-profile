@@ -29,6 +29,7 @@ php artisan test --filter=test_a_booked_slot_is_marked  # one method
 php artisan doctor:import --dry-run   # load content/doctor.yml, showing changes only
 php artisan doctor:import
 php artisan demo:purge --all          # remove every seeded record, keeping staff accounts
+php artisan posts:signature --dry-run # restate the signature at the foot of every signed post
 ```
 
 Screenshots, when you need to see a change rather than assert it: Chrome is on this machine.
