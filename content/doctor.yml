@@ -27,8 +27,8 @@ profile:
   tagline_en: "Treatment is not only physical healing — it is reassurance too."
   tagline_bn: "চিকিৎসা কেবল শারীরিক আরোগ্যের নয়, মানসিক আশ্বাসেরও বিষয়"
 
-  degrees_en: "MBBS (DMC), FCPS (Ortho), MS (Ortho), FACS (USA), BCS (Health)"
-  degrees_bn: "এমবিবিএস (ঢামেক), এফসিপিএস (অর্থো), এমএস (অর্থো), এফএসিএস (ইউএসএ), বিসিএস (স্বাস্থ্য)"
+  degrees_en: "MBBS (DMC), MRCS (A) UK, FCPS (Ortho), MS (Ortho), FACS (USA), BCS (Health)"
+  degrees_bn: "এমবিবিএস (ঢামেক), এমআরসিএস (এ) ইউকে, এফসিপিএস (অর্থো), এমএস (অর্থো), এফএসিএস (ইউএসএ), বিসিএস (স্বাস্থ্য)"
 
   bmdc_reg_no: ""            # not published — get it from him and check the register
   experience_years: 10       # set to 10 in the admin panel; kept in step so an import does not reset it
@@ -393,6 +393,7 @@ credentials:
   - { type: "training",   title_en: "AO Trauma & Spine Advanced Course", title_bn: "এও ট্রমা অ্যান্ড স্পাইন অ্যাডভান্সড কোর্স", organization_en: "India and Sri Lanka", organization_bn: "ভারত ও শ্রীলঙ্কা", start_year: null, end_year: null, is_current: false }
   - { type: "experience", title_en: "Resident Surgeon (R.S.)", title_bn: "রেসিডেন্ট সার্জন (আর.এস.)", organization_en: "National Institute of Traumatology and Orthopaedic Rehabilitation (NITOR)", organization_bn: "জাতীয় অর্থোপেডিক হাসপাতাল ও পুনর্বাসন প্রতিষ্ঠান (নিটোর)", start_year: null, end_year: null, is_current: true }
   - { type: "experience", title_en: "Bangladesh Civil Service (Health)", title_bn: "বাংলাদেশ সিভিল সার্ভিস (স্বাস্থ্য)", organization_en: "", organization_bn: "", start_year: null, end_year: null, is_current: true }
+  - { type: "membership", title_en: "Member, Royal College of Surgeons — MRCS (A)", title_bn: "মেম্বার, রয়্যাল কলেজ অব সার্জনস — এমআরসিএস (এ)", organization_en: "United Kingdom", organization_bn: "যুক্তরাজ্য", start_year: null, end_year: null, is_current: true }
   - { type: "membership", title_en: "Fellow, American College of Surgeons (FACS)", title_bn: "ফেলো, আমেরিকান কলেজ অব সার্জনস (এফএসিএস)", organization_en: "United States", organization_bn: "যুক্তরাষ্ট্র", start_year: null, end_year: null, is_current: true }
 
 # ----------------------------------------------------------------------------
