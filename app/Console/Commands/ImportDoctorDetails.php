@@ -197,7 +197,12 @@ class ImportDoctorDetails extends Command
 
             $clean['slug'] = Str::slug($clean['slug']);
             $clean['sort_order'] = $i;
-            $clean['is_active'] = true;
+
+            // A service is on unless the file says otherwise, as a chamber is.
+            // This was hardcoded true, so an expertise switched off in the panel
+            // came back at the next import — along with its card on the homepage
+            // and its row in site search.
+            $clean['is_active'] = $clean['is_active'] ?? true;
 
             Service::updateOrCreate(['slug' => $clean['slug']], $clean);
             $this->line('  service      '.$clean['slug']);

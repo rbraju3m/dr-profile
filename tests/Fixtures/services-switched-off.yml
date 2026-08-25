@@ -1,0 +1,13 @@
+# Fixture for DoctorImportTest. Two services, one of which the file switches
+# off; everything else the importer reads is deliberately absent.
+services:
+  - slug: "spine-surgery"
+    name_en: "Spine Surgery"
+    name_bn: "স্পাইন সার্জারি"
+    icon: "spine"
+    is_active: false
+
+  - slug: "joint-and-knee-pain"
+    name_en: "Joint and Knee Pain Treatment"
+    name_bn: "জয়েন্ট ও হাঁটু ব্যথার চিকিৎসা"
+    icon: "accessibility"
